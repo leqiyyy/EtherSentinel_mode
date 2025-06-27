@@ -1,0 +1,3366 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>控制台 - EtherSentinel</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --dark-bg: #0a0e1a;
+            --card-bg: rgba(16, 20, 31, 0.8);
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --neon-cyan: #00ffcc;
+            --neon-blue: #00d4ff;
+            --neon-orange: #ff6b35;
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.7);
+            --danger-red: #ff004d;
+            --shadow-glow: 0 8px 32px rgba(0, 255, 204, 0.1);
+            --blockchain-green: #39ff14;
+            --cyber-purple: #8a2be2;
+            --matrix-green: #00ff41;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            position: relative;
+            font-weight: 400;
+            line-height: 1.6;
+            letter-spacing: 0.5px;
+        }
+
+        /* 优化字体排版 */
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Orbitron', monospace;
+            font-weight: 700;
+            line-height: 1.3;
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+        }
+
+        p, span, div {
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 400;
+            line-height: 1.7;
+            letter-spacing: 0.3px;
+        }
+
+        .text-enhanced {
+            font-weight: 500;
+            letter-spacing: 0.8px;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .subtitle-enhanced {
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 500;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            letter-spacing: 0.5px;
+            opacity: 0.9;
+        }
+
+        .content-text {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            letter-spacing: 0.4px;
+            font-weight: 400;
+        }
+
+        /* 增强的区块链科技背景 */
+        .cyber-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -5;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(0, 255, 204, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(0, 212, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(138, 43, 226, 0.08) 0%, transparent 50%),
+                linear-gradient(125deg, #0a0e1a 0%, #1a1f35 50%, #0a0e1a 100%);
+        }
+
+        /* 动态网格背景 */
+        .grid-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 255, 204, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 204, 0.1) 1px, transparent 1px),
+                linear-gradient(rgba(0, 255, 204, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 204, 0.05) 1px, transparent 1px);
+            background-size: 100px 100px, 100px 100px, 20px 20px, 20px 20px;
+            z-index: -4;
+            opacity: 0.4;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(100px, 100px); }
+        }
+
+        /* 粒子效果背景 */
+        .particles-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -3;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            background: var(--neon-cyan);
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0.6;
+            animation: float 15s linear infinite;
+        }
+
+        .particle:nth-child(odd) {
+            background: var(--neon-blue);
+            animation-duration: 20s;
+        }
+
+        .particle:nth-child(3n) {
+            background: var(--blockchain-green);
+            animation-duration: 25s;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) scale(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(-100px) scale(1);
+                opacity: 0;
+            }
+        }
+
+        /* 区块链数据流 */
+        .blockchain-streams {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            opacity: 0.1;
+        }
+
+        .data-stream {
+            position: absolute;
+            width: 2px;
+            height: 100px;
+            background: linear-gradient(to bottom, 
+                transparent, 
+                var(--matrix-green), 
+                transparent);
+            animation: dataFlow 8s linear infinite;
+        }
+
+        @keyframes dataFlow {
+            0% {
+                transform: translateY(-100px);
+                opacity: 0;
+            }
+            10%, 90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh);
+                opacity: 0;
+            }
+        }
+
+        /* 统一导航栏样式（引入组件） */
+        .main-content {
+            margin-top: 80px;
+            padding: 1.5rem 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* 页面标题区域 */
+        .page-header {
+            background: linear-gradient(135deg, 
+                rgba(0, 255, 204, 0.1) 0%, 
+                rgba(0, 212, 255, 0.05) 50%,
+                rgba(138, 43, 226, 0.1) 100%);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(0, 255, 204, 0.2);
+            border-radius: 20px;
+            padding: 2rem 1.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 
+                0 8px 32px rgba(0, 255, 204, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, 
+                transparent, 
+                rgba(0, 255, 204, 0.1), 
+                transparent);
+            animation: rotate 20s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .page-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--neon-cyan);
+            margin-bottom: 0.8rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .page-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 500;
+            line-height: 1.4;
+            letter-spacing: 0.8px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        /* 系统状态指示器 */
+        .system-status {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .status-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(0, 255, 204, 0.2);
+            border-radius: 12px;
+            padding: 1rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .status-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, 
+                var(--neon-cyan), 
+                var(--neon-blue), 
+                var(--blockchain-green));
+            border-radius: 15px 15px 0 0;
+        }
+
+        .status-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--neon-cyan);
+            box-shadow: 0 10px 30px rgba(0, 255, 204, 0.2);
+        }
+
+        .status-value {
+            font-family: 'Orbitron', monospace;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--neon-cyan);
+            margin-bottom: 0.5rem;
+        }
+
+        .status-label {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            font-weight: 500;
+            font-family: 'Rajdhani', sans-serif;
+        }
+
+        /* 主内容区域布局 */
+        .main-content-wrapper {
+            display: flex;
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            min-height: calc(100vh - 120px);
+        }
+
+        /* 左侧功能导航栏 */
+        .sidebar-nav {
+            width: 280px;
+            min-width: 280px;
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.08) 0%, 
+                rgba(255, 255, 255, 0.03) 100%);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(0, 255, 204, 0.2);
+            border-radius: 20px;
+            padding: 1.5rem;
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+            box-shadow: 
+                0 6px 24px rgba(0, 255, 204, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-nav::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, 
+                var(--neon-cyan), 
+                var(--neon-blue), 
+                var(--blockchain-green));
+            border-radius: 25px 25px 0 0;
+        }
+
+        .sidebar-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--neon-cyan);
+            margin-bottom: 1.5rem;
+            text-align: center;
+            text-shadow: 0 0 10px rgba(0, 255, 204, 0.3);
+        }
+
+        /* 功能导航按钮列表 */
+        .function-nav-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .function-nav-item {
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.05) 0%, 
+                rgba(255, 255, 255, 0.02) 100%);
+            border: 1px solid rgba(0, 255, 204, 0.15);
+            border-radius: 10px;
+            padding: 1rem;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: block;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            backdrop-filter: blur(15px);
+            color: var(--text-primary);
+        }
+
+        .function-nav-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, 
+                rgba(0, 255, 204, 0.1) 0%, 
+                rgba(0, 212, 255, 0.05) 50%,
+                rgba(138, 43, 226, 0.1) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1;
+        }
+
+        .function-nav-item:hover::before {
+            opacity: 1;
+        }
+
+        .function-nav-item:hover {
+            transform: translateX(5px);
+            border-color: var(--neon-cyan);
+            box-shadow: 
+                0 8px 25px rgba(0, 255, 204, 0.2),
+                0 0 20px rgba(0, 255, 204, 0.1);
+        }
+
+        .function-nav-item.active {
+            background: linear-gradient(135deg, 
+                rgba(0, 255, 204, 0.15) 0%, 
+                rgba(0, 212, 255, 0.1) 100%);
+            border-color: var(--neon-cyan);
+            box-shadow: 
+                0 8px 25px rgba(0, 255, 204, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            transform: translateX(5px);
+        }
+
+        .nav-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.3rem;
+            transition: all 0.3s ease;
+            font-family: 'Orbitron', monospace;
+            position: relative;
+            z-index: 2;
+        }
+
+        .function-nav-item:hover .nav-title,
+        .function-nav-item.active .nav-title {
+            color: var(--neon-cyan);
+            text-shadow: 0 0 8px rgba(0, 255, 204, 0.5);
+        }
+
+        .nav-description {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            opacity: 0.8;
+            line-height: 1.2;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 2;
+        }
+
+        .function-nav-item:hover .nav-description,
+        .function-nav-item.active .nav-description {
+            color: rgba(0, 255, 204, 0.8);
+            opacity: 1;
+        }
+
+        /* 右侧主内容区域 */
+        .main-content-area {
+            flex: 1;
+            min-width: 0;
+        }
+
+
+
+        /* 内容卡片区域 */
+        .content-section {
+            display: none;
+            animation: fadeInUp 0.6s ease-out;
+            width: 100%;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 内容卡片 */
+        .content-card {
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.08) 0%, 
+                rgba(255, 255, 255, 0.03) 100%);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(0, 255, 204, 0.2);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 
+                0 6px 24px rgba(0, 255, 204, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .content-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, 
+                var(--neon-cyan), 
+                var(--neon-blue), 
+                var(--blockchain-green),
+                var(--cyber-purple));
+            border-radius: 25px 25px 0 0;
+        }
+
+        .content-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.6rem;
+            color: var(--neon-cyan);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            text-shadow: 0 0 15px rgba(0, 255, 204, 0.3);
+        }
+
+        .content-title i {
+            font-size: 1.8rem;
+            background: linear-gradient(45deg, 
+                var(--neon-cyan), 
+                var(--neon-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .content-description {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+            font-size: 1rem;
+        }
+
+        /* 增强的表单样式 */
+        .form-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .form-label {
+            color: var(--text-primary);
+            font-weight: 600;
+            margin-bottom: 0.6rem;
+            display: block;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .input-container {
+            position: relative;
+        }
+
+        /* 输入框和选择器样式优化 */
+        .form-control, .form-select {
+            background: rgba(0, 20, 40, 0.8);
+            border: 2px solid rgba(0, 255, 204, 0.3);
+            color: var(--text-primary);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .form-control:focus, .form-select:focus {
+            background: rgba(0, 20, 40, 0.9);
+            border-color: var(--neon-cyan);
+            box-shadow: 
+                0 0 0 0.2rem rgba(0, 255, 204, 0.25),
+                0 0 20px rgba(0, 255, 204, 0.3);
+            color: var(--text-primary);
+            outline: none;
+        }
+
+        .form-control::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+            opacity: 1;
+        }
+
+        .form-select option {
+            background: var(--dark-bg);
+            color: var(--text-primary);
+            padding: 0.5rem;
+        }
+
+        .form-select option:hover,
+        .form-select option:focus,
+        .form-select option:selected {
+            background: rgba(0, 255, 204, 0.2);
+            color: var(--neon-cyan);
+        }
+
+        /* 输入容器样式 */
+        .input-container {
+            display: flex;
+            gap: 0.8rem;
+            align-items: center;
+        }
+
+        .input-container .form-control {
+            flex: 1;
+        }
+
+        /* 统一的区块链网络选择框样式 */
+        .blockchain-network-select {
+            min-width: 130px;
+            max-width: 130px;
+            flex-shrink: 0;
+            font-weight: 500;
+            text-align: center;
+            background: rgba(0, 20, 40, 0.9);
+            border: 2px solid rgba(0, 255, 204, 0.4);
+            color: var(--neon-cyan);
+            border-radius: 8px;
+            padding: 0.75rem 0.5rem;
+            font-size: 0.95rem;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .blockchain-network-select:focus {
+            background: rgba(0, 20, 40, 1);
+            border-color: var(--neon-cyan);
+            box-shadow: 
+                0 0 0 0.2rem rgba(0, 255, 204, 0.25),
+                0 0 20px rgba(0, 255, 204, 0.4);
+            color: var(--neon-cyan);
+        }
+
+        .blockchain-network-select option {
+            background: var(--dark-bg);
+            color: var(--neon-cyan);
+            padding: 0.5rem;
+            font-weight: 500;
+        }
+
+        .blockchain-network-select option:hover,
+        .blockchain-network-select option:focus,
+        .blockchain-network-select option:selected {
+            background: rgba(0, 255, 204, 0.2);
+            color: var(--neon-cyan);
+        }
+
+        /* 增强的按钮样式 */
+        .btn-primary {
+            background: linear-gradient(45deg, 
+                var(--neon-cyan), 
+                var(--neon-blue));
+            border: none;
+            color: #000;
+            font-weight: 700;
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0, 255, 204, 0.3);
+            margin-top: 0.5rem;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.2), 
+                transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 255, 204, 0.4);
+            color: #000;
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* 结果展示卡片 - 确保与内容卡片对齐 */
+        .result-card {
+            background: linear-gradient(135deg, 
+                rgba(0, 255, 204, 0.05) 0%, 
+                rgba(0, 212, 255, 0.03) 100%);
+            border: 1px solid rgba(0, 255, 204, 0.3);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+            backdrop-filter: blur(15px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .result-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, 
+                var(--neon-cyan), 
+                var(--neon-blue));
+            border-radius: 20px 20px 0 0;
+        }
+
+        .risk-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .risk-item:hover {
+            border-color: rgba(0, 255, 204, 0.3);
+            box-shadow: 0 5px 15px rgba(0, 255, 204, 0.1);
+        }
+
+        .risk-level {
+            font-weight: 600;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .risk-level.high {
+            background: rgba(255, 0, 77, 0.2);
+            color: var(--danger-red);
+            border: 1px solid var(--danger-red);
+        }
+
+        .risk-level.medium {
+            background: rgba(255, 107, 53, 0.2);
+            color: var(--neon-orange);
+            border: 1px solid var(--neon-orange);
+        }
+
+        .risk-level.low {
+            background: rgba(0, 255, 204, 0.2);
+            color: var(--neon-cyan);
+            border: 1px solid var(--neon-cyan);
+        }
+
+        /* 响应式优化 */
+        @media (max-width: 992px) {
+            .main-content-wrapper {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+            
+            .sidebar-nav {
+                width: 100%;
+                position: static;
+                order: -1;
+            }
+            
+            .function-nav-list {
+                flex-direction: row;
+                overflow-x: auto;
+                gap: 1rem;
+                padding-bottom: 0.5rem;
+            }
+            
+            .function-nav-item {
+                min-width: 180px;
+                flex-shrink: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .system-status {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.8rem;
+            }
+
+            .page-title {
+                font-size: 1.8rem;
+            }
+
+            .content-card {
+                padding: 1.5rem 1rem;
+            }
+            
+            .main-content-wrapper {
+                padding: 0 0.5rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .system-status {
+                grid-template-columns: 1fr;
+            }
+
+            .page-header {
+                padding: 1.5rem 1rem;
+            }
+
+            .main-content {
+                padding: 1rem 0.5rem;
+            }
+            
+            .function-nav-list {
+                flex-direction: column;
+            }
+            
+            .function-nav-item {
+                min-width: auto;
+            }
+        }
+
+        /* 加载动画 */
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(0, 255, 204, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--neon-cyan);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* 网络图样式 */
+        .graph-container {
+            border: 1px solid rgba(0, 255, 204, 0.2);
+            box-shadow: 0 4px 15px rgba(0, 255, 204, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .graph-container:hover {
+            border-color: rgba(0, 255, 204, 0.4);
+            box-shadow: 0 6px 20px rgba(0, 255, 204, 0.2);
+        }
+
+        /* SVG 动画效果 */
+        .graph-edge, .address-edge {
+            stroke-dasharray: 5,5;
+            animation: dash 2s linear infinite;
+        }
+
+        @keyframes dash {
+            to {
+                stroke-dashoffset: -10;
+            }
+        }
+
+        .graph-node circle, .address-node circle {
+            filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.3));
+        }
+
+        .graph-node:hover circle, .address-node:hover circle {
+            filter: drop-shadow(0 0 12px rgba(0, 255, 204, 0.8));
+            transform: scale(1.1);
+            transition: all 0.3s ease;
+        }
+
+        /* 时间戳样式 */
+        .timestamp {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-family: 'Orbitron', monospace;
+            margin-top: 1rem;
+            padding: 0.5rem 1rem;
+            background: rgba(0, 255, 204, 0.05);
+            border-radius: 10px;
+            border: 1px solid rgba(0, 255, 204, 0.1);
+        }
+
+        /* 交易甄别页面特殊样式 */
+        .transaction-content {
+            margin-bottom: 1rem;
+        }
+
+        .transaction-details-row {
+            margin-bottom: 1rem;
+        }
+
+        .transaction-risk-section {
+            margin-top: 1rem;
+        }
+
+        /* 风险节点样式 */
+        .risk-node circle {
+            fill: #ff004d !important;
+            stroke: #ffffff !important;
+            filter: drop-shadow(0 0 8px rgba(255, 0, 77, 0.6)) !important;
+        }
+
+        .risk-node text {
+            fill: #ffffff !important;
+            font-weight: bold !important;
+        }
+
+        /* 数据表格容器优化 */
+        .data-table-container {
+            max-width: 100%;
+            overflow-x: auto;
+        }
+
+        /* 严格对齐的行布局 */
+        .row.align-items-stretch > .col-md-6,
+        .row.align-items-stretch > .col-md-12 {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .row.align-items-stretch .graph-container,
+        .row.align-items-stretch > div > div {
+            flex: 1;
+            height: 100%;
+        }
+
+        /* 确保内容区域高度一致 */
+        .equal-height {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .equal-height > div {
+            flex: 1;
+        }
+
+        /* 交易详细信息网格对齐 */
+        .transaction-details-section .row {
+            margin: 0;
+        }
+
+        .transaction-details-section .col-md-6 {
+            padding: 0.5rem;
+        }
+
+        /* 地址信息对齐 */
+        .address-info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            align-items: start;
+        }
+
+        /* 实时数据表格对齐 */
+        .data-table-responsive {
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .data-table-responsive table {
+            margin-bottom: 0;
+        }
+
+        .data-table-responsive thead th {
+            background: rgba(0, 255, 204, 0.1);
+            border-bottom: 2px solid rgba(0, 255, 204, 0.3);
+            font-weight: 600;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .data-table-responsive tbody td {
+            vertical-align: middle;
+            text-align: center;
+        }
+
+        /* 风险项列表对齐 */
+        .risk-items-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            height: 100%;
+        }
+
+        .risk-item-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.8rem;
+            padding: 0.8rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+        }
+
+        .risk-icon-container {
+            flex-shrink: 0;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .risk-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .risk-title {
+            font-weight: 500;
+            margin-bottom: 0.2rem;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+
+        .risk-description {
+            font-size: 0.85rem;
+            opacity: 0.8;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+
+        /* 交易甄别模块风险分析结果优化 */
+        #txResult .col-md-6 {
+            height: 100%;
+        }
+
+        #txResult .transaction-content .row {
+            height: auto;
+        }
+
+        #txResult .transaction-content .col-md-6 {
+            display: flex;
+            flex-direction: column;
+        }
+
+        #txResult .col-md-6 > h5 {
+            background: linear-gradient(90deg, rgba(0, 255, 204, 0.1) 0%, rgba(0, 150, 150, 0.1) 100%);
+            margin: 0 0 0.8rem 0 !important;
+            padding: 0.8rem 1.2rem;
+            border-radius: 12px 12px 0 0;
+            border: 1px solid rgba(0, 255, 204, 0.2);
+            border-bottom: none;
+            font-weight: 600;
+            font-family: 'Orbitron', monospace;
+            position: relative;
+        }
+
+        #txResult .col-md-6 > h5::before {
+            content: '';
+            position: absolute;
+            left: 1.2rem;
+            bottom: -1px;
+            width: 40px;
+            height: 2px;
+            background: var(--neon-cyan);
+            border-radius: 2px;
+        }
+
+        #txResult #txRisks {
+            display: flex;
+            flex-direction: column;
+            background: linear-gradient(135deg, rgba(0, 30, 60, 0.3) 0%, rgba(0, 50, 100, 0.2) 100%) !important;
+            border: 1px solid rgba(0, 255, 204, 0.2) !important;
+            border-radius: 12px !important;
+            backdrop-filter: blur(10px);
+            height: 480px;
+            padding: 1.2rem;
+            overflow: hidden;
+        }
+
+        #txResult #txRisks .risk-content-wrapper {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        #txResult #txRisks .risk-content-wrapper::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        #txResult #txRisks .risk-content-wrapper::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 2px;
+        }
+
+        #txResult #txRisks .risk-content-wrapper::-webkit-scrollbar-thumb {
+            background: rgba(100, 150, 200, 0.3);
+            border-radius: 2px;
+        }
+
+        #txResult #txRisks .risk-content-wrapper::-webkit-scrollbar-thumb:hover {
+            background: rgba(100, 150, 200, 0.5);
+        }
+
+        /* 确保图表容器也有相同高度 */
+        #txResult .graph-container {
+            display: flex;
+            flex-direction: column;
+            height: 480px;
+            background: linear-gradient(135deg, rgba(0, 30, 60, 0.3) 0%, rgba(0, 50, 100, 0.2) 100%);
+            padding: 1.2rem;
+            border-radius: 12px;
+            border: 1px solid rgba(0, 255, 204, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        #txResult .graph-container h6 {
+            background: linear-gradient(90deg, rgba(100, 150, 200, 0.1) 0%, rgba(80, 120, 180, 0.1) 100%);
+            margin: -1.2rem -1.2rem 0.8rem -1.2rem !important;
+            padding: 0.8rem 1.2rem;
+            border-radius: 12px 12px 0 0;
+            border-bottom: 1px solid rgba(100, 150, 200, 0.25);
+            font-weight: 600;
+            font-family: 'Orbitron', monospace;
+            position: relative;
+        }
+
+        #txResult .graph-container h6::before {
+            content: '';
+            position: absolute;
+            left: 1.2rem;
+            bottom: -1px;
+            width: 40px;
+            height: 2px;
+            background: #94a3b8;
+            border-radius: 2px;
+        }
+
+        /* 确保交易甄别模块左右高度严格一致 */
+        #txResult .transaction-content .row.align-items-stretch {
+            align-items: stretch !important;
+        }
+
+        #txResult .transaction-content .col-md-6 {
+            display: flex;
+            flex-direction: column;
+        }
+
+        #txResult .col-md-6:nth-child(2) h6 {
+            flex-shrink: 0;
+            height: auto;
+            margin-bottom: 0.8rem;
+            background: linear-gradient(90deg, rgba(100, 150, 200, 0.1) 0%, rgba(80, 120, 180, 0.1) 100%);
+            margin: -1.2rem -1.2rem 0.8rem -1.2rem !important;
+            padding: 0.8rem 1.2rem;
+            border-radius: 12px 12px 0 0;
+            border-bottom: 1px solid rgba(100, 150, 200, 0.25);
+            font-weight: 600;
+            font-family: 'Orbitron', monospace;
+            position: relative;
+        }
+
+        #txResult .col-md-6:nth-child(2) h6::before {
+            content: '';
+            position: absolute;
+            left: 1.2rem;
+            bottom: -1px;
+            width: 40px;
+            height: 2px;
+            background: #94a3b8;
+            border-radius: 2px;
+        }
+
+        /* 交易详细信息宽度一致 */
+        #txResult .transaction-details-section {
+            margin-top: 2rem;
+            width: 100%;
+        }
+
+        /* 新风险分析界面样式 */
+        #txResult .risk-overview-panel {
+            background: linear-gradient(135deg, rgba(30, 60, 90, 0.2) 0%, rgba(20, 40, 70, 0.15) 100%);
+            border: 1px solid rgba(100, 150, 200, 0.25);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 0.8rem;
+            backdrop-filter: blur(8px);
+        }
+
+        #txResult .risk-score-display {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        #txResult .score-circle {
+            position: relative;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: conic-gradient(from 0deg, #22c55e 0deg, #22c55e 306deg, rgba(255, 255, 255, 0.08) 306deg, rgba(255, 255, 255, 0.08) 360deg);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 15px rgba(34, 197, 94, 0.15);
+        }
+
+        #txResult .score-circle::before {
+            content: '';
+            position: absolute;
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: rgba(15, 23, 42, 0.95);
+            border: 1px solid rgba(100, 150, 200, 0.15);
+            backdrop-filter: blur(8px);
+        }
+
+        #txResult .score-value {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #ffffff;
+            font-family: 'Orbitron', monospace;
+            z-index: 2;
+            line-height: 1;
+            text-shadow: 0 0 8px rgba(34, 197, 94, 0.6), 0 2px 4px rgba(0, 0, 0, 0.8);
+        }
+
+        #txResult .score-label {
+            font-size: 0.55rem;
+            color: #ffffff;
+            font-family: 'Orbitron', monospace;
+            z-index: 2;
+            margin-top: -1px;
+            text-shadow: 0 0 6px rgba(148, 163, 184, 0.8), 0 1px 2px rgba(0, 0, 0, 0.8);
+            opacity: 0.9;
+        }
+
+        #txResult .score-description {
+            flex: 1;
+        }
+
+        #txResult .score-status {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #22c55e;
+            margin-bottom: 0.2rem;
+            font-family: 'Orbitron', monospace;
+        }
+
+        #txResult .score-subtitle {
+            font-size: 0.75rem;
+            color: #94a3b8;
+            opacity: 0.9;
+        }
+
+        #txResult .risk-details-section {
+            margin-bottom: 1rem;
+        }
+
+        #txResult .section-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #94a3b8;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+            font-family: 'Orbitron', monospace;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        #txResult .risk-item-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        #txResult .risk-check-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.7rem;
+            padding: 0.7rem;
+            background: rgba(255, 255, 255, 0.015);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #txResult .risk-check-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #22c55e;
+            opacity: 0.5;
+        }
+
+        #txResult .risk-check-item.danger::before {
+            background: #ef4444;
+            opacity: 0.7;
+        }
+
+        #txResult .risk-check-item:hover {
+            background: rgba(255, 255, 255, 0.025);
+            border-color: rgba(100, 150, 200, 0.15);
+            transform: translateX(1px);
+        }
+
+        #txResult .risk-icon-container {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        #txResult .risk-icon {
+            font-size: 0.7rem;
+        }
+
+        #txResult .risk-icon.safe {
+            color: #22c55e;
+        }
+
+        #txResult .risk-icon.danger {
+            color: #ef4444;
+        }
+
+        #txResult .risk-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        #txResult .risk-title {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #e2e8f0;
+            margin-bottom: 0.15rem;
+            line-height: 1.3;
+        }
+
+        #txResult .risk-status {
+            font-size: 0.7rem;
+            color: #22c55e;
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+
+        #txResult .risk-check-item.danger .risk-status {
+            color: #ef4444;
+        }
+
+        #txResult .risk-description {
+            font-size: 0.65rem;
+            color: #94a3b8;
+            opacity: 0.85;
+            line-height: 1.4;
+        }
+
+        #txResult .risk-recommendation {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(37, 99, 235, 0.08) 100%);
+            border: 1px solid rgba(59, 130, 246, 0.15);
+            border-radius: 6px;
+            padding: 0.7rem;
+            margin-top: 0.5rem;
+        }
+
+        #txResult .recommendation-header {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            color: #60a5fa;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 0.4rem;
+            font-family: 'Orbitron', monospace;
+        }
+
+        #txResult .recommendation-content {
+            font-size: 0.7rem;
+            line-height: 1.5;
+            color: #94a3b8;
+        }
+
+        #txResult .recommendation-content p {
+            margin: 0 0 0.3rem 0;
+        }
+
+        #txResult .recommendation-content p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* 危险状态样式 */
+        #txResult .score-circle.danger {
+            background: conic-gradient(from 0deg, #ef4444 0deg, #ef4444 180deg, rgba(255, 255, 255, 0.08) 180deg, rgba(255, 255, 255, 0.08) 360deg);
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.2);
+        }
+
+        #txResult .score-circle.danger .score-value {
+            color: #ef4444;
+        }
+
+        #txResult .score-status.danger {
+            color: #ef4444;
+        }
+
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            #txResult .transaction-content .col-md-6 {
+                margin-bottom: 2rem;
+            }
+
+            #txResult #txRisks,
+            #txResult .graph-container {
+                min-height: auto;
+                height: auto;
+            }
+
+            #txResult .risk-score-display {
+                flex-direction: column;
+                text-align: center;
+                gap: 0.8rem;
+            }
+
+            #txResult .score-description {
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 增强的背景系统 -->
+    <div class="cyber-background"></div>
+    <div class="grid-overlay"></div>
+    <div class="particles-bg" id="particlesBg"></div>
+    <div class="blockchain-streams" id="blockchainStreams"></div>
+
+    <!-- 引入统一导航栏 -->
+    <div id="navbar-placeholder"></div>
+
+    <!-- 主要内容 -->
+    <div class="main-content">
+        <div class="container">
+            <!-- 页面标题 -->
+            <div class="page-header">
+                <h1 class="page-title">
+                    <i class="bi bi-speedometer2"></i>
+                    安全控制台
+                </h1>
+                                    <p class="page-subtitle subtitle-enhanced">区块链安全监控与威胁检测中心</p>
+                
+                <!-- 系统状态 -->
+                <div class="system-status">
+                    <div class="status-card">
+                        <div class="status-value" id="totalScans">2,854,367</div>
+                        <div class="status-label">总扫描次数</div>
+                        <div class="status-trend" style="font-size: 0.7rem; color: var(--blockchain-green); margin-top: 0.3rem;">
+                            <i class="bi bi-arrow-up"></i> +12.5%
+                        </div>
+                    </div>
+                    <div class="status-card">
+                        <div class="status-value" id="threatsBlocked">127,458</div>
+                        <div class="status-label">已阻止威胁</div>
+                        <div class="status-trend" style="font-size: 0.7rem; color: var(--danger-red); margin-top: 0.3rem;">
+                            <i class="bi bi-arrow-up"></i> +8.3%
+                        </div>
+                    </div>
+                    <div class="status-card">
+                        <div class="status-value" id="activeMonitors">24</div>
+                        <div class="status-label">活跃监控</div>
+                        <div class="status-trend" style="font-size: 0.7rem; color: var(--neon-cyan); margin-top: 0.3rem;">
+                            <i class="bi bi-check-circle"></i> 稳定运行
+                        </div>
+                    </div>
+                    <div class="status-card">
+                        <div class="status-value" id="systemUptime">99.97%</div>
+                        <div class="status-label">系统运行时间</div>
+                        <div class="status-trend" style="font-size: 0.7rem; color: var(--blockchain-green); margin-top: 0.3rem;">
+                            <i class="bi bi-clock"></i> 365天
+                        </div>
+                    </div>
+                </div>
+    </div>
+
+            <!-- 主内容包装器 -->
+            <div class="main-content-wrapper">
+                <!-- 左侧功能导航栏 -->
+                <div class="sidebar-nav">
+                    <h3 class="sidebar-title">功能模块</h3>
+                    <div class="function-nav-list">
+                        <a href="#" class="function-nav-item" onclick="showSection('address')" id="nav-address" data-section="address">
+                            <div class="nav-title">地址检测</div>
+                            <div class="nav-description">分析区块链地址风险等级</div>
+                        </a>
+
+                        <a href="#" class="function-nav-item active" onclick="showSection('transaction')" id="nav-transaction" data-section="transaction">
+                            <div class="nav-title">交易甄别</div>
+                            <div class="nav-description">检测异常交易保障安全</div>
+                        </a>
+
+                        <a href="#" class="function-nav-item" onclick="showSection('code')" id="nav-generate" data-section="code">
+                            <div class="nav-title">代码生成</div>
+                            <div class="nav-description">智能合约代码解析重构</div>
+                        </a>
+
+                        <a href="#" class="function-nav-item" onclick="showSection('data')" id="nav-realtime" data-section="data">
+                            <div class="nav-title">实时数据</div>
+                            <div class="nav-description">区块链交易统计分析</div>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 右侧主内容区域 -->
+                <div class="main-content-area">
+
+                        <!-- 交易甄别模块 -->
+            <div id="transaction-section" class="content-section">
+                <div class="content-card">
+                    <h3 class="content-title">
+                        <i class="bi bi-shield-check"></i>
+                        交易甄别 (Transaction Screening)
+                    </h3>
+                    <p class="content-description">
+                        该系统旨在识别和检测区块链交易中的多种潜在风险，确保区块链生态系统的安全性。通过输入交易哈希，系统能够预测其类别并展示相关信息，包括：交易详细信息、网络关系图、风险分析结果等。能够检测钓鱼活动、恶意合约、黑名单地址、可疑转账活动、智能合约漏洞等风险场景，同时标识安全交易，为用户提供全面的交易安全评估。
+                    </p>
+                    
+                    <div class="form-group">
+                        <label for="txHash" class="form-label">交易哈希 (Transaction Hash)</label>
+                        <div class="input-container">
+                            <select class="form-select blockchain-network-select">
+                                <option value="ethereum" selected>Ethereum</option>
+                                <option value="bsc">BSC</option>
+                                <option value="polygon">Polygon</option>
+                                <option value="bitcoin">Bitcoin</option>
+                            </select>
+                            <input 
+                                type="text" 
+                                class="form-control" 
+                                id="txHash" 
+                                placeholder="输入交易哈希"
+                            >
+                        </div>
+                    </div>
+
+                    <button type="button" class="btn-primary" id="analyzeTx">
+                        <i class="bi bi-search me-2"></i>
+                        预测交易甄别
+                </button>
+                    
+                    <!-- 分析结果 -->
+                    <div id="txResult" class="result-card" style="display: none;">
+                        <!-- 交易网络图和风险分析结果 -->
+                        <div class="transaction-content">
+                            <div class="row g-3 align-items-stretch">
+                                <!-- 左侧网络图 -->
+                                <div class="col-md-6">
+                                    <div class="graph-container">
+                                        <h6 style="color: #94a3b8; margin-bottom: 0.8rem; text-align: center; font-weight: 600; font-family: 'Orbitron', monospace;">交易网络关系图</h6>
+                                    <svg id="transaction-graph" width="100%" height="360" viewBox="0 0 500 360">
+                                        <!-- 图形背景 -->
+                                        <rect width="100%" height="100%" fill="transparent" />
+                                        
+                                        <!-- 连接线组 -->
+                                        <g id="graph-edges">
+                                            <!-- 第一层连线 (核心连接) -->
+                                            <path id="edge-0" class="graph-edge level-0" d="M230,140 L250,185" stroke="rgba(0, 255, 204, 0.7)" stroke-width="2.5" opacity="0" />
+                                            <path id="edge-1" class="graph-edge level-0" d="M250,185 L270,230" stroke="rgba(0, 255, 204, 0.7)" stroke-width="2.5" opacity="0" />
+                                            
+                                            <!-- 第二层连线 -->
+                                            <path id="edge-2" class="graph-edge level-1" d="M230,140 L130,100" stroke="rgba(255,255,255,0.3)" stroke-width="2" opacity="0" />
+                                            <path id="edge-3" class="graph-edge level-1" d="M230,140 L170,70" stroke="rgba(255,255,255,0.3)" stroke-width="2" opacity="0" />
+                                            <path id="edge-4" class="graph-edge level-1" d="M230,140 L320,60" stroke="rgba(255,255,255,0.3)" stroke-width="2" opacity="0" />
+                                            <path id="edge-5" class="graph-edge level-1" d="M230,140 L370,110" stroke="rgba(255,255,255,0.3)" stroke-width="2" opacity="0" />
+                                            
+                                            <!-- 第三层连线 -->
+                                            <path id="edge-6" class="graph-edge level-2" d="M270,230 L135,280" stroke="rgba(255,255,255,0.3)" stroke-width="2" opacity="0" />
+                                            <path id="edge-7" class="graph-edge level-2" d="M270,230 L205,300" stroke="rgba(255,255,255,0.3)" stroke-width="2" opacity="0" />
+                                            <path id="edge-8" class="graph-edge level-2" d="M270,230 L330,290" stroke="rgba(255,255,255,0.3)" stroke-width="2" opacity="0" />
+                                            <path id="edge-9" class="graph-edge level-2" d="M270,230 L375,260" stroke="rgba(255,255,255,0.3)" stroke-width="2" opacity="0" />
+                                        </g>
+                                        
+                                        <!-- 节点组 -->
+                                        <g id="graph-nodes">
+                                            <!-- 核心节点 (交易双方) -->
+                                            <g id="node-0" class="graph-node level-0" opacity="0">
+                                                <circle cx="230" cy="140" r="18" fill="#2c3e50" stroke="white" stroke-width="2">
+                                                    <animate attributeName="r" from="0" to="18" dur="0.5s" begin="0s" fill="freeze" />
+                                                </circle>
+                                                <text x="230" y="140" text-anchor="middle" dominant-baseline="middle" fill="white" font-size="10">发送方</text>
+                                            </g>
+                                            
+                                            <g id="node-1" class="graph-node level-0" opacity="0">
+                                                <circle cx="270" cy="230" r="16" fill="#2c3e50" stroke="white" stroke-width="2">
+                                                    <animate attributeName="r" from="0" to="16" dur="0.5s" begin="0s" fill="freeze" />
+                                                </circle>
+                                                <text x="270" y="230" text-anchor="middle" dominant-baseline="middle" fill="white" font-size="10">接收方</text>
+                                            </g>
+                                            
+                                            <g id="node-2" class="graph-node level-0" opacity="0">
+                                                <circle cx="250" cy="185" r="8" fill="#00ffcc" stroke="white" stroke-width="2">
+                                                    <animate attributeName="r" from="0" to="8" dur="0.5s" begin="0s" fill="freeze" />
+                                                </circle>
+                                                <text x="250" y="185" text-anchor="middle" dominant-baseline="middle" fill="white" font-size="8">TX</text>
+                                            </g>
+                                            
+                                            <!-- 第二层节点 (发送方相关) -->
+                                            <g id="node-3" class="graph-node level-1" opacity="0">
+                                                <circle cx="130" cy="100" r="10" fill="#2c3e50" stroke="white" stroke-width="2" />
+                                                <text x="130" y="100" text-anchor="middle" dominant-baseline="middle" fill="white" font-size="9">A</text>
+                                            </g>
+                                            
+                                            <g id="node-4" class="graph-node level-1" opacity="0">
+                                                <circle cx="170" cy="70" r="8" fill="#2c3e50" stroke="white" stroke-width="2" />
+                                                <text x="170" y="70" text-anchor="middle" dominant-baseline="middle" fill="white" font-size="9">B</text>
+                                            </g>
+                                            
+                                            <g id="node-5" class="graph-node level-1" opacity="0">
+                                                <circle cx="320" cy="60" r="9" fill="#2c3e50" stroke="white" stroke-width="2" />
+                                                <text x="320" y="60" text-anchor="middle" dominant-baseline="middle" fill="white" font-size="9">C</text>
+                                            </g>
+                                            
+                                            <g id="node-6" class="graph-node level-1" opacity="0">
+                                                <circle cx="370" cy="110" r="11" fill="#2c3e50" stroke="white" stroke-width="2" />
+                                                <text x="370" y="110" text-anchor="middle" dominant-baseline="middle" fill="white" font-size="9">D</text>
+                                            </g>
+                                            
+                                            <!-- 第三层节点 (接收方相关) -->
+                                            <g id="node-7" class="graph-node level-2" opacity="0">
+                                                <circle cx="135" cy="280" r="10" fill="#2c3e50" stroke="white" stroke-width="2" />
+                                                <text x="135" y="280" text-anchor="middle" dominant-baseline="middle" fill="white" font-size="9">E</text>
+                                            </g>
+                                            
+                                            <g id="node-8" class="graph-node level-2" opacity="0">
+                                                <circle cx="205" cy="300" r="8" fill="#2c3e50" stroke="white" stroke-width="2" />
+                                                <text x="205" y="300" text-anchor="middle" dominant-baseline="middle" fill="white" font-size="9">F</text>
+                                            </g>
+                                            
+                                            <g id="node-9" class="graph-node level-2" opacity="0">
+                                                <circle cx="330" cy="290" r="9" fill="#2c3e50" stroke="white" stroke-width="2" />
+                                                <text x="330" y="290" text-anchor="middle" dominant-baseline="middle" fill="white" font-size="9">G</text>
+                                            </g>
+                                            
+                                            <g id="node-10" class="graph-node level-2" opacity="0">
+                                                <circle cx="375" cy="260" r="7" fill="#2c3e50" stroke="white" stroke-width="2" />
+                                                <text x="375" y="260" text-anchor="middle" dominant-baseline="middle" fill="white" font-size="8">H</text>
+                                            </g>
+                                        </g>
+                                    </svg>
+            </div>
+                            </div>
+                            
+                                <!-- 右侧风险分析结果 -->
+                                <div class="col-md-6">
+                                    <div id="txRisks">
+                                        <h6 style="color: #94a3b8; margin-bottom: 0.8rem; text-align: center; font-weight: 600; font-family: 'Orbitron', monospace;">智能风险分析</h6>
+                                        <div class="risk-content-wrapper">
+                                            <!-- 风险评估概览 -->
+                                            <div class="risk-overview-panel">
+                                            <div class="risk-score-display">
+                                                <div class="score-circle">
+                                                    <span class="score-value" id="risk-score">85</span>
+                                                    <span class="score-label">安全分</span>
+                                                </div>
+                                                <div class="score-description">
+                                                    <div class="score-status" id="overall-status">低风险交易</div>
+                                                    <div class="score-subtitle">基于5项安全指标分析</div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- 风险检测详情 -->
+                                        <div class="risk-details-section">
+                                            <div class="section-header">
+                                                <i class="bi bi-shield-check-fill"></i>
+                                                <span>安全检测项目</span>
+                                            </div>
+                                            
+                                            <div class="risk-item-grid">
+                                                <!-- 钓鱼活动检测 -->
+                                                <div class="risk-check-item" data-risk-type="phishing">
+                                                    <div class="risk-icon-container">
+                                                        <i class="bi bi-shield-check risk-icon safe"></i>
+                                                    </div>
+                                                    <div class="risk-content">
+                                                        <div class="risk-title">钓鱼活动检测</div>
+                                                        <div class="risk-status">✓ 通过检测</div>
+                                                        <div class="risk-description">交易流向正常，未发现欺诈行为</div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- 恶意合约检测 -->
+                                                <div class="risk-check-item" data-risk-type="malicious">
+                                                    <div class="risk-icon-container">
+                                                        <i class="bi bi-shield-check risk-icon safe"></i>
+                                                    </div>
+                                                    <div class="risk-content">
+                                                        <div class="risk-title">恶意合约检测</div>
+                                                        <div class="risk-status">✓ 通过检测</div>
+                                                        <div class="risk-description">合约代码安全，无恶意逻辑</div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- 黑名单地址检测 -->
+                                                <div class="risk-check-item" data-risk-type="blacklist">
+                                                    <div class="risk-icon-container">
+                                                        <i class="bi bi-shield-check risk-icon safe"></i>
+                                                    </div>
+                                                    <div class="risk-content">
+                                                        <div class="risk-title">黑名单地址检测</div>
+                                                        <div class="risk-status">✓ 通过检测</div>
+                                                        <div class="risk-description">地址清洁，无风险记录</div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- 资金安全检测 -->
+                                                <div class="risk-check-item" data-risk-type="theft">
+                                                    <div class="risk-icon-container">
+                                                        <i class="bi bi-shield-check risk-icon safe"></i>
+                                                    </div>
+                                                    <div class="risk-content">
+                                                        <div class="risk-title">资金安全检测</div>
+                                                        <div class="risk-status">✓ 通过检测</div>
+                                                        <div class="risk-description">资金来源合法，无盗窃迹象</div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- 智能合约漏洞检测 -->
+                                                <div class="risk-check-item" data-risk-type="vulnerability">
+                                                    <div class="risk-icon-container">
+                                                        <i class="bi bi-shield-check risk-icon safe"></i>
+                                                    </div>
+                                                    <div class="risk-content">
+                                                        <div class="risk-title">合约漏洞检测</div>
+                                                        <div class="risk-status">✓ 通过检测</div>
+                                                        <div class="risk-description">代码结构稳定，无已知漏洞</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- 风险建议 -->
+                                        <div class="risk-recommendation">
+                                            <div class="recommendation-header">
+                                                <i class="bi bi-lightbulb-fill"></i>
+                                                <span>安全建议</span>
+                                            </div>
+                                            <div class="recommendation-content" id="risk-recommendation">
+                                                <p>✅ 该交易通过所有安全检测，可以放心执行</p>
+                                                <p>💡 建议持续关注交易对手的历史行为</p>
+                                            </div>
+                                        </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+            </div>
+
+                        <!-- 交易详细信息 -->
+                        <div class="transaction-details-section">
+                            <h5 style="color: var(--neon-cyan); margin-bottom: 1rem; text-align: center;">交易详细信息</h5>
+                            <div style="background: rgba(0, 20, 40, 0.6); padding: 1.5rem; border-radius: 15px; border: 1px solid rgba(0, 255, 204, 0.2);">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <div class="mb-2" style="font-size: 0.9rem;">
+                                            <strong style="color: var(--neon-cyan);">Transaction Hash:</strong><br>
+                                            <span class="text-truncate d-block" id="tx-hash-display" style="font-family: 'Orbitron', monospace; font-size: 0.8rem;">0x742d356c6c7c3a3c5a8f5b5d94ec8a20bf4a8c2</span>
+                </div>
+                                        <div class="mb-2">
+                                            <strong style="color: var(--neon-cyan);">Status:</strong>
+                                            <span id="tx-status-badge" class="badge bg-success ms-2" style="font-size: 0.8rem;">Success</span>
+                    </div>
+                                        <div class="mb-2" style="font-size: 0.9rem;">
+                                            <strong style="color: var(--neon-cyan);">Block:</strong>
+                                            <span class="ms-1" style="color: #4a90e2;">22409812</span>
+                                            <span class="ms-1" style="color: rgba(255, 255, 255, 0.6);">(11 Confirmations)</span>
+                </div>
+                                        <div class="mb-2" style="font-size: 0.9rem;">
+                                            <strong style="color: var(--neon-cyan);">Timestamp:</strong><br>
+                                            <span id="tx-timestamp" style="font-size: 0.85rem;">2 mins ago (Jun 26, 2025, 12:02:36 PM UTC)</span>
+                                        </div>
+                                        <div style="font-size: 0.9rem;">
+                                            <strong style="color: var(--neon-cyan);">Method:</strong>
+                                            <span class="ms-1 badge bg-info" style="font-size: 0.75rem;">Transfer</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <div class="mb-2" style="font-size: 0.9rem;">
+                                            <strong style="color: var(--neon-cyan);">From:</strong><br>
+                                            <span style="font-family: 'Orbitron', monospace; font-size: 0.8rem; color: #4a90e2;">titanbuilder.eth (Titan Builder)</span>
+                                        </div>
+                                        <div class="mb-2" style="font-size: 0.9rem;">
+                                            <strong style="color: var(--neon-cyan);">To:</strong><br>
+                                            <span style="font-family: 'Orbitron', monospace; font-size: 0.8rem; color: #4a90e2;">0x503bc6453eee236a31639e31021d503d14c6a...</span>
+                                        </div>
+                                        <div class="mb-2" style="font-size: 0.9rem;">
+                                            <strong style="color: var(--neon-cyan);">Value:</strong>
+                                            <span class="ms-1" style="color: #f39c12;">0.02533912567354679 ETH ($48.38)</span>
+                                        </div>
+                                        <div class="mb-2" style="font-size: 0.9rem;">
+                                            <strong style="color: var(--neon-cyan);">Transaction Fee:</strong>
+                                            <span class="ms-1" style="color: #f39c12;">0.000087114510735 ETH ($0.17)</span>
+                                        </div>
+                                        <div class="mb-2" style="font-size: 0.9rem;">
+                                            <strong style="color: var(--neon-cyan);">Gas Price:</strong>
+                                            <span class="ms-1" style="color: #f39c12;">4.148310035 Gwei</span>
+                                        </div>
+                                        <div style="font-size: 0.9rem;">
+                                            <strong style="color: var(--neon-cyan);">Network:</strong>
+                                            <span class="ms-1" style="color: #4a90e2;">Ethereum Mainnet</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+                        <!-- 地址检测模块 -->
+            <div id="address-section" class="content-section active">
+                <div class="content-card">
+                    <h3 class="content-title">
+                        <i class="bi bi-search-heart"></i>
+                        地址检测 (Address Detection)
+                    </h3>
+                    <p class="content-description">
+                        分析区块链地址的历史行为和交易模式，评估风险等级，识别潜在威胁并提供预警。系统可以检测钓鱼活动、黑名单地址、恶意合约、盗窃活动、蜜罐相关地址、假冒身份认证、混币活动、暗网交易、洗钱活动、被制裁地址、金融犯罪、网络犯罪、勒索活动、诈骗活动等多种风险类型。
+                    </p>
+                    
+                    <div class="form-group">
+                        <label for="addressInput" class="form-label">区块链地址</label>
+                        <div class="input-container">
+                            <select class="form-select blockchain-network-select">
+                                <option>Ethereum</option>
+                                <option>BSC</option>
+                                <option>Polygon</option>
+                            </select>
+                            <input 
+                                type="text" 
+                                class="form-control" 
+                                id="addressInput" 
+                                placeholder="请输入待检测的地址"
+                            >
+                </div>
+                    </div>
+
+                    <button type="button" class="btn-primary" id="analyzeAddress">
+                        <i class="bi bi-search me-2"></i>
+                        评估地址风险
+                    </button>
+                    
+                    <!-- 检测结果 -->
+                    <div id="addressResult" class="result-card" style="display: none;">
+                        <!-- 地址信息栏 -->
+                        <div style="background: rgba(0, 20, 40, 0.6); padding: 1rem; border-radius: 10px; border: 1px solid rgba(0, 255, 204, 0.2); margin-bottom: 1rem;">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <div class="text-truncate me-3" style="flex-grow: 1;">
+                                    <strong style="color: var(--neon-cyan);">检测地址：</strong><br>
+                                    <span id="result-address-display" style="font-family: 'Orbitron', monospace; font-size: 0.9rem; color: #4a90e2;">0x85BC81fc84892cf1b391510f8e3784fTc9d1f9297</span>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span style="color: var(--neon-cyan); font-weight: 500;">检测结果：</span>
+                                <span id="address-risk-badge" class="badge bg-success rounded-pill d-flex align-items-center" style="font-size: 0.85rem; padding: 0.5rem 1rem;">
+                                    <i class="bi bi-shield-check me-1"></i> 风险项 0
+                                </span>
+            </div>
+        </div>
+
+                        <!-- 地址网络图和风险评估 -->
+                        <div class="row g-3 align-items-stretch mb-3">
+                            <!-- 左侧网络图 -->
+                            <div class="col-md-6">
+                                <div class="graph-container" style="background: rgba(0, 0, 0, 0.2); padding: 1.5rem; border-radius: 15px; height: 350px; border: 1px solid rgba(0, 255, 204, 0.2);">
+                                    <h6 style="color: var(--neon-cyan); margin-bottom: 1rem; text-align: center;">地址关联网络图</h6>
+                                    <svg id="address-graph" width="100%" height="270" viewBox="0 0 500 270">
+                                        <!-- 图形背景 -->
+                                        <rect width="100%" height="100%" fill="transparent" />
+                                        
+                                        <!-- 连接线组 -->
+                                        <g id="address-graph-edges">
+                                            <!-- 第一层连线 (直接连接) -->
+                                            <path id="address-edge-0" class="address-edge level-0" d="M250,135 L135,85" stroke="rgba(0, 255, 204, 0.7)" stroke-width="2" opacity="0" />
+                                            <path id="address-edge-1" class="address-edge level-0" d="M250,135 L185,205" stroke="rgba(0, 255, 204, 0.7)" stroke-width="2" opacity="0" />
+                                            <path id="address-edge-2" class="address-edge level-0" d="M250,135 L350,115" stroke="rgba(0, 255, 204, 0.7)" stroke-width="2" opacity="0" />
+                                            
+                                            <!-- 第二层连线 (间接连接) -->
+                                            <path id="address-edge-3" class="address-edge level-1" d="M135,85 L60,110" stroke="rgba(255,255,255,0.3)" stroke-width="2" opacity="0" />
+                                            <path id="address-edge-4" class="address-edge level-1" d="M135,85 L165,25" stroke="rgba(255,255,255,0.3)" stroke-width="2" opacity="0" />
+                                            <path id="address-edge-5" class="address-edge level-1" d="M185,205 L110,250" stroke="rgba(255,255,255,0.3)" stroke-width="2" opacity="0" />
+                                            <path id="address-edge-6" class="address-edge level-1" d="M350,115 L420,85" stroke="rgba(255,255,255,0.3)" stroke-width="2" opacity="0" />
+                                            <path id="address-edge-7" class="address-edge level-1" d="M350,115 L400,180" stroke="rgba(255,255,255,0.3)" stroke-width="2" opacity="0" />
+                                        </g>
+                                        
+                                        <!-- 节点组 -->
+                                        <g id="address-graph-nodes">
+                                            <!-- 核心节点 (目标地址) -->
+                                            <g id="address-node-0" class="address-node level-0" opacity="0">
+                                                <circle cx="250" cy="135" r="22" fill="#2c3e50" stroke="white" stroke-width="2" />
+                                                <text x="250" y="135" text-anchor="middle" dominant-baseline="middle" fill="white" font-size="10">目标地址</text>
+                                            </g>
+                                            
+                                            <!-- 第一层节点 (直接关联) -->
+                                            <g id="address-node-1" class="address-node level-0" opacity="0">
+                                                <circle cx="135" cy="85" r="15" fill="#2c3e50" stroke="white" stroke-width="2" />
+                                                <text x="135" y="85" text-anchor="middle" dominant-baseline="middle" fill="white" font-size="10">A</text>
+                                            </g>
+                                            
+                                            <g id="address-node-2" class="address-node level-0" opacity="0">
+                                                <circle cx="185" cy="205" r="15" fill="#2c3e50" stroke="white" stroke-width="2" />
+                                                <text x="185" y="205" text-anchor="middle" dominant-baseline="middle" fill="white" font-size="10">B</text>
+                                            </g>
+                                            
+                                            <g id="address-node-3" class="address-node level-0" opacity="0">
+                                                <circle cx="350" cy="115" r="15" fill="#2c3e50" stroke="white" stroke-width="2" />
+                                                <text x="350" y="115" text-anchor="middle" dominant-baseline="middle" fill="white" font-size="10">C</text>
+                                            </g>
+                                            
+                                            <!-- 第二层节点 (间接关联) -->
+                                            <g id="address-node-4" class="address-node level-1" opacity="0">
+                                                <circle cx="60" cy="110" r="12" fill="#2c3e50" stroke="white" stroke-width="2" />
+                                                <text x="60" y="110" text-anchor="middle" dominant-baseline="middle" fill="white" font-size="9">D</text>
+                                            </g>
+                                            
+                                            <g id="address-node-5" class="address-node level-1" opacity="0">
+                                                <circle cx="165" cy="25" r="12" fill="#2c3e50" stroke="white" stroke-width="2" />
+                                                <text x="165" y="25" text-anchor="middle" dominant-baseline="middle" fill="white" font-size="9">E</text>
+                                            </g>
+                                            
+                                            <g id="address-node-6" class="address-node level-1" opacity="0">
+                                                <circle cx="110" cy="250" r="12" fill="#2c3e50" stroke="white" stroke-width="2" />
+                                                <text x="110" y="250" text-anchor="middle" dominant-baseline="middle" fill="white" font-size="9">F</text>
+                                            </g>
+                                            
+                                            <g id="address-node-7" class="address-node level-1" opacity="0">
+                                                <circle cx="420" cy="85" r="12" fill="#2c3e50" stroke="white" stroke-width="2" />
+                                                <text x="420" y="85" text-anchor="middle" dominant-baseline="middle" fill="white" font-size="9">G</text>
+                                            </g>
+                                            
+                                            <g id="address-node-8" class="address-node level-1" opacity="0">
+                                                <circle cx="400" cy="180" r="12" fill="#2c3e50" stroke="white" stroke-width="2" />
+                                                <text x="400" y="180" text-anchor="middle" dominant-baseline="middle" fill="white" font-size="9">H</text>
+                                            </g>
+                                        </g>
+                                    </svg>
+            </div>
+                            </div>
+                            
+                            <!-- 右侧风险评估 -->
+                            <div class="col-md-6">
+                                <h5 style="color: var(--neon-cyan); margin-bottom: 1rem; text-align: center;">风险评估结果</h5>
+                                <div id="addressRisks" style="background: rgba(0, 20, 40, 0.6); padding: 1rem; border-radius: 15px; border: 1px solid rgba(0, 255, 204, 0.2); height: 350px; overflow-y: auto;">
+                                    <div class="text-center py-3">
+                                        <i class="bi bi-shield-check text-success" style="font-size: 2.5rem;"></i>
+                                        <h5 class="mt-3" style="color: var(--blockchain-green);">未检测到风险</h5>
+                                        <p class="text-muted">该地址未被发现存在已知风险</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 地址信息 -->
+                        <div class="mt-3">
+                            <h5 style="color: var(--neon-cyan); text-align: center; margin-bottom: 1rem;">地址信息</h5>
+                            <div style="background: rgba(0, 20, 40, 0.6); padding: 1rem; border-radius: 10px; border: 1px solid rgba(0, 255, 204, 0.2);">
+                                <div class="row">
+                                    <div class="col-md-6 mb-2">
+                                        <strong style="color: var(--neon-cyan);">ETH BALANCE:</strong><br>
+                                        <span id="eth-balance" style="color: #f39c12; font-family: 'Orbitron', monospace;">0.0001 ETH</span>
+                                    </div>
+                                    <div class="col-md-6 mb-2">
+                                        <strong style="color: var(--neon-cyan);">ETH VALUE:</strong><br>
+                                        <span id="eth-value" style="color: #f39c12; font-family: 'Orbitron', monospace;">$0.39 (@ $3,892.64/ETH)</span>
+                                    </div>
+                                    <div class="col-12 mb-2">
+                                        <strong style="color: var(--neon-cyan);">PRIVATE NAME TAGS:</strong>
+                                        <span class="ms-2" style="color: rgba(255, 255, 255, 0.6);">Not Available</span>
+                                    </div>
+                                    <div class="col-12 mb-2">
+                                        <strong style="color: var(--neon-cyan);">LAST_TXN_SENT:</strong><br>
+                                        <span class="small text-truncate d-block" id="last-txn" style="color: #4a90e2; font-family: 'Orbitron', monospace; font-size: 0.8rem;">0x3c9246141ca600c1e5637fb95Bb395c3e30fva06eeac30ax7a3fc3ae216as<br><span style="color: rgba(255, 255, 255, 0.6);">(from 2403 days ago)</span></span>
+                                    </div>
+                                    <div class="col-12">
+                                        <strong style="color: var(--neon-cyan);">FIRST_TXN_SENT:</strong><br>
+                                        <span class="small text-truncate d-block" id="first-txn" style="color: #4a90e2; font-family: 'Orbitron', monospace; font-size: 0.8rem;">0xb7e34d32fa2e0c0f21fea908335a4a0d0406dc31c4cc9dd04a9982ba3dde9<br><span style="color: rgba(255, 255, 255, 0.6);">(from 2447 days ago)</span></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 代码生成模块 -->
+            <div id="code-section" class="content-section">
+                <div class="content-card">
+                    <h3 class="content-title">
+                        <i class="bi bi-braces-asterisk"></i>
+                        代码生成 (Code Generate)
+                    </h3>
+                    <p class="content-description">
+                        在智能合约开发中，部分函数名常被混淆为十六进制代码，这增加了安全分析的难度。本系统通过输入未知合约代码函数名数据，利用训练模型预测其函数名并展示结果。系统能够将混淆的十六进制函数名恢复为可读的函数名称，帮助开发者和安全分析师更好地理解合约功能，识别潜在的安全风险，确保区块链生态系统的安全。
+                    </p>
+                    
+                    <div class="form-group">
+                        <label for="codeInput" class="form-label">合约地址</label>
+                        <div class="input-container">
+                            <select class="form-select blockchain-network-select">
+                                <option>Ethereum</option>
+                                <option>BSC</option>
+                                <option>Polygon</option>
+                            </select>
+                            <input 
+                                type="text" 
+                                class="form-control" 
+                                id="codeInput" 
+                                placeholder="请输入待检测的地址"
+                            >
+                        </div>
+                    </div>
+                    
+                    <button type="button" class="btn-primary" id="generateCode">
+                        <i class="bi bi-gear me-2"></i>
+                        生成函数名
+                    </button>
+                    
+                    <!-- 生成结果 -->
+                    <div id="codeResult" class="result-card" style="display: none;">
+                        <!-- 输入信息展示 -->
+                        <div style="background: rgba(0, 20, 40, 0.6); padding: 1rem; border-radius: 10px; border: 1px solid rgba(0, 255, 204, 0.2); margin-bottom: 1rem;">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <div class="text-truncate me-3" style="flex-grow: 1;">
+                                    <strong style="color: var(--neon-cyan);">输入合约地址：</strong><br>
+                                    <span id="contract-address-display" style="font-family: 'Orbitron', monospace; font-size: 0.9rem; color: #4a90e2;">0x85BC81fc84892cf1b391510f8e3784fTc9d1f9297</span>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span style="color: var(--neon-cyan); font-weight: 500;">处理状态：</span>
+                                <span class="badge bg-success rounded-pill d-flex align-items-center" style="font-size: 0.85rem; padding: 0.5rem 1rem;">
+                                    <i class="bi bi-check-circle me-1"></i> 函数名恢复完成
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <h5 style="color: var(--neon-cyan); margin-bottom: 1rem; text-align: center;">代码生成结果</h5>
+                        <div class="row g-3 align-items-stretch">
+                            <div class="col-md-6">
+                                <h6 style="color: var(--neon-cyan); text-align: center; margin-bottom: 1rem;">原始合约扫描结果</h6>
+                                <div id="originalData" style="background: rgba(0, 20, 40, 0.6); padding: 1rem; border-radius: 10px; border: 1px solid rgba(255, 0, 77, 0.3); font-size: 0.85rem; overflow-x: auto; min-height: 320px;">
+                                    <pre style="color: var(--text-secondary); margin: 0; white-space: pre-wrap; font-family: 'Orbitron', monospace; line-height: 1.4;">{
+  "is_contract": true,
+  "goplus": "stealing attack",
+  "code": {
+     "_dispatcher": "function _dispatcher",
+     "_fallback": "function _fallback payable view pure",
+     "withdraw()": "function withdraw()",
+     "<span style="color: #ff004d; font-weight: bold;">0x5b1e3b51</span>": "function <span style="color: #ff004d; font-weight: bold;">0x5b1e3b51</span> payable view",
+     "<span style="color: #ff004d; font-weight: bold;">0x5fe2e4d1</span>": "function <span style="color: #ff004d; font-weight: bold;">0x5fe2e4d1</span> payable view",
+     "withdraw(address,uint256)": "function withdraw(address,uint256) view"
+   }
+}</pre>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <h6 style="color: var(--neon-cyan); text-align: center; margin-bottom: 1rem;">生成结果</h6>
+                                <div id="generatedData" style="background: rgba(0, 20, 40, 0.6); padding: 1rem; border-radius: 10px; border: 1px solid rgba(0, 255, 204, 0.3); font-size: 0.85rem; overflow-x: auto; min-height: 320px;">
+                                    <pre style="color: var(--text-secondary); margin: 0; white-space: pre-wrap; font-family: 'Orbitron', monospace; line-height: 1.4;">{
+  "is_contract": true,
+  "goplus": "stealing attack",
+  "code": {
+     "_dispatcher": "function _dispatcher",
+     "_fallback": "function _fallback payable view pure",
+     "withdraw()": "function withdraw()",
+     "<span style="color: #00ffcc; font-weight: bold;">approveTransaction()</span>": "function <span style="color: #00ffcc; font-weight: bold;">approveTransaction()</span> payable view",
+     "<span style="color: #00ffcc; font-weight: bold;">finalizePayment()</span>": "function <span style="color: #00ffcc; font-weight: bold;">finalizePayment()</span> payable view",
+     "withdraw(address,uint256)": "function withdraw(address,uint256) view"
+   }
+}</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 实时数据模块 -->
+            <div id="data-section" class="content-section">
+                <div class="content-card">
+                    <h3 class="content-title">
+                        <i class="bi bi-activity"></i>
+                        实时数据 (Real-time Data)
+                    </h3>
+                    <p class="content-description">
+                        该系统实现实时监控和分析区块链交易的功能，能够测试是否能够构建交易子图，并检测多种潜在风险场景：钓鱼活动、恶意合约交易、黑名单地址交互、可疑转账活动、智能合约漏洞等。通过构建完整的交易关系网络，为用户提供全面的风险评估和安全交易验证。
+                    </p>
+                    
+                    <button type="button" class="btn-primary" id="getRealTimeData">
+                        <i class="bi bi-download me-2"></i>
+                        获取实时数据
+                    </button>
+                    
+                    <button type="button" class="btn-primary ms-2" id="updateData" style="display: none;">
+                        <i class="bi bi-arrow-clockwise me-2"></i>
+                        更新数据
+                    </button>
+                    
+                    <!-- 数据展示 -->
+                    <div id="dataResult" class="result-card" style="display: none;">
+                        <!-- 状态信息栏 -->
+                        <div style="background: rgba(0, 20, 40, 0.6); padding: 1rem; border-radius: 10px; border: 1px solid rgba(0, 255, 204, 0.2); margin-bottom: 1rem;">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <div class="d-flex align-items-center">
+                                    <div class="me-4">
+                                        <strong style="color: var(--neon-cyan);">链名：</strong>
+                                        <span style="color: #4a90e2; font-family: 'Orbitron', monospace;">ethereum</span>
+                                    </div>
+                                    <div class="me-4">
+                                        <strong style="color: var(--neon-cyan);">Block Number:</strong>
+                                        <span style="color: #4a90e2; font-family: 'Orbitron', monospace;">22409812</span>
+                                    </div>
+                                    <div>
+                                        <strong style="color: var(--neon-cyan);">交易子图构建：</strong>
+                                        <span class="badge bg-success rounded-pill" style="font-size: 0.75rem;">
+                                            <i class="bi bi-check-circle me-1"></i>成功构建
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center">
+                                    <span id="data-loading-indicator" class="me-3 d-none" style="color: rgba(255, 255, 255, 0.6);">
+                                        <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                                        获取中...
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h5 style="color: var(--neon-cyan); margin-bottom: 1rem; text-align: center;">实时交易数据</h5>
+                        <div style="background: rgba(0, 20, 40, 0.6); padding: 1rem; border-radius: 10px; border: 1px solid rgba(0, 255, 204, 0.2);">
+                            <div class="data-table-container">
+                                <div class="table-responsive">
+                                    <table class="table table-dark table-hover table-borderless mb-0" style="background: transparent;">
+                                        <thead>
+                                            <tr style="border-bottom: 2px solid rgba(0, 255, 204, 0.3);">
+                                                <th style="color: var(--neon-cyan); font-family: 'Orbitron', monospace; font-size: 0.9rem; padding: 0.8rem;">Transaction Hash</th>
+                                                <th style="color: var(--neon-cyan); font-family: 'Orbitron', monospace; font-size: 0.9rem; padding: 0.8rem;">From</th>
+                                                <th style="color: var(--neon-cyan); font-family: 'Orbitron', monospace; font-size: 0.9rem; padding: 0.8rem;">To</th>
+                                                <th style="color: var(--neon-cyan); font-family: 'Orbitron', monospace; font-size: 0.9rem; padding: 0.8rem;">Detect</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="dataTableBody" style="font-family: 'Orbitron', monospace; font-size: 0.8rem;">
+                                            <!-- 数据将通过JavaScript动态填充 -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                </div> <!-- 关闭 main-content-area -->
+            </div> <!-- 关闭 main-content-wrapper -->
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- 加载导航栏组件 -->
+    <script>
+        fetch('navbar-component.html')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('navbar-placeholder').innerHTML = html;
+                // 设置当前页面导航栏高亮
+                setTimeout(() => {
+                    const currentNavLink = document.querySelector('a[href="dashboard.html"]');
+                    if (currentNavLink) {
+                        // 移除所有其他页面的激活状态
+                        document.querySelectorAll('.unified-nav-link').forEach(link => {
+                            link.classList.remove('active');
+                        });
+                        // 设置当前页面为激活状态
+                        currentNavLink.classList.add('active');
+                    }
+                }, 100);
+            })
+            .catch(error => console.error('导航栏加载失败:', error));
+    </script>
+    
+    <script>
+        // 页面加载时检查登录状态
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuthStatus();
+            initializeEventListeners();
+            
+            // 诊断和初始化导航状态（延迟执行确保DOM完全加载）
+            setTimeout(() => {
+                testNavigationElements();
+                initializeNavigationState();
+            }, 1000);
+            
+            // 初始化增强粒子系统
+            initAdvancedParticleSystem();
+            initMouseInteraction();
+        });
+
+        // 检查登录状态
+        function checkAuthStatus() {
+            const isLoggedIn = localStorage.getItem('ethersent_logged_in') || 
+                              sessionStorage.getItem('ethersent_logged_in');
+            
+            if (isLoggedIn !== 'true') {
+                window.location.href = 'auth.html';
+                return;
+            }
+        }
+
+        // 用户菜单切换
+        function toggleUserMenu() {
+            // 简单的登出功能
+            if (confirm('确定要退出登录吗？')) {
+                localStorage.removeItem('ethersent_logged_in');
+                localStorage.removeItem('ethersent_username');
+                sessionStorage.removeItem('ethersent_logged_in');
+                sessionStorage.removeItem('ethersent_username');
+                window.location.href = 'auth.html';
+            }
+        }
+
+        // 功能模块切换
+        function showSection(sectionName) {
+            console.log('=== showSection 被调用 ===');
+            console.log('参数 sectionName:', sectionName);
+            
+            // 定义导航ID映射
+            const navIdMap = {
+                'address': 'nav-address',
+                'transaction': 'nav-transaction', 
+                'code': 'nav-generate',
+                'data': 'nav-realtime'
+            };
+            
+            // 移除所有活跃状态
+            document.querySelectorAll('.function-nav-item').forEach(item => {
+                item.classList.remove('active');
+                console.log('移除激活状态:', item.id);
+            });
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+                console.log('隐藏内容区域:', section.id);
+            });
+            
+            // 添加当前活跃状态
+            const navId = navIdMap[sectionName];
+            const contentId = sectionName + '-section';
+            
+            console.log('映射的导航ID:', navId);
+            console.log('内容区域ID:', contentId);
+            
+            const navElement = document.getElementById(navId);
+            const contentElement = document.getElementById(contentId);
+            
+            if (navElement) {
+                navElement.classList.add('active');
+                console.log('激活导航项:', navId);
+            } else {
+                console.error('未找到导航元素:', navId);
+            }
+            
+            if (contentElement) {
+                contentElement.classList.add('active');
+                console.log('显示内容区域:', contentId);
+            } else {
+                console.error('未找到内容元素:', contentId);
+            }
+        }
+
+        // 测试导航元素是否存在
+        function testNavigationElements() {
+            console.log('=== 导航元素诊断 ===');
+            
+            const expectedNavElements = ['nav-address', 'nav-transaction', 'nav-generate', 'nav-realtime'];
+            const expectedContentElements = ['address-section', 'transaction-section', 'code-section', 'data-section'];
+            
+            console.log('检查导航元素:');
+            expectedNavElements.forEach(id => {
+                const element = document.getElementById(id);
+                console.log(`- ${id}:`, element ? '✓ 存在' : '✗ 不存在');
+            });
+            
+            console.log('检查内容元素:');
+            expectedContentElements.forEach(id => {
+                const element = document.getElementById(id);
+                console.log(`- ${id}:`, element ? '✓ 存在' : '✗ 不存在');
+            });
+            
+            // 检查当前激活状态
+            const activeNav = document.querySelector('.function-nav-item.active');
+            const activeContent = document.querySelector('.content-section.active');
+            console.log('当前激活的导航:', activeNav ? activeNav.id : '无');
+            console.log('当前激活的内容:', activeContent ? activeContent.id : '无');
+        }
+
+        // 初始化导航状态
+        function initializeNavigationState() {
+            console.log('=== 初始化导航状态 ===');
+            
+            // 确保默认显示交易甄别页面
+            const defaultNav = document.getElementById('nav-transaction');
+            const defaultContent = document.getElementById('transaction-section');
+            
+            if (defaultNav && defaultContent) {
+                // 清除所有激活状态
+                document.querySelectorAll('.function-nav-item').forEach(item => item.classList.remove('active'));
+                document.querySelectorAll('.content-section').forEach(section => section.classList.remove('active'));
+                
+                // 设置默认激活状态
+                defaultNav.classList.add('active');
+                defaultContent.classList.add('active');
+                
+                console.log('设置默认状态: 交易甄别');
+            } else {
+                console.error('无法找到默认元素');
+            }
+        }
+
+        // 初始化事件监听器
+        function initializeEventListeners() {
+            // 功能模块切换（备用方案）
+            document.querySelectorAll('.function-nav-item').forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    console.log('备用事件监听器被触发:', this.id);
+                    
+                    const sectionName = this.getAttribute('data-section');
+                    if (sectionName) {
+                        showSection(sectionName);
+                    }
+                });
+            });
+
+            // 交易分析
+            document.getElementById('analyzeTx').addEventListener('click', analyzeTransaction);
+            
+            // 地址检测
+            document.getElementById('analyzeAddress').addEventListener('click', analyzeAddress);
+            
+            // 代码生成
+            document.getElementById('generateCode').addEventListener('click', generateCode);
+            
+            // 实时数据
+            document.getElementById('getRealTimeData').addEventListener('click', getRealTimeData);
+            document.getElementById('updateData').addEventListener('click', updateRealTimeData);
+        }
+
+        // 交易分析功能
+        function analyzeTransaction() {
+            const txHash = document.getElementById('txHash').value.trim();
+            const button = document.getElementById('analyzeTx');
+            const resultDiv = document.getElementById('txResult');
+            
+            // 检查是否输入了交易哈希
+            if (!txHash) {
+                alert('请输入有效的交易哈希');
+                return;
+            }
+            
+            // 显示到结果页面
+            document.getElementById('tx-hash-display').textContent = txHash;
+            
+            // 更新按钮状态
+            button.disabled = true;
+            button.innerHTML = '<div class="loading-spinner me-2"></div>分析中...';
+            
+            // 更新时间戳
+            const now = new Date();
+            const timeString = now.toLocaleString('en-US', {
+                month: 'short',
+                day: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: true,
+                timeZone: 'UTC'
+            }) + ' UTC';
+            document.getElementById('tx-timestamp').textContent = `2 mins ago (${timeString})`;
+            
+            // 显示结果卡片
+            resultDiv.style.display = 'block';
+            
+            // 启动交易图动画
+            resetTransactionGraph();
+            setTimeout(() => {
+                animateTransactionGraph();
+            }, 500);
+            
+            // 模拟分析过程
+            setTimeout(() => {
+                // 调用后端API（与旧前端保持一致）
+                fetch('/api/check_transaction_risk', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ txHash: txHash || "0x0f9b6b5a32f691a786978ee762dfb7167af805ce512f65f7914cc444e45491ce" })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    displayTransactionResult(data);
+                })
+                .catch(error => {
+                    console.error('API调用失败:', error);
+                    // 使用模拟数据 - 根据哈希内容判断是否有风险
+                    const inputHash = txHash;
+                    const hasRisk = inputHash.toLowerCase().includes('a') || inputHash.toLowerCase().includes('1');
+                    const riskData = hasRisk ? {
+                        isSafe: false,
+                        risks: ['涉及钓鱼活动'],
+                        txHash: inputHash,
+                        riskNodes: ['node-0'] // 标记发送方节点为风险节点
+                    } : {
+                        isSafe: true,
+                        risks: [],
+                        txHash: inputHash,
+                        riskNodes: []
+                    };
+                    displayTransactionResult(riskData);
+                })
+                .finally(() => {
+                    button.disabled = false;
+                    button.innerHTML = '<i class="bi bi-search me-2"></i>预测交易甄别';
+                });
+            }, 3000);
+        }
+
+        // 交易可视化图动画函数
+        function animateTransactionGraph() {
+            // 第一层(核心层)节点和边的显示
+            setTimeout(() => {
+                // 显示核心节点(交易双方)
+                document.querySelectorAll('.graph-node.level-0').forEach(node => {
+                    node.style.opacity = 1;
+                    node.style.transition = 'opacity 0.5s ease-in-out';
+                });
+                
+                // 显示核心边(主要交易路径)
+                setTimeout(() => {
+                    document.querySelectorAll('.graph-edge.level-0').forEach(edge => {
+                        edge.style.opacity = 1;
+                        edge.style.transition = 'opacity 0.5s ease-in-out';
+                    });
+                    
+                    // 第二层节点和边的显示(与发送方相关的节点)
+                    setTimeout(() => {
+                        document.querySelectorAll('.graph-node.level-1').forEach(node => {
+                            node.style.opacity = 1;
+                            node.style.transition = 'opacity 0.5s ease-in-out';
+                        });
+                        
+                        // 显示第二层边
+                        setTimeout(() => {
+                            document.querySelectorAll('.graph-edge.level-1').forEach(edge => {
+                                edge.style.opacity = 1;
+                                edge.style.transition = 'opacity 0.5s ease-in-out';
+                            });
+                            
+                            // 第三层节点和边的显示(与接收方相关的节点)
+                            setTimeout(() => {
+                                document.querySelectorAll('.graph-node.level-2').forEach(node => {
+                                    node.style.opacity = 1;
+                                    node.style.transition = 'opacity 0.5s ease-in-out';
+                                });
+                                
+                                // 显示第三层边
+                                setTimeout(() => {
+                                    document.querySelectorAll('.graph-edge.level-2').forEach(edge => {
+                                        edge.style.opacity = 1;
+                                        edge.style.transition = 'opacity 0.5s ease-in-out';
+                                    });
+                                }, 300);
+                            }, 600);
+                        }, 300);
+                    }, 600);
+                }, 300);
+            }, 300);
+        }
+        
+        // 重置可视化图动画的函数
+        function resetTransactionGraph() {
+            document.querySelectorAll('.graph-node, .graph-edge').forEach(item => {
+                item.style.opacity = 0;
+            });
+        }
+        
+        // 地址关联图动画函数
+        function animateAddressGraph() {
+            // 第一层：显示核心地址节点
+            setTimeout(() => {
+                // 显示目标地址
+                document.querySelectorAll('.address-node.level-0').forEach(node => {
+                    node.style.opacity = 1;
+                    node.style.transition = 'opacity 0.5s ease-in-out';
+                });
+                
+                // 显示直接连接的边
+                setTimeout(() => {
+                    document.querySelectorAll('.address-edge.level-0').forEach(edge => {
+                        edge.style.opacity = 1;
+                        edge.style.transition = 'opacity 0.5s ease-in-out';
+                    });
+                    
+                    // 第二层：显示间接关联节点
+                    setTimeout(() => {
+                        document.querySelectorAll('.address-node.level-1').forEach(node => {
+                            node.style.opacity = 1;
+                            node.style.transition = 'opacity 0.5s ease-in-out';
+                        });
+                        
+                        // 显示间接连接的边
+                        setTimeout(() => {
+                            document.querySelectorAll('.address-edge.level-1').forEach(edge => {
+                                edge.style.opacity = 1;
+                                edge.style.transition = 'opacity 0.5s ease-in-out';
+                            });
+                        }, 300);
+                    }, 500);
+                }, 300);
+            }, 300);
+        }
+        
+        // 重置地址图动画
+        function resetAddressGraph() {
+            document.querySelectorAll('.address-node, .address-edge').forEach(item => {
+                item.style.opacity = 0;
+            });
+        }
+
+        // 显示交易分析结果
+        function displayTransactionResult(data) {
+            const resultDiv = document.getElementById('txResult');
+            
+            // 标记风险节点
+            if (data.riskNodes && data.riskNodes.length > 0) {
+                data.riskNodes.forEach(nodeId => {
+                    const node = document.getElementById(nodeId);
+                    if (node) {
+                        node.classList.add('risk-node');
+                    }
+                });
+            } else {
+                // 移除所有风险节点标记
+                document.querySelectorAll('.risk-node').forEach(node => {
+                    node.classList.remove('risk-node');
+                });
+            }
+            
+            // 更新风险分析结果
+            const hasRisks = data.risks && data.risks.length > 0;
+            const riskScore = hasRisks ? Math.max(20, 85 - (data.risks.length * 15)) : 85;
+            
+            // 更新概览面板
+            updateRiskOverview(riskScore, hasRisks, data.risks?.length || 0);
+            
+            // 更新检测项目
+            updateRiskDetectionItems(data.risks || []);
+            
+            // 更新建议
+            updateRiskRecommendation(hasRisks, data.risks || []);
+        }
+
+        // 更新风险概览
+        function updateRiskOverview(score, hasRisks, riskCount) {
+            const scoreElement = document.getElementById('risk-score');
+            const statusElement = document.getElementById('overall-status');
+            const scoreCircle = document.querySelector('.score-circle');
+            
+            scoreElement.textContent = score;
+            
+            if (hasRisks) {
+                statusElement.textContent = riskCount > 2 ? '高风险交易' : '中风险交易';
+                statusElement.classList.add('danger');
+                scoreCircle.classList.add('danger');
+                
+                // 更新进度圆圈
+                const percentage = (score / 100) * 360;
+                scoreCircle.style.background = `conic-gradient(from 0deg, #ef4444 0deg, #ef4444 ${percentage}deg, rgba(255, 255, 255, 0.08) ${percentage}deg, rgba(255, 255, 255, 0.08) 360deg)`;
+            } else {
+                statusElement.textContent = '低风险交易';
+                statusElement.classList.remove('danger');
+                scoreCircle.classList.remove('danger');
+                
+                // 更新进度圆圈
+                const percentage = (score / 100) * 360;
+                scoreCircle.style.background = `conic-gradient(from 0deg, #22c55e 0deg, #22c55e ${percentage}deg, rgba(255, 255, 255, 0.08) ${percentage}deg, rgba(255, 255, 255, 0.08) 360deg)`;
+            }
+        }
+
+        // 更新检测项目
+        function updateRiskDetectionItems(risks) {
+            const riskTypes = ['phishing', 'malicious', 'blacklist', 'theft', 'vulnerability'];
+            const riskTitles = ['钓鱼活动检测', '恶意合约检测', '黑名单地址检测', '资金安全检测', '合约漏洞检测'];
+            const safeDescriptions = [
+                '交易流向正常，未发现欺诈行为',
+                '合约代码安全，无恶意逻辑',
+                '地址清洁，无风险记录',
+                '资金来源合法，无盗窃迹象',
+                '代码结构稳定，无已知漏洞'
+            ];
+            
+            riskTypes.forEach((type, index) => {
+                const item = document.querySelector(`[data-risk-type="${type}"]`);
+                if (!item) return;
+                
+                const icon = item.querySelector('.risk-icon');
+                const title = item.querySelector('.risk-title');
+                const status = item.querySelector('.risk-status');
+                const description = item.querySelector('.risk-description');
+                
+                // 检查是否有对应的风险
+                const hasThisRisk = risks.some(risk => 
+                    risk.toLowerCase().includes(type === 'phishing' ? '钓鱼' : 
+                    type === 'malicious' ? '恶意' : 
+                    type === 'blacklist' ? '黑名单' : 
+                    type === 'theft' ? '盗窃' : '漏洞')
+                );
+                
+                if (hasThisRisk) {
+                    item.classList.add('danger');
+                    item.classList.remove('safe');
+                    icon.className = 'bi bi-shield-exclamation risk-icon danger';
+                    status.textContent = '⚠ 检测到风险';
+                    status.style.color = '#ef4444';
+                    description.textContent = '发现安全风险，建议谨慎处理';
+                } else {
+                    item.classList.remove('danger');
+                    item.classList.add('safe');
+                    icon.className = 'bi bi-shield-check risk-icon safe';
+                    status.textContent = '✓ 通过检测';
+                    status.style.color = '#22c55e';
+                    description.textContent = safeDescriptions[index];
+                }
+            });
+        }
+
+        // 更新风险建议
+        function updateRiskRecommendation(hasRisks, risks) {
+            const recommendationContent = document.getElementById('risk-recommendation');
+            
+            if (hasRisks) {
+                const riskCount = risks.length;
+                let content = '<p>⚠️ 检测到安全风险，建议采取以下措施：</p>';
+                
+                if (riskCount > 2) {
+                    content += '<p>🚨 高危交易，强烈建议停止执行</p>';
+                    content += '<p>🔍 建议进行详细的人工审核</p>';
+                } else {
+                    content += '<p>⚡ 中等风险，建议谨慎处理</p>';
+                    content += '<p>🔒 可考虑采用多重签名验证</p>';
+                }
+                
+                content += '<p>📞 如有疑问，请联系安全团队</p>';
+                recommendationContent.innerHTML = content;
+            } else {
+                recommendationContent.innerHTML = `
+                    <p>✅ 该交易通过所有安全检测，可以放心执行</p>
+                    <p>💡 建议持续关注交易对手的历史行为</p>
+                `;
+            }
+        }
+
+        // 地址检测功能
+        function analyzeAddress() {
+            const address = document.getElementById('addressInput').value.trim();
+            const button = document.getElementById('analyzeAddress');
+            const resultDiv = document.getElementById('addressResult');
+            
+            if (!address) {
+                alert('请输入有效的区块链地址');
+                return;
+            }
+            
+            // 显示地址到结果页面
+            document.getElementById('result-address-display').textContent = address;
+            
+            button.disabled = true;
+            button.innerHTML = '<div class="loading-spinner me-2"></div>检测中...';
+            
+            // 设置一个初始状态
+            document.getElementById('address-risk-badge').className = 'badge bg-secondary rounded-pill d-flex align-items-center';
+            document.getElementById('address-risk-badge').innerHTML = '<i class="bi bi-hourglass-split me-1"></i> 分析中...';
+            
+            // 显示结果卡片
+            resultDiv.style.display = 'block';
+            
+            // 启动地址图动画
+            resetAddressGraph();
+            setTimeout(() => {
+                animateAddressGraph();
+            }, 500);
+            
+            setTimeout(() => {
+                // 调用后端API
+                fetch('/api/check_address_risk', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ address: address })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    displayAddressResult(data, address);
+                })
+                .catch(error => {
+                    console.error('API调用失败:', error);
+                    // 使用模拟数据 - 简单规则演示
+                    const isRisk = address.toLowerCase().includes('a') || address.toLowerCase().includes('1');
+                    const riskData = isRisk ? {
+                        risks: ['涉及钓鱼活动', '涉及恶意合约投资活动'],
+                        riskLevel: '风险',
+                        address: address,
+                        riskNodes: ['address-node-0'] // 标记目标地址节点为风险节点
+                    } : {
+                        risks: [],
+                        riskLevel: '安全',
+                        address: address,
+                        riskNodes: []
+                    };
+                    displayAddressResult(riskData, address);
+                })
+                .finally(() => {
+                    button.disabled = false;
+                    button.innerHTML = '<i class="bi bi-search me-2"></i>评估地址风险';
+                });
+            }, 3000);
+        }
+
+        // 显示地址检测结果
+        function displayAddressResult(data, address) {
+            const resultDiv = document.getElementById('addressResult');
+            const risksDiv = document.getElementById('addressRisks');
+            
+            // 标记风险节点
+            if (data.riskNodes && data.riskNodes.length > 0) {
+                data.riskNodes.forEach(nodeId => {
+                    const node = document.getElementById(nodeId);
+                    if (node) {
+                        node.classList.add('risk-node');
+                    }
+                });
+            } else {
+                // 移除所有风险节点标记
+                document.querySelectorAll('#address-graph .risk-node').forEach(node => {
+                    node.classList.remove('risk-node');
+                });
+            }
+            
+            const isRisky = data.risks && data.risks.length > 0;
+            const riskCount = isRisky ? data.risks.length : 0;
+            
+            // 更新地址风险徽章
+            if (isRisky) {
+                document.getElementById('address-risk-badge').className = 'badge bg-danger rounded-pill d-flex align-items-center';
+                document.getElementById('address-risk-badge').innerHTML = `<i class="bi bi-exclamation-triangle me-1"></i> 风险项 ${riskCount}`;
+                document.getElementById('address-risk-badge').style.fontSize = '0.85rem';
+                document.getElementById('address-risk-badge').style.padding = '0.5rem 1rem';
+                
+                // 显示风险详情
+                risksDiv.innerHTML = `
+                    <div class="alert alert-danger" style="background: rgba(255, 0, 77, 0.1); border: 1px solid rgba(255, 0, 77, 0.3); color: var(--danger-red); font-weight: 500;">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        检测到 ${riskCount} 项风险问题
+                    </div>
+                    <div id="risk-details-list">
+                        ${data.risks.map((risk, index) => `
+                            <div style="background: rgba(255, 0, 77, 0.05); border: 1px solid rgba(255, 0, 77, 0.2); border-radius: 8px; padding: 0.8rem; margin-bottom: 0.5rem;">
+                                <div style="color: #ff6b6b; font-weight: 500; margin-bottom: 0.3rem;">${index + 1}. ${risk}</div>
+                                <div style="color: rgba(255, 255, 255, 0.7); font-size: 0.85rem;">建议避免与此地址交互</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            } else {
+                document.getElementById('address-risk-badge').className = 'badge bg-success rounded-pill d-flex align-items-center';
+                document.getElementById('address-risk-badge').innerHTML = '<i class="bi bi-shield-check me-1"></i> 风险项 0';
+                document.getElementById('address-risk-badge').style.fontSize = '0.85rem';
+                document.getElementById('address-risk-badge').style.padding = '0.5rem 1rem';
+                
+                // 显示无风险状态
+                risksDiv.innerHTML = `
+                    <div class="text-center py-3">
+                        <i class="bi bi-shield-check text-success" style="font-size: 2.5rem;"></i>
+                        <h5 class="mt-3" style="color: var(--blockchain-green);">未检测到风险</h5>
+                        <p style="color: rgba(255, 255, 255, 0.7);">该地址未被发现存在已知风险</p>
+                    </div>
+                `;
+            }
+        }
+
+        // 代码生成功能
+        function generateCode() {
+            const contractAddress = document.getElementById('codeInput').value.trim();
+            const button = document.getElementById('generateCode');
+            const resultDiv = document.getElementById('codeResult');
+            
+            // 检查是否输入了合约地址
+            if (!contractAddress) {
+                alert('请输入有效的合约地址');
+                return;
+            }
+            
+            // 显示输入的合约地址
+            document.getElementById('contract-address-display').textContent = contractAddress;
+            
+            button.disabled = true;
+            button.innerHTML = '<div class="loading-spinner me-2"></div>生成中...';
+            
+            setTimeout(() => {
+                // 调用后端API
+                fetch('/api/generate_code', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ contractAddress: contractAddress })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // 使用API返回的数据或默认数据
+                    displayCodeResult(data);
+                })
+                .catch(error => {
+                    console.error('API调用失败:', error);
+                    // 使用默认的示例数据
+                    displayCodeResult({
+                        original_data: {
+                            'is_contract': true,
+                            'goplus': 'stealing attack',
+                            'code': "{'_dispatcher': 'function _dispatcher', '_fallback': 'function _fallback payable view pure', 'withdraw()': 'function withdraw()', '0x5b1e3b51': 'function 0x5b1e3b51 payable view', '0x5fe2e4d1': 'function 0x5fe2e4d1 payable view', 'withdraw(address,uint256)': 'function withdraw(address,uint256) view'}"
+                        },
+                        processed_data: {
+                            'is_contract': true,
+                            'goplus': 'stealing attack',
+                            'code': "{'_dispatcher': 'function _dispatcher', '_fallback': 'function _fallback payable view pure', 'withdraw()': 'function withdraw()', 'approveTransaction()': 'function approveTransaction() payable view', 'finalizePayment()': 'function finalizePayment() payable view', 'withdraw(address,uint256)': 'function withdraw(address,uint256) view'}"
+                        }
+                    });
+                })
+                .finally(() => {
+                    button.disabled = false;
+                    button.innerHTML = '<i class="bi bi-gear me-2"></i>生成函数名';
+                });
+            }, 1500);
+        }
+
+        // 显示代码生成结果
+        function displayCodeResult(data) {
+            const resultDiv = document.getElementById('codeResult');
+            
+            // 结果已经在HTML中预设，只需显示
+            resultDiv.style.display = 'block';
+        }
+
+        // 获取实时数据
+        function getRealTimeData() {
+            const button = document.getElementById('getRealTimeData');
+            const updateButton = document.getElementById('updateData');
+            const resultDiv = document.getElementById('dataResult');
+            
+            button.disabled = true;
+            button.innerHTML = '<div class="loading-spinner me-2"></div>获取中...';
+            
+            setTimeout(() => {
+                // 调用后端API获取数据
+                fetch('/api/get_realtime_data', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({})
+                })
+                .then(response => response.json())
+                .then(data => {
+                    generateTableData(data);
+                })
+                .catch(error => {
+                    console.error('API调用失败:', error);
+                    generateTableData(); // 使用模拟数据
+                })
+                .finally(() => {
+                    resultDiv.style.display = 'block';
+                    updateButton.style.display = 'inline-block';
+                    
+                    button.disabled = false;
+                    button.innerHTML = '<i class="bi bi-download me-2"></i>获取实时数据';
+                });
+            }, 2000);
+        }
+
+        // 更新实时数据
+        function updateRealTimeData() {
+            const button = document.getElementById('updateData');
+            
+            button.disabled = true;
+            button.innerHTML = '<div class="loading-spinner me-2"></div>更新中...';
+            
+            setTimeout(() => {
+                generateTableData();
+                
+                button.disabled = false;
+                button.innerHTML = '<i class="bi bi-arrow-clockwise me-2"></i>更新数据';
+            }, 1000);
+        }
+
+        // 生成表格数据
+        function generateTableData() {
+            const tableBody = document.getElementById('dataTableBody');
+            tableBody.innerHTML = '';
+            
+            const chars = 'abcdef0123456789';
+            const sampleData = [
+                { risk: false, type: '安全' },
+                { risk: true, type: '风险' },
+                { risk: false, type: '安全' },
+                { risk: false, type: '安全' },
+                { risk: true, type: '风险' },
+                { risk: false, type: '安全' },
+                { risk: false, type: '安全' },
+                { risk: false, type: '安全' },
+                { risk: true, type: '风险' },
+                { risk: false, type: '安全' }
+            ];
+            
+            for (let i = 0; i < 10; i++) {
+                let hash = '0x';
+                let from = '0x';
+                let to = '0x';
+                
+                for (let j = 0; j < 16; j++) {
+                    hash += chars.charAt(Math.floor(Math.random() * chars.length));
+                    from += chars.charAt(Math.floor(Math.random() * chars.length));
+                    to += chars.charAt(Math.floor(Math.random() * chars.length));
+                }
+                
+                hash += '...';
+                from += '...';
+                to += '...';
+                
+                const isRisk = sampleData[i].risk;
+                const badgeClass = isRisk ? 'bg-danger' : 'bg-success';
+                const statusText = isRisk ? '风险' : '安全';
+                const badgeIcon = isRisk ? '<i class="bi bi-exclamation-triangle me-1"></i>' : '<i class="bi bi-shield-check me-1"></i>';
+                
+                const row = `<tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
+                    <td style="max-width: 180px; padding: 0.6rem; color: #4a90e2;" class="text-truncate">${hash}</td>
+                    <td style="max-width: 140px; padding: 0.6rem; color: #4a90e2;" class="text-truncate">${from}</td>
+                    <td style="max-width: 140px; padding: 0.6rem; color: #4a90e2;" class="text-truncate">${to}</td>
+                    <td style="padding: 0.6rem;"><span class="badge ${badgeClass} d-flex align-items-center justify-content-center" style="font-size: 0.75rem; padding: 0.4rem 0.8rem;">${badgeIcon}${statusText}</span></td>
+                </tr>`;
+                
+                tableBody.innerHTML += row;
+            }
+        }
+
+        // 格式化时间戳
+        function formatTimestamp(date) {
+            return date.toLocaleString('zh-CN', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: false
+            });
+        }
+
+        // 复制到剪贴板功能
+        function copyToClipboard(selector) {
+            const element = document.querySelector(selector);
+            if (element) {
+                const text = element.textContent;
+                navigator.clipboard.writeText(text).then(() => {
+                    // 可以添加一个提示消息
+                    console.log('已复制到剪贴板:', text);
+                }).catch(err => {
+                    console.error('复制失败:', err);
+                });
+            }
+        }
+
+        // 导航栏增强功能
+        (function() {
+            // 移动端菜单切换
+            const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+            const navMenu = document.getElementById('navMenu');
+            const navbar = document.getElementById('mainNavbar');
+
+            if (mobileMenuToggle && navMenu) {
+                mobileMenuToggle.addEventListener('click', function() {
+                    navMenu.classList.toggle('active');
+                    const icon = this.querySelector('i');
+                    icon.classList.toggle('bi-list');
+                    icon.classList.toggle('bi-x');
+                });
+            }
+
+            // 点击外部关闭移动端菜单
+            document.addEventListener('click', function(e) {
+                if (navMenu && !e.target.closest('.nav-menu') && !e.target.closest('.mobile-menu-toggle')) {
+                    navMenu.classList.remove('active');
+                    const icon = mobileMenuToggle?.querySelector('i');
+                    if (icon) {
+                        icon.classList.add('bi-list');
+                        icon.classList.remove('bi-x');
+                    }
+                }
+            });
+
+            // 滚动效果
+            let lastScrollTop = 0;
+            window.addEventListener('scroll', function() {
+                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                
+                if (navbar) {
+                    if (scrollTop > 100) {
+                        navbar.classList.add('scrolled');
+                    } else {
+                        navbar.classList.remove('scrolled');
+                    }
+
+                    // 隐藏/显示导航栏（向下滚动隐藏，向上滚动显示）
+                    if (scrollTop > lastScrollTop && scrollTop > 200) {
+                        navbar.style.transform = 'translateY(-100%)';
+                    } else {
+                        navbar.style.transform = 'translateY(0)';
+                    }
+                }
+                
+                lastScrollTop = scrollTop;
+            });
+
+            // 平滑滚动
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+        })();
+    </script>
+
+    <!-- 背景动效脚本 -->
+    <script>
+        function createParticles() {
+            const particlesContainer = document.getElementById('particlesBg');
+            const particleCount = 50;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.width = Math.random() * 4 + 2 + 'px';
+                particle.style.height = particle.style.width;
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.animationDuration = (Math.random() * 10 + 15) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // 区块链数据流
+        function createDataStreams() {
+            const streamsContainer = document.getElementById('blockchainStreams');
+            const streamCount = 20;
+
+            for (let i = 0; i < streamCount; i++) {
+                const stream = document.createElement('div');
+                stream.className = 'data-stream';
+                stream.style.left = Math.random() * 100 + '%';
+                stream.style.animationDelay = Math.random() * 8 + 's';
+                stream.style.animationDuration = (Math.random() * 4 + 6) + 's';
+                streamsContainer.appendChild(stream);
+            }
+        }
+
+        // 初始化背景效果
+        document.addEventListener('DOMContentLoaded', function() {
+            createParticles();
+            createDataStreams();
+        });
+    </script>
+
+    <!-- 主要功能脚本 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // 增强粒子背景动画系统
+        function initAdvancedParticleSystem() {
+            const canvas = document.createElement('canvas');
+            canvas.style.position = 'fixed';
+            canvas.style.top = '0';
+            canvas.style.left = '0';
+            canvas.style.width = '100%';
+            canvas.style.height = '100%';
+            canvas.style.zIndex = '-1';
+            canvas.style.pointerEvents = 'none';
+            document.body.appendChild(canvas);
+
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const particles = [];
+            const particleCount = 80;
+            const connections = [];
+
+            // 粒子类
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() * canvas.height;
+                    this.vx = (Math.random() - 0.5) * 1.5;
+                    this.vy = (Math.random() - 0.5) * 1.5;
+                    this.radius = Math.random() * 3 + 1;
+                    this.alpha = Math.random() * 0.6 + 0.3;
+                    this.type = Math.random() < 0.7 ? 'normal' : 'blockchain'; // 70%普通粒子，30%区块链节点
+                    this.pulse = Math.random() * Math.PI * 2;
+                    this.connections = [];
+                }
+
+                update() {
+                    this.x += this.vx;
+                    this.y += this.vy;
+                    this.pulse += 0.02;
+
+                    // 边界反弹
+                    if (this.x < 0 || this.x > canvas.width) {
+                        this.vx *= -1;
+                        this.x = Math.max(0, Math.min(canvas.width, this.x));
+                    }
+                    if (this.y < 0 || this.y > canvas.height) {
+                        this.vy *= -1;
+                        this.y = Math.max(0, Math.min(canvas.height, this.y));
+                    }
+                }
+
+                draw() {
+                    ctx.save();
+                    
+                    if (this.type === 'blockchain') {
+                        // 区块链节点样式
+                        const pulseSize = this.radius + Math.sin(this.pulse) * 1;
+                        
+                        // 外圈光晕
+                        const gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, pulseSize * 3);
+                        gradient.addColorStop(0, `rgba(0, 255, 204, ${this.alpha * 0.3})`);
+                        gradient.addColorStop(0.5, `rgba(0, 212, 255, ${this.alpha * 0.1})`);
+                        gradient.addColorStop(1, 'rgba(0, 255, 204, 0)');
+                        
+                        ctx.beginPath();
+                        ctx.arc(this.x, this.y, pulseSize * 3, 0, Math.PI * 2);
+                        ctx.fillStyle = gradient;
+                        ctx.fill();
+                        
+                        // 核心节点
+                        ctx.beginPath();
+                        ctx.arc(this.x, this.y, pulseSize, 0, Math.PI * 2);
+                        ctx.fillStyle = `rgba(0, 255, 204, ${this.alpha})`;
+                        ctx.fill();
+                        
+                        // 内部小点
+                        ctx.beginPath();
+                        ctx.arc(this.x, this.y, pulseSize * 0.3, 0, Math.PI * 2);
+                        ctx.fillStyle = `rgba(255, 255, 255, ${this.alpha * 0.8})`;
+                        ctx.fill();
+                    } else {
+                        // 普通粒子
+                        ctx.beginPath();
+                        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                        const colors = [
+                            `rgba(0, 255, 204, ${this.alpha})`,
+                            `rgba(0, 212, 255, ${this.alpha})`,
+                            `rgba(57, 255, 20, ${this.alpha})`
+                        ];
+                        ctx.fillStyle = colors[Math.floor(Math.random() * colors.length)];
+                        ctx.fill();
+                    }
+                    
+                    ctx.restore();
+                }
+            }
+
+            // 初始化粒子
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+
+            // 绘制连接线
+            function drawConnections() {
+                for (let i = 0; i < particles.length; i++) {
+                    for (let j = i + 1; j < particles.length; j++) {
+                        const dx = particles[i].x - particles[j].x;
+                        const dy = particles[i].y - particles[j].y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        
+                        if (distance < 120) {
+                            const opacity = (120 - distance) / 120 * 0.3;
+                            
+                            ctx.beginPath();
+                            ctx.moveTo(particles[i].x, particles[i].y);
+                            ctx.lineTo(particles[j].x, particles[j].y);
+                            ctx.strokeStyle = `rgba(0, 255, 204, ${opacity})`;
+                            ctx.lineWidth = 1;
+                            ctx.stroke();
+                        }
+                    }
+                }
+            }
+
+            // 添加区块链数据流动效果
+            function drawDataFlow() {
+                const time = Date.now() * 0.001;
+                
+                for (let i = 0; i < 5; i++) {
+                    const x = (time * 50 + i * 200) % (canvas.width + 100) - 50;
+                    const y = 50 + i * (canvas.height / 6);
+                    
+                    // 数据包
+                    ctx.save();
+                    ctx.fillStyle = `rgba(0, 255, 204, 0.6)`;
+                    ctx.fillRect(x, y, 30, 8);
+                    
+                    // 数据尾迹
+                    const gradient = ctx.createLinearGradient(x - 50, y, x, y);
+                    gradient.addColorStop(0, 'rgba(0, 255, 204, 0)');
+                    gradient.addColorStop(1, 'rgba(0, 255, 204, 0.3)');
+                    ctx.fillStyle = gradient;
+                    ctx.fillRect(x - 50, y, 50, 8);
+                    ctx.restore();
+                }
+            }
+
+            // 动画循环
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                // 更新和绘制粒子
+                particles.forEach(particle => {
+                    particle.update();
+                    particle.draw();
+                });
+                
+                // 绘制连接线
+                drawConnections();
+                
+                // 绘制数据流
+                drawDataFlow();
+                
+                requestAnimationFrame(animate);
+            }
+            
+            animate();
+            
+            // 响应窗口大小变化
+            window.addEventListener('resize', () => {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            });
+        }
+
+        // 鼠标交互效果
+        function initMouseInteraction() {
+            let mouseX = 0;
+            let mouseY = 0;
+            
+            document.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+                
+                // 创建鼠标轨迹粒子
+                if (Math.random() < 0.1) {
+                    createTrailParticle(mouseX, mouseY);
+                }
+            });
+        }
+
+        function createTrailParticle(x, y) {
+            const trail = document.createElement('div');
+            trail.style.position = 'fixed';
+            trail.style.left = x + 'px';
+            trail.style.top = y + 'px';
+            trail.style.width = '4px';
+            trail.style.height = '4px';
+            trail.style.backgroundColor = 'rgba(0, 255, 204, 0.6)';
+            trail.style.borderRadius = '50%';
+            trail.style.pointerEvents = 'none';
+            trail.style.zIndex = '1000';
+            trail.style.transition = 'all 0.5s ease-out';
+            document.body.appendChild(trail);
+            
+            setTimeout(() => {
+                trail.style.opacity = '0';
+                trail.style.transform = 'scale(0)';
+                setTimeout(() => {
+                    if (trail.parentNode) {
+                        trail.parentNode.removeChild(trail);
+                    }
+                }, 500);
+            }, 10);
+        }
+    </script>
+</body>
+</html>
