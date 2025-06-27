@@ -312,7 +312,7 @@
                 <p class="hero-description">
                     多维度评估交易和账户风险，通过机器学习和深层神经网络技术，全面分析交易图中的节点和边信息。
                     我们提供详细的风险分析报告和安全建议，支持系统的持续改进和优化。
-                </p>
+            </p>
                 <div class="mt-4">
                     <a href="auth.html" class="btn-hero">开始使用</a>
                     <a href="#features" class="btn-hero btn-hero-outline">了解更多</a>
@@ -513,7 +513,7 @@
             
             // 延迟启动数字动画
             setTimeout(animateNumbers, 1000);
-        });
+            });
 
         // 区块链增强效果
         function initBlockchainEffects() {
@@ -542,8 +542,8 @@
                     vy: (Math.random() - 0.5) * 1,
                     pulse: Math.random() * Math.PI * 2,
                     energy: Math.random() * 100
-                });
-            }
+            });
+        }
 
             function animateBlockchain() {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -577,12 +577,12 @@
                             ctx.stroke();
                         }
                     }
-                }
-                
+        }
+
                 // 绘制节点
                 blockchainNodes.forEach(node => {
                     const size = 3 + Math.sin(node.pulse) * 1;
-                    
+            
                     // 外圈光晕
                     const gradient = ctx.createRadialGradient(node.x, node.y, 0, node.x, node.y, size * 3);
                     gradient.addColorStop(0, 'rgba(0, 255, 204, 0.4)');
@@ -608,7 +608,7 @@
             window.addEventListener('resize', () => {
                 canvas.width = window.innerWidth;
                 canvas.height = window.innerHeight;
-            });
+        });
         }
     </script>
 </body>

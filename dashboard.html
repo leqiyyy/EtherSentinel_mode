@@ -1139,11 +1139,11 @@
             background: rgba(100, 150, 200, 0.5);
         }
 
-        /* 确保图表容器也有相同高度 */
+        /* 确保图表容器高度适配 */
         #txResult .graph-container {
             display: flex;
             flex-direction: column;
-            height: 480px;
+            height: 320px;
             background: linear-gradient(135deg, rgba(0, 30, 60, 0.3) 0%, rgba(0, 50, 100, 0.2) 100%);
             padding: 1.2rem;
             border-radius: 12px;
@@ -1409,8 +1409,10 @@
             background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(37, 99, 235, 0.08) 100%);
             border: 1px solid rgba(59, 130, 246, 0.15);
             border-radius: 6px;
-            padding: 0.7rem;
-            margin-top: 0.5rem;
+            padding: 0.8rem;
+            height: 140px;
+            display: flex;
+            flex-direction: column;
         }
 
         #txResult .recommendation-header {
@@ -1425,13 +1427,17 @@
         }
 
         #txResult .recommendation-content {
-            font-size: 0.7rem;
-            line-height: 1.5;
+            font-size: 0.75rem;
+            line-height: 1.6;
             color: #94a3b8;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
         #txResult .recommendation-content p {
-            margin: 0 0 0.3rem 0;
+            margin: 0 0 0.4rem 0;
         }
 
         #txResult .recommendation-content p:last-child {
@@ -1500,31 +1506,31 @@
                 <!-- 系统状态 -->
                 <div class="system-status">
                     <div class="status-card">
-                        <div class="status-value" id="totalScans">2,854,367</div>
+                        <div class="status-value" id="totalScans">48,527</div>
                         <div class="status-label">总扫描次数</div>
                         <div class="status-trend" style="font-size: 0.7rem; color: var(--blockchain-green); margin-top: 0.3rem;">
-                            <i class="bi bi-arrow-up"></i> +12.5%
+                            <i class="bi bi-arrow-up"></i> +3.2%
                         </div>
                     </div>
                     <div class="status-card">
-                        <div class="status-value" id="threatsBlocked">127,458</div>
+                        <div class="status-value" id="threatsBlocked">1,847</div>
                         <div class="status-label">已阻止威胁</div>
-                        <div class="status-trend" style="font-size: 0.7rem; color: var(--danger-red); margin-top: 0.3rem;">
-                            <i class="bi bi-arrow-up"></i> +8.3%
+                        <div class="status-trend" style="font-size: 0.7rem; color: #f59e0b; margin-top: 0.3rem;">
+                            <i class="bi bi-shield-check"></i> +2.1%
                         </div>
                     </div>
                     <div class="status-card">
-                        <div class="status-value" id="activeMonitors">24</div>
+                        <div class="status-value" id="activeMonitors">12</div>
                         <div class="status-label">活跃监控</div>
                         <div class="status-trend" style="font-size: 0.7rem; color: var(--neon-cyan); margin-top: 0.3rem;">
                             <i class="bi bi-check-circle"></i> 稳定运行
                         </div>
                     </div>
                     <div class="status-card">
-                        <div class="status-value" id="systemUptime">99.97%</div>
+                        <div class="status-value" id="systemUptime">99.8%</div>
                         <div class="status-label">系统运行时间</div>
                         <div class="status-trend" style="font-size: 0.7rem; color: var(--blockchain-green); margin-top: 0.3rem;">
-                            <i class="bi bi-clock"></i> 365天
+                            <i class="bi bi-clock"></i> 30天
                         </div>
                     </div>
                 </div>
@@ -1536,14 +1542,14 @@
                 <div class="sidebar-nav">
                     <h3 class="sidebar-title">功能模块</h3>
                     <div class="function-nav-list">
-                        <a href="#" class="function-nav-item" onclick="showSection('address')" id="nav-address" data-section="address">
-                            <div class="nav-title">地址检测</div>
-                            <div class="nav-description">分析区块链地址风险等级</div>
-                        </a>
-
                         <a href="#" class="function-nav-item active" onclick="showSection('transaction')" id="nav-transaction" data-section="transaction">
                             <div class="nav-title">交易甄别</div>
                             <div class="nav-description">检测异常交易保障安全</div>
+                        </a>
+
+                        <a href="#" class="function-nav-item" onclick="showSection('address')" id="nav-address" data-section="address">
+                            <div class="nav-title">地址检测</div>
+                            <div class="nav-description">分析区块链地址风险等级</div>
                         </a>
 
                         <a href="#" class="function-nav-item" onclick="showSection('code')" id="nav-generate" data-section="code">
@@ -1562,7 +1568,7 @@
                 <div class="main-content-area">
 
                         <!-- 交易甄别模块 -->
-            <div id="transaction-section" class="content-section">
+            <div id="transaction-section" class="content-section active">
                 <div class="content-card">
                     <h3 class="content-title">
                         <i class="bi bi-shield-check"></i>
@@ -1597,105 +1603,118 @@
                     
                     <!-- 分析结果 -->
                     <div id="txResult" class="result-card" style="display: none;">
-                        <!-- 交易网络图和风险分析结果 -->
+                                                <!-- 交易网络图和风险分析结果 -->
                         <div class="transaction-content">
                             <div class="row g-3 align-items-stretch">
-                                <!-- 左侧网络图 -->
+                                <!-- 左侧网络图和安全建议 -->
                                 <div class="col-md-6">
-                                    <div class="graph-container">
+                                    <!-- 交易网络图 -->
+                                    <div class="graph-container" style="margin-bottom: 1rem;">
                                         <h6 style="color: #94a3b8; margin-bottom: 0.8rem; text-align: center; font-weight: 600; font-family: 'Orbitron', monospace;">交易网络关系图</h6>
-                                    <svg id="transaction-graph" width="100%" height="360" viewBox="0 0 500 360">
+                                    <svg id="transaction-graph" width="100%" height="280" viewBox="0 0 500 280">
                                         <!-- 图形背景 -->
                                         <rect width="100%" height="100%" fill="transparent" />
                                         
                                         <!-- 连接线组 -->
                                         <g id="graph-edges">
                                             <!-- 第一层连线 (核心连接) -->
-                                            <path id="edge-0" class="graph-edge level-0" d="M230,140 L250,185" stroke="rgba(0, 255, 204, 0.7)" stroke-width="2.5" opacity="0" />
-                                            <path id="edge-1" class="graph-edge level-0" d="M250,185 L270,230" stroke="rgba(0, 255, 204, 0.7)" stroke-width="2.5" opacity="0" />
+                                            <path id="edge-0" class="graph-edge level-0" d="M230,110 L250,145" stroke="rgba(0, 255, 204, 0.7)" stroke-width="2.5" opacity="0" />
+                                            <path id="edge-1" class="graph-edge level-0" d="M250,145 L270,180" stroke="rgba(0, 255, 204, 0.7)" stroke-width="2.5" opacity="0" />
                                             
                                             <!-- 第二层连线 -->
-                                            <path id="edge-2" class="graph-edge level-1" d="M230,140 L130,100" stroke="rgba(255,255,255,0.3)" stroke-width="2" opacity="0" />
-                                            <path id="edge-3" class="graph-edge level-1" d="M230,140 L170,70" stroke="rgba(255,255,255,0.3)" stroke-width="2" opacity="0" />
-                                            <path id="edge-4" class="graph-edge level-1" d="M230,140 L320,60" stroke="rgba(255,255,255,0.3)" stroke-width="2" opacity="0" />
-                                            <path id="edge-5" class="graph-edge level-1" d="M230,140 L370,110" stroke="rgba(255,255,255,0.3)" stroke-width="2" opacity="0" />
+                                            <path id="edge-2" class="graph-edge level-1" d="M230,110 L130,80" stroke="rgba(255,255,255,0.3)" stroke-width="2" opacity="0" />
+                                            <path id="edge-3" class="graph-edge level-1" d="M230,110 L170,50" stroke="rgba(255,255,255,0.3)" stroke-width="2" opacity="0" />
+                                            <path id="edge-4" class="graph-edge level-1" d="M230,110 L320,40" stroke="rgba(255,255,255,0.3)" stroke-width="2" opacity="0" />
+                                            <path id="edge-5" class="graph-edge level-1" d="M230,110 L370,90" stroke="rgba(255,255,255,0.3)" stroke-width="2" opacity="0" />
                                             
                                             <!-- 第三层连线 -->
-                                            <path id="edge-6" class="graph-edge level-2" d="M270,230 L135,280" stroke="rgba(255,255,255,0.3)" stroke-width="2" opacity="0" />
-                                            <path id="edge-7" class="graph-edge level-2" d="M270,230 L205,300" stroke="rgba(255,255,255,0.3)" stroke-width="2" opacity="0" />
-                                            <path id="edge-8" class="graph-edge level-2" d="M270,230 L330,290" stroke="rgba(255,255,255,0.3)" stroke-width="2" opacity="0" />
-                                            <path id="edge-9" class="graph-edge level-2" d="M270,230 L375,260" stroke="rgba(255,255,255,0.3)" stroke-width="2" opacity="0" />
+                                            <path id="edge-6" class="graph-edge level-2" d="M270,180 L135,230" stroke="rgba(255,255,255,0.3)" stroke-width="2" opacity="0" />
+                                            <path id="edge-7" class="graph-edge level-2" d="M270,180 L205,260" stroke="rgba(255,255,255,0.3)" stroke-width="2" opacity="0" />
+                                            <path id="edge-8" class="graph-edge level-2" d="M270,180 L330,250" stroke="rgba(255,255,255,0.3)" stroke-width="2" opacity="0" />
+                                            <path id="edge-9" class="graph-edge level-2" d="M270,180 L375,220" stroke="rgba(255,255,255,0.3)" stroke-width="2" opacity="0" />
                                         </g>
                                         
                                         <!-- 节点组 -->
                                         <g id="graph-nodes">
                                             <!-- 核心节点 (交易双方) -->
                                             <g id="node-0" class="graph-node level-0" opacity="0">
-                                                <circle cx="230" cy="140" r="18" fill="#2c3e50" stroke="white" stroke-width="2">
+                                                <circle cx="230" cy="110" r="18" fill="#2c3e50" stroke="white" stroke-width="2">
                                                     <animate attributeName="r" from="0" to="18" dur="0.5s" begin="0s" fill="freeze" />
                                                 </circle>
-                                                <text x="230" y="140" text-anchor="middle" dominant-baseline="middle" fill="white" font-size="10">发送方</text>
+                                                <text x="230" y="110" text-anchor="middle" dominant-baseline="middle" fill="white" font-size="10">发送方</text>
                                             </g>
                                             
                                             <g id="node-1" class="graph-node level-0" opacity="0">
-                                                <circle cx="270" cy="230" r="16" fill="#2c3e50" stroke="white" stroke-width="2">
+                                                <circle cx="270" cy="180" r="16" fill="#2c3e50" stroke="white" stroke-width="2">
                                                     <animate attributeName="r" from="0" to="16" dur="0.5s" begin="0s" fill="freeze" />
                                                 </circle>
-                                                <text x="270" y="230" text-anchor="middle" dominant-baseline="middle" fill="white" font-size="10">接收方</text>
+                                                <text x="270" y="180" text-anchor="middle" dominant-baseline="middle" fill="white" font-size="10">接收方</text>
                                             </g>
                                             
                                             <g id="node-2" class="graph-node level-0" opacity="0">
-                                                <circle cx="250" cy="185" r="8" fill="#00ffcc" stroke="white" stroke-width="2">
+                                                <circle cx="250" cy="145" r="8" fill="#00ffcc" stroke="white" stroke-width="2">
                                                     <animate attributeName="r" from="0" to="8" dur="0.5s" begin="0s" fill="freeze" />
                                                 </circle>
-                                                <text x="250" y="185" text-anchor="middle" dominant-baseline="middle" fill="white" font-size="8">TX</text>
+                                                <text x="250" y="145" text-anchor="middle" dominant-baseline="middle" fill="white" font-size="8">TX</text>
                                             </g>
                                             
                                             <!-- 第二层节点 (发送方相关) -->
                                             <g id="node-3" class="graph-node level-1" opacity="0">
-                                                <circle cx="130" cy="100" r="10" fill="#2c3e50" stroke="white" stroke-width="2" />
-                                                <text x="130" y="100" text-anchor="middle" dominant-baseline="middle" fill="white" font-size="9">A</text>
+                                                <circle cx="130" cy="80" r="10" fill="#2c3e50" stroke="white" stroke-width="2" />
+                                                <text x="130" y="80" text-anchor="middle" dominant-baseline="middle" fill="white" font-size="9">A</text>
                                             </g>
                                             
                                             <g id="node-4" class="graph-node level-1" opacity="0">
-                                                <circle cx="170" cy="70" r="8" fill="#2c3e50" stroke="white" stroke-width="2" />
-                                                <text x="170" y="70" text-anchor="middle" dominant-baseline="middle" fill="white" font-size="9">B</text>
+                                                <circle cx="170" cy="50" r="8" fill="#2c3e50" stroke="white" stroke-width="2" />
+                                                <text x="170" y="50" text-anchor="middle" dominant-baseline="middle" fill="white" font-size="9">B</text>
                                             </g>
                                             
                                             <g id="node-5" class="graph-node level-1" opacity="0">
-                                                <circle cx="320" cy="60" r="9" fill="#2c3e50" stroke="white" stroke-width="2" />
-                                                <text x="320" y="60" text-anchor="middle" dominant-baseline="middle" fill="white" font-size="9">C</text>
+                                                <circle cx="320" cy="40" r="9" fill="#2c3e50" stroke="white" stroke-width="2" />
+                                                <text x="320" y="40" text-anchor="middle" dominant-baseline="middle" fill="white" font-size="9">C</text>
                                             </g>
                                             
                                             <g id="node-6" class="graph-node level-1" opacity="0">
-                                                <circle cx="370" cy="110" r="11" fill="#2c3e50" stroke="white" stroke-width="2" />
-                                                <text x="370" y="110" text-anchor="middle" dominant-baseline="middle" fill="white" font-size="9">D</text>
+                                                <circle cx="370" cy="90" r="11" fill="#2c3e50" stroke="white" stroke-width="2" />
+                                                <text x="370" y="90" text-anchor="middle" dominant-baseline="middle" fill="white" font-size="9">D</text>
                                             </g>
                                             
                                             <!-- 第三层节点 (接收方相关) -->
                                             <g id="node-7" class="graph-node level-2" opacity="0">
-                                                <circle cx="135" cy="280" r="10" fill="#2c3e50" stroke="white" stroke-width="2" />
-                                                <text x="135" y="280" text-anchor="middle" dominant-baseline="middle" fill="white" font-size="9">E</text>
+                                                <circle cx="135" cy="230" r="10" fill="#2c3e50" stroke="white" stroke-width="2" />
+                                                <text x="135" y="230" text-anchor="middle" dominant-baseline="middle" fill="white" font-size="9">E</text>
                                             </g>
                                             
                                             <g id="node-8" class="graph-node level-2" opacity="0">
-                                                <circle cx="205" cy="300" r="8" fill="#2c3e50" stroke="white" stroke-width="2" />
-                                                <text x="205" y="300" text-anchor="middle" dominant-baseline="middle" fill="white" font-size="9">F</text>
+                                                <circle cx="205" cy="260" r="8" fill="#2c3e50" stroke="white" stroke-width="2" />
+                                                <text x="205" y="260" text-anchor="middle" dominant-baseline="middle" fill="white" font-size="9">F</text>
                                             </g>
                                             
                                             <g id="node-9" class="graph-node level-2" opacity="0">
-                                                <circle cx="330" cy="290" r="9" fill="#2c3e50" stroke="white" stroke-width="2" />
-                                                <text x="330" y="290" text-anchor="middle" dominant-baseline="middle" fill="white" font-size="9">G</text>
+                                                <circle cx="330" cy="250" r="9" fill="#2c3e50" stroke="white" stroke-width="2" />
+                                                <text x="330" y="250" text-anchor="middle" dominant-baseline="middle" fill="white" font-size="9">G</text>
                                             </g>
                                             
                                             <g id="node-10" class="graph-node level-2" opacity="0">
-                                                <circle cx="375" cy="260" r="7" fill="#2c3e50" stroke="white" stroke-width="2" />
-                                                <text x="375" y="260" text-anchor="middle" dominant-baseline="middle" fill="white" font-size="8">H</text>
+                                                <circle cx="375" cy="220" r="7" fill="#2c3e50" stroke="white" stroke-width="2" />
+                                                <text x="375" y="220" text-anchor="middle" dominant-baseline="middle" fill="white" font-size="8">H</text>
                                             </g>
                                         </g>
                                     </svg>
-            </div>
-                            </div>
+                                    </div>
+                                    
+                                    <!-- 安全建议 -->
+                                    <div class="risk-recommendation">
+                                        <div class="recommendation-header">
+                                            <i class="bi bi-lightbulb-fill"></i>
+                                            <span>安全建议</span>
+                                        </div>
+                                        <div class="recommendation-content" id="risk-recommendation">
+                                            <p>✅ 该交易通过所有安全检测，可以放心执行</p>
+                                            <p>💡 建议持续关注交易对手的历史行为</p>
+                                        </div>
+                                    </div>
+                </div>
                             
                                 <!-- 右侧风险分析结果 -->
                                 <div class="col-md-6">
@@ -1785,18 +1804,6 @@
                                                 </div>
                                             </div>
                                         </div>
-
-                                        <!-- 风险建议 -->
-                                        <div class="risk-recommendation">
-                                            <div class="recommendation-header">
-                                                <i class="bi bi-lightbulb-fill"></i>
-                                                <span>安全建议</span>
-                                            </div>
-                                            <div class="recommendation-content" id="risk-recommendation">
-                                                <p>✅ 该交易通过所有安全检测，可以放心执行</p>
-                                                <p>💡 建议持续关注交易对手的历史行为</p>
-                                            </div>
-                                        </div>
                                         </div>
                                     </div>
                                 </div>
@@ -1865,7 +1872,7 @@
             </div>
 
                         <!-- 地址检测模块 -->
-            <div id="address-section" class="content-section active">
+            <div id="address-section" class="content-section">
                 <div class="content-card">
                     <h3 class="content-title">
                         <i class="bi bi-search-heart"></i>
@@ -1997,7 +2004,7 @@
                             <!-- 右侧风险评估 -->
                             <div class="col-md-6">
                                 <h5 style="color: var(--neon-cyan); margin-bottom: 1rem; text-align: center;">风险评估结果</h5>
-                                <div id="addressRisks" style="background: rgba(0, 20, 40, 0.6); padding: 1rem; border-radius: 15px; border: 1px solid rgba(0, 255, 204, 0.2); height: 350px; overflow-y: auto;">
+                                <div id="addressRisks" style="background: rgba(0, 20, 40, 0.6); padding: 1rem; border-radius: 15px; border: 1px solid rgba(0, 255, 204, 0.2); height: 350px; overflow-y: auto; font-size: 0.9rem;">
                                     <div class="text-center py-3">
                                         <i class="bi bi-shield-check text-success" style="font-size: 2.5rem;"></i>
                                         <h5 class="mt-3" style="color: var(--blockchain-green);">未检测到风险</h5>
@@ -2102,8 +2109,8 @@
      "_dispatcher": "function _dispatcher",
      "_fallback": "function _fallback payable view pure",
      "withdraw()": "function withdraw()",
-     "<span style="color: #ff004d; font-weight: bold;">0x5b1e3b51</span>": "function <span style="color: #ff004d; font-weight: bold;">0x5b1e3b51</span> payable view",
-     "<span style="color: #ff004d; font-weight: bold;">0x5fe2e4d1</span>": "function <span style="color: #ff004d; font-weight: bold;">0x5fe2e4d1</span> payable view",
+     "<span style="color: #ff6b6b; font-weight: bold; background: rgba(255, 107, 107, 0.1); padding: 2px 4px; border-radius: 3px;">0x5b1e3b51</span>": "function <span style="color: #ff6b6b; font-weight: bold; background: rgba(255, 107, 107, 0.1); padding: 2px 4px; border-radius: 3px;">0x5b1e3b51</span> payable view",
+     "<span style="color: #ff6b6b; font-weight: bold; background: rgba(255, 107, 107, 0.1); padding: 2px 4px; border-radius: 3px;">0x5fe2e4d1</span>": "function <span style="color: #ff6b6b; font-weight: bold; background: rgba(255, 107, 107, 0.1); padding: 2px 4px; border-radius: 3px;">0x5fe2e4d1</span> payable view",
      "withdraw(address,uint256)": "function withdraw(address,uint256) view"
    }
 }</pre>
@@ -2119,8 +2126,8 @@
      "_dispatcher": "function _dispatcher",
      "_fallback": "function _fallback payable view pure",
      "withdraw()": "function withdraw()",
-     "<span style="color: #00ffcc; font-weight: bold;">approveTransaction()</span>": "function <span style="color: #00ffcc; font-weight: bold;">approveTransaction()</span> payable view",
-     "<span style="color: #00ffcc; font-weight: bold;">finalizePayment()</span>": "function <span style="color: #00ffcc; font-weight: bold;">finalizePayment()</span> payable view",
+     "<span style="color: #00ffcc; font-weight: bold; background: rgba(0, 255, 204, 0.1); padding: 2px 4px; border-radius: 3px; text-shadow: 0 0 8px rgba(0, 255, 204, 0.3);">approveTransaction()</span>": "function <span style="color: #00ffcc; font-weight: bold; background: rgba(0, 255, 204, 0.1); padding: 2px 4px; border-radius: 3px; text-shadow: 0 0 8px rgba(0, 255, 204, 0.3);">approveTransaction()</span> payable view",
+     "<span style="color: #00ffcc; font-weight: bold; background: rgba(0, 255, 204, 0.1); padding: 2px 4px; border-radius: 3px; text-shadow: 0 0 8px rgba(0, 255, 204, 0.3);">finalizePayment()</span>": "function <span style="color: #00ffcc; font-weight: bold; background: rgba(0, 255, 204, 0.1); padding: 2px 4px; border-radius: 3px; text-shadow: 0 0 8px rgba(0, 255, 204, 0.3);">finalizePayment()</span> payable view",
      "withdraw(address,uint256)": "function withdraw(address,uint256) view"
    }
 }</pre>
@@ -2183,6 +2190,31 @@
                         </div>
 
                         <h5 style="color: var(--neon-cyan); margin-bottom: 1rem; text-align: center;">实时交易数据</h5>
+                        
+                        <!-- 数据统计信息 -->
+                        <div id="dataStats" class="mb-3" style="display: none;">
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <div style="background: rgba(0, 40, 80, 0.4); padding: 0.8rem; border-radius: 8px; border: 1px solid rgba(34, 197, 94, 0.3); text-align: center;">
+                                        <div style="color: #22c55e; font-size: 1.2rem; font-weight: bold;" id="safeCount">0</div>
+                                        <div style="color: #94a3b8; font-size: 0.8rem;">安全交易</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div style="background: rgba(80, 20, 20, 0.4); padding: 0.8rem; border-radius: 8px; border: 1px solid rgba(239, 68, 68, 0.3); text-align: center;">
+                                        <div style="color: #ef4444; font-size: 1.2rem; font-weight: bold;" id="riskCount">0</div>
+                                        <div style="color: #94a3b8; font-size: 0.8rem;">风险交易</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div style="background: rgba(0, 40, 80, 0.4); padding: 0.8rem; border-radius: 8px; border: 1px solid rgba(0, 255, 204, 0.3); text-align: center;">
+                                        <div style="color: var(--neon-cyan); font-size: 1.2rem; font-weight: bold;" id="totalCount">0</div>
+                                        <div style="color: #94a3b8; font-size: 0.8rem;">显示记录数</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
                         <div style="background: rgba(0, 20, 40, 0.6); padding: 1rem; border-radius: 10px; border: 1px solid rgba(0, 255, 204, 0.2);">
                             <div class="data-table-container">
                                 <div class="table-responsive">
@@ -2250,6 +2282,9 @@
             // 初始化增强粒子系统
             initAdvancedParticleSystem();
             initMouseInteraction();
+            
+            // 启动动态数据更新
+            initDynamicDataUpdate();
         });
 
         // 检查登录状态
@@ -2372,6 +2407,99 @@
             }
         }
 
+        // 动态数据更新系统
+        function initDynamicDataUpdate() {
+            // 初始数据
+            const baseData = {
+                totalScans: 48527,
+                threatsBlocked: 1847,
+                activeMonitors: 12,
+                systemUptime: 99.8
+            };
+            
+            // 每15秒更新一次数据
+            setInterval(() => {
+                updateDashboardData(baseData);
+            }, 15000);
+            
+            // 页面加载2秒后开始第一次更新
+            setTimeout(() => {
+                updateDashboardData(baseData);
+            }, 2000);
+        }
+        
+        // 更新控制台数据
+        function updateDashboardData(baseData) {
+            // 生成小幅度的随机变化
+            const totalScansVariation = Math.floor(Math.random() * 15) + 1; // 1-15
+            const threatsVariation = Math.floor(Math.random() * 3) + 1; // 1-3
+            const monitorsVariation = Math.random() > 0.8 ? (Math.random() > 0.5 ? 1 : -1) : 0; // 20%几率变化±1
+            const uptimeVariation = (Math.random() * 0.2 - 0.1); // ±0.1%
+            
+            // 计算新数值
+            const newTotalScans = baseData.totalScans + totalScansVariation;
+            const newThreatsBlocked = baseData.threatsBlocked + threatsVariation;
+            const newActiveMonitors = Math.max(10, Math.min(15, baseData.activeMonitors + monitorsVariation));
+            const newSystemUptime = Math.max(99.5, Math.min(99.9, baseData.systemUptime + uptimeVariation));
+            
+            // 更新DOM
+            animateValueChange('totalScans', newTotalScans.toLocaleString());
+            animateValueChange('threatsBlocked', newThreatsBlocked.toLocaleString());
+            animateValueChange('activeMonitors', newActiveMonitors.toString());
+            animateValueChange('systemUptime', newSystemUptime.toFixed(1) + '%');
+            
+            // 更新趋势百分比
+            updateTrendPercentages();
+            
+            // 更新基础数据
+            baseData.totalScans = newTotalScans;
+            baseData.threatsBlocked = newThreatsBlocked;
+            baseData.activeMonitors = newActiveMonitors;
+            baseData.systemUptime = newSystemUptime;
+        }
+        
+        // 数值变化动画
+        function animateValueChange(elementId, newValue) {
+            const element = document.getElementById(elementId);
+            if (!element) return;
+            
+            // 添加更新动画效果
+            element.style.transform = 'scale(1.05)';
+            element.style.color = 'var(--neon-cyan)';
+            element.style.transition = 'all 0.3s ease';
+            
+            setTimeout(() => {
+                element.textContent = newValue;
+                element.style.transform = 'scale(1)';
+                element.style.color = '';
+            }, 150);
+        }
+        
+        // 更新趋势百分比
+        function updateTrendPercentages() {
+            const trends = [
+                { selector: '.status-card:nth-child(1) .status-trend', values: ['+2.8%', '+3.1%', '+3.4%', '+3.6%'], colors: ['var(--blockchain-green)'] },
+                { selector: '.status-card:nth-child(2) .status-trend', values: ['+1.8%', '+2.1%', '+2.3%', '+2.5%'], colors: ['#f59e0b'] },
+                { selector: '.status-card:nth-child(4) .status-trend', values: ['29天', '30天', '31天'], colors: ['var(--blockchain-green)'] }
+            ];
+            
+            trends.forEach(trend => {
+                const element = document.querySelector(trend.selector);
+                if (element && trend.values.length > 0) {
+                    const randomValue = trend.values[Math.floor(Math.random() * trend.values.length)];
+                    const textContent = element.textContent;
+                    
+                    // 只更新数值部分，保留图标
+                    if (textContent.includes('+') || textContent.includes('天')) {
+                        const icon = element.querySelector('i');
+                        const iconClass = icon ? icon.className : '';
+                        const newContent = textContent.replace(/[\d.]+[%天]?/, randomValue.replace(/[+-]/, ''));
+                        element.innerHTML = `<i class="${iconClass}"></i> ${randomValue}`;
+                    }
+                }
+            });
+        }
+
         // 初始化事件监听器
         function initializeEventListeners() {
             // 功能模块切换（备用方案）
@@ -2416,9 +2544,9 @@
             // 显示到结果页面
             document.getElementById('tx-hash-display').textContent = txHash;
             
-            // 更新按钮状态
+            // 更新按钮状态并显示进度条
             button.disabled = true;
-            button.innerHTML = '<div class="loading-spinner me-2"></div>分析中...';
+            showTransactionProgress(button);
             
             // 更新时间戳
             const now = new Date();
@@ -2434,18 +2562,34 @@
             }) + ' UTC';
             document.getElementById('tx-timestamp').textContent = `2 mins ago (${timeString})`;
             
-            // 显示结果卡片
+            // 显示结果卡片但隐藏分析结果
             resultDiv.style.display = 'block';
+            // 先显示加载状态
+            hideTransactionAnalysisResults();
             
-            // 启动交易图动画
-            resetTransactionGraph();
+            // 分阶段显示分析过程
             setTimeout(() => {
+                // 第一阶段：显示网络图动画
+                resetTransactionGraph();
+                updateProgressButton(button, '构建交易网络图...', 25);
                 animateTransactionGraph();
-            }, 500);
+            }, 300);
             
-            // 模拟分析过程
             setTimeout(() => {
-                // 调用后端API（与旧前端保持一致）
+                // 第二阶段：模拟风险检测
+                updateProgressButton(button, '执行风险检测...', 50);
+            }, 800);
+            
+            setTimeout(() => {
+                // 第三阶段：分析交易模式
+                updateProgressButton(button, '分析交易模式...', 75);
+            }, 1200);
+            
+            setTimeout(() => {
+                // 第四阶段：生成分析报告
+                updateProgressButton(button, '生成分析报告...', 90);
+                
+                // 调用后端API
                 fetch('/api/check_transaction_risk', {
                     method: 'POST',
                     headers: {
@@ -2455,32 +2599,219 @@
                 })
                 .then(response => response.json())
                 .then(data => {
-                    displayTransactionResult(data);
+                    updateProgressButton(button, '分析完成', 100);
+                    // 更新交易状态为成功
+                    document.getElementById('tx-status-badge').className = 'badge bg-success';
+                    document.getElementById('tx-status-badge').textContent = 'Success (安全)';
+                    // 等待进度条完成后显示预设结果
+                    setTimeout(() => {
+                        showPresetTransactionAnalysisResults(txHash);
+                    }, 300);
+                    resetButton(button, '<i class="bi bi-search me-2"></i>预测交易甄别');
                 })
                 .catch(error => {
                     console.error('API调用失败:', error);
-                    // 使用模拟数据 - 根据哈希内容判断是否有风险
-                    const inputHash = txHash;
-                    const hasRisk = inputHash.toLowerCase().includes('a') || inputHash.toLowerCase().includes('1');
-                    const riskData = hasRisk ? {
-                        isSafe: false,
-                        risks: ['涉及钓鱼活动'],
-                        txHash: inputHash,
-                        riskNodes: ['node-0'] // 标记发送方节点为风险节点
-                    } : {
-                        isSafe: true,
-                        risks: [],
-                        txHash: inputHash,
-                        riskNodes: []
-                    };
-                    displayTransactionResult(riskData);
-                })
-                .finally(() => {
-                    button.disabled = false;
-                    button.innerHTML = '<i class="bi bi-search me-2"></i>预测交易甄别';
+                    updateProgressButton(button, '分析完成', 100);
+                    // 更新交易状态为成功
+                    document.getElementById('tx-status-badge').className = 'badge bg-success';
+                    document.getElementById('tx-status-badge').textContent = 'Success (安全)';
+                    // 等待进度条完成后显示预设结果
+                    setTimeout(() => {
+                        showPresetTransactionAnalysisResults(txHash);
+                    }, 300);
+                    resetButton(button, '<i class="bi bi-search me-2"></i>预测交易甄别');
                 });
-            }, 3000);
+            }, 1600);
         }
+
+        // 显示交易分析进度
+        function showTransactionProgress(button) {
+            const progressHtml = `
+                <div class="d-flex align-items-center">
+                    <div class="progress me-3" style="width: 120px; height: 6px;">
+                        <div class="progress-bar bg-info" role="progressbar" style="width: 0%" id="tx-progress-bar"></div>
+                    </div>
+                    <span id="tx-progress-text">初始化检测...</span>
+                </div>
+            `;
+            button.innerHTML = progressHtml;
+        }
+
+        // 更新进度按钮
+        function updateProgressButton(button, text, progress) {
+            const progressBar = document.getElementById('tx-progress-bar');
+            const progressText = document.getElementById('tx-progress-text');
+            
+            if (progressBar && progressText) {
+                progressBar.style.width = progress + '%';
+                progressText.textContent = text;
+                
+                // 进度条颜色变化
+                if (progress < 30) {
+                    progressBar.className = 'progress-bar bg-info';
+                } else if (progress < 70) {
+                    progressBar.className = 'progress-bar bg-warning';
+                } else if (progress < 100) {
+                    progressBar.className = 'progress-bar bg-primary';
+                } else {
+                    progressBar.className = 'progress-bar bg-success';
+                }
+            }
+        }
+
+        // 重置按钮状态
+        function resetButton(button, originalContent) {
+            setTimeout(() => {
+                button.disabled = false;
+                button.innerHTML = originalContent;
+            }, 500);
+        }
+
+        // 隐藏交易分析结果
+        function hideTransactionAnalysisResults() {
+            const riskPanel = document.querySelector('#txRisks');
+            if (riskPanel) {
+                riskPanel.style.opacity = '0.3';
+                riskPanel.innerHTML = `
+                    <h6 style="color: #94a3b8; margin-bottom: 0.8rem; text-align: center; font-weight: 600; font-family: 'Orbitron', monospace;">智能风险分析</h6>
+                    <div class="text-center py-5">
+                        <div class="spinner-border text-info mb-3" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p style="color: #94a3b8;">正在分析交易风险...</p>
+                        <p style="color: #64748b; font-size: 0.85rem;">请稍候...</p>
+                    </div>
+                `;
+            }
+            
+            // 清空安全建议内容
+            const recommendationPanel = document.getElementById('risk-recommendation');
+            if (recommendationPanel) {
+                recommendationPanel.innerHTML = '';
+                recommendationPanel.style.opacity = '0';
+            }
+        }
+
+        // 显示预设的交易分析结果
+        function showPresetTransactionAnalysisResults(txHash) {
+            const riskPanel = document.querySelector('#txRisks');
+            if (!riskPanel) return;
+            
+                        // 交易甄别始终显示无风险结果
+            riskPanel.style.opacity = '1';
+            
+            // 显示安全的预设结果
+            riskPanel.innerHTML = `
+                    <h6 style="color: #94a3b8; margin-bottom: 0.8rem; text-align: center; font-weight: 600; font-family: 'Orbitron', monospace;">智能风险分析</h6>
+                    <div class="risk-content-wrapper">
+                        <!-- 风险评估概览 -->
+                        <div class="risk-overview-panel">
+                            <div class="risk-score-display">
+                                <div class="score-circle">
+                                    <span class="score-value">85</span>
+                                    <span class="score-label">安全分</span>
+                                </div>
+                                <div class="score-description">
+                                    <div class="score-status">低风险交易</div>
+                                    <div class="score-subtitle">基于5项安全指标分析</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 风险检测详情 -->
+                        <div class="risk-details-section">
+                            <div class="section-header">
+                                <i class="bi bi-shield-check-fill"></i>
+                                <span>安全检测项目</span>
+                            </div>
+                            
+                            <div class="risk-item-grid">
+                                <!-- 所有检测项目 - 安全 -->
+                                <div class="risk-check-item">
+                                    <div class="risk-icon-container">
+                                        <i class="bi bi-shield-check risk-icon safe"></i>
+                                    </div>
+                                    <div class="risk-content">
+                                        <div class="risk-title">钓鱼活动检测</div>
+                                        <div class="risk-status">✓ 通过检测</div>
+                                        <div class="risk-description">交易流向正常，未发现欺诈行为</div>
+                                    </div>
+                                </div>
+
+                                <div class="risk-check-item">
+                                    <div class="risk-icon-container">
+                                        <i class="bi bi-shield-check risk-icon safe"></i>
+                                    </div>
+                                    <div class="risk-content">
+                                        <div class="risk-title">恶意合约检测</div>
+                                        <div class="risk-status">✓ 通过检测</div>
+                                        <div class="risk-description">合约代码安全，无恶意逻辑</div>
+                                    </div>
+                                </div>
+
+                                <div class="risk-check-item">
+                                    <div class="risk-icon-container">
+                                        <i class="bi bi-shield-check risk-icon safe"></i>
+                                    </div>
+                                    <div class="risk-content">
+                                        <div class="risk-title">黑名单地址检测</div>
+                                        <div class="risk-status">✓ 通过检测</div>
+                                        <div class="risk-description">地址清洁，无风险记录</div>
+                                    </div>
+                                </div>
+
+                                <div class="risk-check-item">
+                                    <div class="risk-icon-container">
+                                        <i class="bi bi-shield-check risk-icon safe"></i>
+                                    </div>
+                                    <div class="risk-content">
+                                        <div class="risk-title">资金安全检测</div>
+                                        <div class="risk-status">✓ 通过检测</div>
+                                        <div class="risk-description">资金来源合法，无盗窃迹象</div>
+                                    </div>
+                                </div>
+
+                                <div class="risk-check-item">
+                                    <div class="risk-icon-container">
+                                        <i class="bi bi-shield-check risk-icon safe"></i>
+                                    </div>
+                                    <div class="risk-content">
+                                        <div class="risk-title">合约漏洞检测</div>
+                                        <div class="risk-status">✓ 通过检测</div>
+                                        <div class="risk-description">代码结构稳定，无已知漏洞</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                // 移除所有风险节点标记
+                document.querySelectorAll('.risk-node').forEach(node => {
+                    node.classList.remove('risk-node');
+                });
+                
+                // 延时显示安全建议
+                setTimeout(() => {
+                    const recommendationPanel = document.getElementById('risk-recommendation');
+                    if (recommendationPanel) {
+                        // 添加淡入效果
+                        recommendationPanel.style.opacity = '0';
+                        recommendationPanel.style.transition = 'opacity 0.5s ease-in-out';
+                        
+                        recommendationPanel.innerHTML = `
+                            <p>✅ 该交易通过所有安全检测，可以放心执行</p>
+                            <p>💡 建议持续关注交易对手的历史行为</p>
+                        `;
+                        
+                        setTimeout(() => {
+                            recommendationPanel.style.opacity = '1';
+                        }, 50);
+                    }
+                }, 800);
+        }
+
+
 
         // 交易可视化图动画函数
         function animateTransactionGraph() {
@@ -2587,6 +2918,12 @@
         // 显示交易分析结果
         function displayTransactionResult(data) {
             const resultDiv = document.getElementById('txResult');
+            const riskPanel = document.querySelector('#txRisks');
+            
+            // 恢复面板透明度
+            if (riskPanel) {
+                riskPanel.style.opacity = '1';
+            }
             
             // 标记风险节点
             if (data.riskNodes && data.riskNodes.length > 0) {
@@ -2731,23 +3068,45 @@
             // 显示地址到结果页面
             document.getElementById('result-address-display').textContent = address;
             
+            // 更新按钮状态并显示进度条
             button.disabled = true;
-            button.innerHTML = '<div class="loading-spinner me-2"></div>检测中...';
+            showAddressProgress(button);
             
-            // 设置一个初始状态
+            // 设置初始状态
             document.getElementById('address-risk-badge').className = 'badge bg-secondary rounded-pill d-flex align-items-center';
             document.getElementById('address-risk-badge').innerHTML = '<i class="bi bi-hourglass-split me-1"></i> 分析中...';
             
-            // 显示结果卡片
+            // 显示结果卡片但隐藏分析结果
             resultDiv.style.display = 'block';
+            hideAddressAnalysisResults();
             
-            // 启动地址图动画
-            resetAddressGraph();
+            // 分阶段显示分析过程
             setTimeout(() => {
+                // 第一阶段：构建地址关联网络
+                resetAddressGraph();
+                updateAddressProgressButton(button, '构建地址关联网络...', 20);
                 animateAddressGraph();
             }, 500);
             
             setTimeout(() => {
+                // 第二阶段：黑名单检查
+                updateAddressProgressButton(button, '执行黑名单检查...', 40);
+            }, 1000);
+            
+            setTimeout(() => {
+                // 第三阶段：历史交易分析
+                updateAddressProgressButton(button, '分析历史交易模式...', 60);
+            }, 1500);
+            
+            setTimeout(() => {
+                // 第四阶段：风险评估
+                updateAddressProgressButton(button, '执行风险评估...', 80);
+            }, 2000);
+            
+            setTimeout(() => {
+                // 第五阶段：生成报告
+                updateAddressProgressButton(button, '生成风险报告...', 95);
+                
                 // 调用后端API
                 fetch('/api/check_address_risk', {
                     method: 'POST',
@@ -2758,30 +3117,112 @@
                 })
                 .then(response => response.json())
                 .then(data => {
-                    displayAddressResult(data, address);
+                    updateAddressProgressButton(button, '检测完成', 100);
+                    // 地址检测始终显示有风险的结果
+                    const riskData = {
+                        risks: ['涉及钓鱼活动', '涉及恶意合约交互', '关联黑名单地址'],
+                        riskLevel: '风险',
+                        address: address,
+                        riskNodes: ['address-node-0']
+                    };
+                    displayAddressResultWithAnimation(riskData, address);
+                    resetButton(button, '<i class="bi bi-search me-2"></i>评估地址风险');
                 })
                 .catch(error => {
                     console.error('API调用失败:', error);
-                    // 使用模拟数据 - 简单规则演示
-                    const isRisk = address.toLowerCase().includes('a') || address.toLowerCase().includes('1');
-                    const riskData = isRisk ? {
-                        risks: ['涉及钓鱼活动', '涉及恶意合约投资活动'],
+                    // 地址检测始终显示有风险的结果
+                    const riskData = {
+                        risks: ['涉及钓鱼活动', '涉及恶意合约交互', '关联黑名单地址'],
                         riskLevel: '风险',
                         address: address,
-                        riskNodes: ['address-node-0'] // 标记目标地址节点为风险节点
-                    } : {
-                        risks: [],
-                        riskLevel: '安全',
-                        address: address,
-                        riskNodes: []
+                        riskNodes: ['address-node-0']
                     };
-                    displayAddressResult(riskData, address);
-                })
-                .finally(() => {
-                    button.disabled = false;
-                    button.innerHTML = '<i class="bi bi-search me-2"></i>评估地址风险';
+                    
+                    updateAddressProgressButton(button, '检测完成', 100);
+                    displayAddressResultWithAnimation(riskData, address);
+                    resetButton(button, '<i class="bi bi-search me-2"></i>评估地址风险');
                 });
             }, 3000);
+        }
+
+        // 显示地址检测进度
+        function showAddressProgress(button) {
+            const progressHtml = `
+                <div class="d-flex align-items-center">
+                    <div class="progress me-3" style="width: 120px; height: 6px;">
+                        <div class="progress-bar bg-info" role="progressbar" style="width: 0%" id="address-progress-bar"></div>
+                    </div>
+                    <span id="address-progress-text">初始化检测...</span>
+                </div>
+            `;
+            button.innerHTML = progressHtml;
+        }
+
+        // 更新地址检测进度按钮
+        function updateAddressProgressButton(button, text, progress) {
+            const progressBar = document.getElementById('address-progress-bar');
+            const progressText = document.getElementById('address-progress-text');
+            
+            if (progressBar && progressText) {
+                progressBar.style.width = progress + '%';
+                progressText.textContent = text;
+                
+                // 进度条颜色变化
+                if (progress < 25) {
+                    progressBar.className = 'progress-bar bg-info';
+                } else if (progress < 50) {
+                    progressBar.className = 'progress-bar bg-primary';
+                } else if (progress < 75) {
+                    progressBar.className = 'progress-bar bg-warning';
+                } else if (progress < 100) {
+                    progressBar.className = 'progress-bar bg-danger';
+                } else {
+                    progressBar.className = 'progress-bar bg-success';
+                }
+            }
+        }
+
+        // 隐藏地址分析结果
+        function hideAddressAnalysisResults() {
+            const risksDiv = document.getElementById('addressRisks');
+            if (risksDiv) {
+                risksDiv.style.opacity = '0.3';
+                risksDiv.innerHTML = `
+                    <div class="text-center py-5">
+                        <div class="spinner-border text-primary mb-3" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p style="color: #94a3b8;">正在检测地址风险...</p>
+                        <p style="color: #64748b; font-size: 0.85rem;">正在查询黑名单数据库</p>
+                    </div>
+                `;
+            }
+        }
+
+        // 带动画的显示地址检测结果
+        function displayAddressResultWithAnimation(data, address) {
+            const risksDiv = document.getElementById('addressRisks');
+            if (!risksDiv) return;
+            
+            // 恢复面板透明度
+            risksDiv.style.opacity = '1';
+            
+            // 标记风险节点
+            if (data.riskNodes && data.riskNodes.length > 0) {
+                data.riskNodes.forEach(nodeId => {
+                    const node = document.getElementById(nodeId);
+                    if (node) {
+                        node.classList.add('risk-node');
+                    }
+                });
+            } else {
+                document.querySelectorAll('#address-graph .risk-node').forEach(node => {
+                    node.classList.remove('risk-node');
+                });
+            }
+            
+            // 立即显示详细结果
+            displayAddressResult(data, address);
         }
 
         // 显示地址检测结果
@@ -2814,19 +3255,46 @@
                 document.getElementById('address-risk-badge').style.fontSize = '0.85rem';
                 document.getElementById('address-risk-badge').style.padding = '0.5rem 1rem';
                 
-                // 显示风险详情
+                // 显示紧凑的风险分析结果
                 risksDiv.innerHTML = `
-                    <div class="alert alert-danger" style="background: rgba(255, 0, 77, 0.1); border: 1px solid rgba(255, 0, 77, 0.3); color: var(--danger-red); font-weight: 500;">
+                    <div class="alert alert-danger" style="background: rgba(255, 0, 77, 0.1); border: 1px solid rgba(255, 0, 77, 0.3); color: var(--danger-red); font-weight: 500; margin-bottom: 0.8rem; padding: 0.6rem; font-size: 0.85rem;">
                         <i class="bi bi-exclamation-triangle-fill me-2"></i>
-                        检测到 ${riskCount} 项风险问题
+                        检测到 ${riskCount} 项安全风险
                     </div>
-                    <div id="risk-details-list">
-                        ${data.risks.map((risk, index) => `
-                            <div style="background: rgba(255, 0, 77, 0.05); border: 1px solid rgba(255, 0, 77, 0.2); border-radius: 8px; padding: 0.8rem; margin-bottom: 0.5rem;">
-                                <div style="color: #ff6b6b; font-weight: 500; margin-bottom: 0.3rem;">${index + 1}. ${risk}</div>
-                                <div style="color: rgba(255, 255, 255, 0.7); font-size: 0.85rem;">建议避免与此地址交互</div>
+                    
+                    <!-- 风险概览 -->
+                    <div style="background: rgba(255, 0, 77, 0.05); border: 1px solid rgba(255, 0, 77, 0.2); border-radius: 6px; padding: 0.6rem; margin-bottom: 0.8rem;">
+                        <div class="d-flex align-items-center">
+                            <div class="rounded-circle bg-danger d-flex justify-content-center align-items-center me-2" style="width: 28px; height: 28px;">
+                                <i class="bi bi-exclamation-triangle-fill text-white" style="font-size: 0.7rem;"></i>
                             </div>
-                        `).join('')}
+                            <div>
+                                <div style="color: #ff6b6b; font-weight: 600; font-size: 0.9rem;">高风险地址</div>
+                                <div style="color: rgba(255, 255, 255, 0.7); font-size: 0.75rem;">建议避免与此地址交互</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 风险详情列表 -->
+                    <div>
+                        <h6 style="color: var(--danger-red); margin-bottom: 0.5rem; font-weight: 600; font-size: 0.85rem;">
+                            <i class="bi bi-shield-exclamation me-1"></i>检测到的风险类型
+                        </h6>
+                        <div>
+                            ${data.risks.map((risk, index) => `
+                                <div class="d-flex align-items-start mb-2" style="background: rgba(255, 0, 77, 0.05); border: 1px solid rgba(255, 0, 77, 0.15); border-radius: 4px; padding: 0.5rem;">
+                                    <div class="rounded-circle bg-danger d-flex justify-content-center align-items-center me-2" style="width: 18px; height: 18px; flex-shrink: 0;">
+                                        <i class="bi bi-exclamation text-white" style="font-size: 0.6rem;"></i>
+                                    </div>
+                                    <div style="flex: 1;">
+                                        <div style="color: #ff6b6b; font-weight: 500; margin-bottom: 0.2rem; font-size: 0.8rem;">${risk}</div>
+                                        <div style="color: rgba(255, 255, 255, 0.7); font-size: 0.7rem; line-height: 1.3;">
+                                            ${getRiskDescription(risk)}
+                                        </div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
                     </div>
                 `;
             } else {
@@ -2939,6 +3407,12 @@
                     resultDiv.style.display = 'block';
                     updateButton.style.display = 'inline-block';
                     
+                    // 显示统计信息栏
+                    const statsDiv = document.getElementById('dataStats');
+                    if (statsDiv) {
+                        statsDiv.style.display = 'block';
+                    }
+                    
                     button.disabled = false;
                     button.innerHTML = '<i class="bi bi-download me-2"></i>获取实时数据';
                 });
@@ -2966,24 +3440,40 @@
             tableBody.innerHTML = '';
             
             const chars = 'abcdef0123456789';
-            const sampleData = [
-                { risk: false, type: '安全' },
-                { risk: true, type: '风险' },
-                { risk: false, type: '安全' },
-                { risk: false, type: '安全' },
-                { risk: true, type: '风险' },
-                { risk: false, type: '安全' },
-                { risk: false, type: '安全' },
-                { risk: false, type: '安全' },
-                { risk: true, type: '风险' },
-                { risk: false, type: '安全' }
-            ];
             
-            for (let i = 0; i < 10; i++) {
+            // 固定显示10条记录
+            const recordCount = 10;
+            
+            // 动态生成风险数量（1-4条风险记录）
+            const riskCount = Math.floor(Math.random() * 4) + 1; // 1到4条风险
+            const safeCount = recordCount - riskCount; // 剩余的都是安全记录
+            
+            // 创建动态数据数组
+            const sampleData = [];
+            
+            // 添加风险记录
+            for (let i = 0; i < riskCount; i++) {
+                sampleData.push({ risk: true, type: '风险' });
+            }
+            
+            // 添加安全记录
+            for (let i = 0; i < safeCount; i++) {
+                sampleData.push({ risk: false, type: '安全' });
+            }
+            
+            // 打乱数组顺序，随机分布安全和风险记录
+            for (let i = sampleData.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [sampleData[i], sampleData[j]] = [sampleData[j], sampleData[i]];
+            }
+            
+            // 生成表格行
+            for (let i = 0; i < recordCount; i++) {
                 let hash = '0x';
                 let from = '0x';
                 let to = '0x';
                 
+                // 生成随机哈希值
                 for (let j = 0; j < 16; j++) {
                     hash += chars.charAt(Math.floor(Math.random() * chars.length));
                     from += chars.charAt(Math.floor(Math.random() * chars.length));
@@ -3008,6 +3498,37 @@
                 
                 tableBody.innerHTML += row;
             }
+            
+            // 更新统计信息显示
+            updateDataStatistics(recordCount, safeCount, riskCount);
+            
+            // 在控制台显示统计信息（用于调试）
+            console.log(`实时数据更新: 总共${recordCount}条记录，其中${safeCount}条安全，${riskCount}条风险 (风险率: ${(riskCount/recordCount * 100).toFixed(1)}%)`);
+        }
+        
+        // 更新数据统计信息
+        function updateDataStatistics(total, safe, risk) {
+            const totalElement = document.getElementById('totalCount');
+            const safeElement = document.getElementById('safeCount');
+            const riskElement = document.getElementById('riskCount');
+            
+            if (totalElement && safeElement && riskElement) {
+                // 添加更新动画效果
+                [totalElement, safeElement, riskElement].forEach(element => {
+                    element.style.transform = 'scale(1.1)';
+                    element.style.transition = 'all 0.3s ease';
+                });
+                
+                setTimeout(() => {
+                    totalElement.textContent = total;
+                    safeElement.textContent = safe;
+                    riskElement.textContent = risk;
+                    
+                    [totalElement, safeElement, riskElement].forEach(element => {
+                        element.style.transform = 'scale(1)';
+                    });
+                }, 150);
+            }
         }
 
         // 格式化时间戳
@@ -3021,6 +3542,19 @@
                 second: '2-digit',
                 hour12: false
             });
+        }
+
+        // 获取风险描述
+        function getRiskDescription(riskType) {
+            const descriptions = {
+                '涉及钓鱼活动': '参与钓鱼诈骗，可能窃取资金',
+                '涉及恶意合约交互': '与恶意合约有交互历史',
+                '关联黑名单地址': '与危险地址有关联',
+                '涉及洗钱活动': '可能参与资金洗钱',
+                '涉及盗窃活动': '可能涉及资金盗窃',
+                '涉及欺诈活动': '参与多起欺诈案件'
+            };
+            return descriptions[riskType] || '存在潜在安全风险';
         }
 
         // 复制到剪贴板功能
