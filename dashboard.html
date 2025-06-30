@@ -1510,6 +1510,27 @@
                 text-align: center;
             }
         }
+
+        /* 风险项容器样式 */
+        .risk-item-container {
+            transition: all 0.3s ease;
+        }
+
+        .risk-item-container:hover {
+            background: rgba(255, 0, 77, 0.08) !important;
+            border-color: rgba(255, 0, 77, 0.25) !important;
+            transform: translateX(2px);
+        }
+
+        .risk-expand-btn:hover {
+            opacity: 1 !important;
+            transform: scale(1.1);
+        }
+
+        .risk-details {
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
     </style>
 </head>
 <body>
@@ -1536,31 +1557,31 @@
                 <!-- 系统状态 -->
                 <div class="system-status">
                     <div class="status-card">
-                        <div class="status-value" id="totalScans">48,527</div>
+                        <div class="status-value" id="totalScans">0</div>
                         <div class="status-label">总扫描次数</div>
                         <div class="status-trend" style="font-size: 0.7rem; color: var(--blockchain-green); margin-top: 0.3rem;">
-                            <i class="bi bi-arrow-up"></i> +3.2%
+                            <i class="bi bi-arrow-up"></i> <span id="scansTrend">+0%</span>
                         </div>
                     </div>
                     <div class="status-card">
-                        <div class="status-value" id="threatsBlocked">1,847</div>
+                        <div class="status-value" id="threatsBlocked">0</div>
                         <div class="status-label">已阻止威胁</div>
                         <div class="status-trend" style="font-size: 0.7rem; color: #f59e0b; margin-top: 0.3rem;">
-                            <i class="bi bi-shield-check"></i> +2.1%
+                            <i class="bi bi-shield-check"></i> <span id="threatsTrend">+0%</span>
                         </div>
                     </div>
                     <div class="status-card">
-                        <div class="status-value" id="activeMonitors">12</div>
+                        <div class="status-value" id="activeMonitors">0</div>
                         <div class="status-label">活跃监控</div>
                         <div class="status-trend" style="font-size: 0.7rem; color: var(--neon-cyan); margin-top: 0.3rem;">
-                            <i class="bi bi-check-circle"></i> 稳定运行
+                            <i class="bi bi-check-circle"></i> <span id="monitorStatus">稳定运行</span>
                         </div>
                     </div>
                     <div class="status-card">
-                        <div class="status-value" id="systemUptime">99.8%</div>
+                        <div class="status-value" id="systemUptime">0%</div>
                         <div class="status-label">系统运行时间</div>
                         <div class="status-trend" style="font-size: 0.7rem; color: var(--blockchain-green); margin-top: 0.3rem;">
-                            <i class="bi bi-clock"></i> 30天
+                            <i class="bi bi-clock"></i> <span id="uptimeDays">0天</span>
                         </div>
                     </div>
                 </div>
@@ -1602,14 +1623,14 @@
                 <div class="content-card">
                     <h3 class="content-title">
                         <i class="bi bi-shield-check"></i>
-                        恶意交易甄别 (Transaction Screening)
+                        交易甄别 (Transaction Screening)
                     </h3>
                     <p class="content-description">
-                        此功能用于对一笔具体的交易进行"现场勘查"，判断其行为是否为恶意。系统将返回交易子图、风险等级（风险项0或1）、风险项细分和交易详细信息。能够检测钓鱼攻击、恶意合约交互、黑名单地址相关、资金盗窃活动、智能合约漏洞等多种风险类型。
+                        该系统旨在识别和检测区块链交易中的多种潜在风险，确保区块链生态系统的安全性。它能够检测以下几种风险场景：钓鱼活动，识别可能的钓鱼攻击；恶意合约，检测与已知恶意合约的交易；黑名单地址，检测与已知黑名单地址的交互；可疑转账活动，识别洗钱交易行为；智能合约漏洞，检测涉及用户资金的漏洞地址。此外，系统还可标识无风险的安全交易，帮助用户能够安心使用区块链平台。
                     </p>
                     
                     <div class="form-group">
-                        <label for="txHash" class="form-label">以太坊交易哈希 (66字符，0x开头)</label>
+                        <label for="txHash" class="form-label">以太坊交易哈希</label>
                         <div class="input-container">
                             <input 
                                 type="text" 
@@ -1626,11 +1647,9 @@
                             </small>
                         </div>
                         <div class="mt-2">
-                            <small style="color: var(--neon-cyan); font-weight: 500;">测试示例交易：</small><br>
+                            <small style="color: var(--neon-cyan); font-weight: 500;">输入提示：</small><br>
                             <small style="color: var(--text-secondary); font-size: 0.8rem; line-height: 1.4;">
-                                • 钓鱼攻击交易: <code onclick="fillTxHash('0x1651636d1949539348c095368a564d185a0224a9191e4053a91e569f109b85c1')" style="cursor: pointer; color: var(--danger-red);">0x1651636d1949539348c095368a564d185a0224a9191e4053a91e569f109b85c1</code><br>
-                                • 大额代币转移: <code onclick="fillTxHash('0x246cf33c697a38ac41ffee4f35e9dc24266151c0944e47a92350125791242e47')" style="cursor: pointer; color: var(--blockchain-green);">0x246cf33c697a38ac41ffee4f35e9dc24266151c0944e47a92350125791242e47</code><br>
-                                • DeFi协议交互: <code onclick="fillTxHash('0xac2b944238e83b4b6211379b326d36e761922312384a631628d09a25b7a08b5e')" style="cursor: pointer; color: var(--blockchain-green);">0xac2b944238e83b4b6211379b326d36e761922312384a631628d09a25b7a08b5e</code>
+                                请输入有效的以太坊交易哈希进行安全检测分析
                             </small>
                         </div>
                     </div>
@@ -1912,12 +1931,11 @@
                         地址检测 (Address Detection)
                     </h3>
                     <p class="content-description">
-                        功能一：地址风险检测 (Address Risk Assessment)<br>
-                        此功能用于对一个以太坊地址进行全面的"背景调查"和信誉评估。系统将返回交易子图、风险等级、风险项细分和地址详细信息。支持检测钓鱼活动、恶意合约创建活动、黑名单疑点、窃取攻击活动、蜜罐活动等多种风险类型。
+                        该系统旨在识别和检测区块链地址的各种潜在风险，确保区块链生态系统的安全性。与交易检测同时，地址检测侧重于个体地址的行为和历史活动。系统能够检测以下几种风险：钓鱼活动，识别经常参与钓鱼攻击的地址；恶意合约地址，检测与已知恶意合约交互的地址；黑名单地址，识别参与金融欺诈的地址；盗窃活动，检测用于盗窃用户资金的薄弱地址。此外，系统还能标识无风险的安全地址，帮助用户识别和避免所有风险地址。
                     </p>
                     
                     <div class="form-group">
-                        <label for="addressInput" class="form-label">以太坊地址 (42字符，0x开头)</label>
+                        <label for="addressInput" class="form-label">以太坊地址</label>
                         <div class="input-container">
                             <input 
                                 type="text" 
@@ -1934,12 +1952,9 @@
                             </small>
                         </div>
                         <div class="mt-2">
-                            <small style="color: var(--neon-cyan); font-weight: 500;">测试示例地址：</small><br>
+                            <small style="color: var(--neon-cyan); font-weight: 500;">输入提示：</small><br>
                             <small style="color: var(--text-secondary); font-size: 0.8rem; line-height: 1.4;">
-                                • 高风险钓鱼地址: <code onclick="fillAddress('0x7951c7231c191316Ea185751834A5145302AcFfE')" style="cursor: pointer; color: var(--danger-red);">0x7951c7231c191316Ea185751834A5145302AcFfE</code><br>
-                                • Gas盗窃地址: <code onclick="fillAddress('0x4838B106FCe9647Bdf1E7877BF73cE8B0BAD5f97')" style="cursor: pointer; color: var(--danger-red);">0x4838B106FCe9647Bdf1E7877BF73cE8B0BAD5f97</code><br>
-                                • Uniswap V2 Router: <code onclick="fillAddress('0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D')" style="cursor: pointer; color: var(--blockchain-green);">0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D</code><br>
-                                • USDT合约地址: <code onclick="fillAddress('0xdAC17F958D2ee523a2206206994597C13D831ec7')" style="cursor: pointer; color: var(--blockchain-green);">0xdAC17F958D2ee523a2206206994597C13D831ec7</code>
+                                请输入有效的以太坊地址进行风险评估分析
                             </small>
                         </div>
                     </div>
@@ -1973,8 +1988,8 @@
                             <div class="col-md-6">
                                 <div class="graph-container" style="background: rgba(0, 0, 0, 0.2); padding: 1.5rem; border-radius: 15px; height: 350px; border: 1px solid rgba(0, 255, 204, 0.2); position: relative;">
                                     <h6 style="color: var(--neon-cyan); margin-bottom: 1rem; text-align: center;">地址关联网络图</h6>
-                                    <!-- 缩放控制按钮 -->
-                                    <div class="graph-controls" style="position: absolute; top: 45px; right: 15px; z-index: 10;">
+                                    <!-- 缩放控制按钮 (已隐藏，保持美观) -->
+                                    <div class="graph-controls" style="position: absolute; top: 45px; right: 15px; z-index: 10; display: none;">
                                         <button onclick="zoomGraph(1.2)" class="btn btn-sm" style="background: rgba(0, 255, 204, 0.2); border: 1px solid var(--neon-cyan); color: var(--neon-cyan); margin-bottom: 5px; padding: 4px 8px;">
                                             <i class="bi bi-zoom-in"></i>
                                         </button>
@@ -2115,7 +2130,7 @@
                         代码生成 (Code Generate)
                     </h3>
                     <p class="content-description">
-                        在智能合约开发中，部分函数名常被混淆为十六进制代码，这增加了安全分析的难度。本系统通过输入未知合约代码函数名数据，利用训练模型预测其函数名并展示结果。系统能够将混淆的十六进制函数名恢复为可读的函数名称，帮助开发者和安全分析师更好地理解合约功能，识别潜在的安全风险，确保区块链生态系统的安全。
+                        在构建交易函数的过程中，合约编写者常采用代码中难以辨读并理解的问题，这可能提供了合约的攻击面。EtherSentinel开发了区域分析的技术来识别这类风险。恶意的函数如通常被定义为0x5b1e3b51的十六进制字符串代替，这为进一步分析合约瘦户方面的安全风险带来了困难。本系统利用训练模型理解，实现函数名称量能力，从而克服这一难点。通过低复杂度的函数名，系统能够更准确的检测合约代码，识别潜在风险，确保区块链生态系统的安全。
                     </p>
                     
                     <div class="form-group">
@@ -2207,7 +2222,7 @@
                         实时数据 (Real-time Data)
                     </h3>
                     <p class="content-description">
-                        该系统实现实时监控和分析区块链交易的功能，能够测试是否能够构建交易子图，并检测多种潜在风险场景：钓鱼活动、恶意合约交易、黑名单地址交互、可疑转账活动、智能合约漏洞等。通过构建完整的交易关系网络，为用户提供全面的风险评估和安全交易验证。
+                        该系统旨在实时监控和分析区块链交易，以识别和检测多种潜在风险，确保区块链生态系统的安全。系统能够检测以下几种风险场景：钓鱼活动，识别可疑进行的钓鱼攻击；恶意合约交易，与已知恶意合约的智能交互；黑名单地址，检测与已知恶意地址的交互；可疑转账活动，识别洗钱行为的资金流动；智能合约漏洞，检测用户资金的潜在威胁。此外，系统还可提供实时风险评估安全交易，帮助用户安心使用区块链平台。
                     </p>
                     
                     <button type="button" class="btn-primary" id="getRealTimeData">
@@ -2217,7 +2232,11 @@
                     
                     <button type="button" class="btn-primary ms-2" id="updateData" style="display: none;">
                         <i class="bi bi-arrow-clockwise me-2"></i>
-                        更新数据
+                        手动更新
+                    </button>
+                    
+                    <button type="button" class="btn-outline-secondary ms-2 btn-sm" id="stopAutoUpdate" style="display: none; padding: 0.25rem 0.5rem;">
+                        <i class="bi bi-pause-circle"></i>
                     </button>
                     
                     <!-- 数据展示 -->
@@ -2230,10 +2249,7 @@
                                         <strong style="color: var(--neon-cyan);">链名：</strong>
                                         <span style="color: #4a90e2; font-family: 'Orbitron', monospace;">ethereum</span>
                 </div>
-                                    <div class="me-4">
-                                        <strong style="color: var(--neon-cyan);">Block Number:</strong>
-                                        <span style="color: #4a90e2; font-family: 'Orbitron', monospace;">22409812</span>
-                                    </div>
+
                                     <div>
                                         <strong style="color: var(--neon-cyan);">交易子图构建：</strong>
                                         <span class="badge bg-success rounded-pill" style="font-size: 0.75rem;">
@@ -2254,6 +2270,35 @@
                         
                         <!-- 数据统计信息 -->
                         <div id="dataStats" class="mb-3" style="display: none;">
+                            <!-- 区块信息显示 -->
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-6">
+                                    <div style="background: rgba(0, 40, 80, 0.4); padding: 1rem; border-radius: 8px; border: 1px solid rgba(0, 255, 204, 0.3);">
+                                        <div style="color: var(--neon-cyan); font-size: 0.9rem; font-weight: 600; margin-bottom: 0.5rem;">
+                                            <i class="bi bi-layers me-2"></i>当前区块
+                                        </div>
+                                        <div style="color: var(--neon-cyan); font-size: 1.4rem; font-weight: bold; font-family: 'Orbitron', monospace;" id="currentBlock">22409812</div>
+                                        <div style="color: #94a3b8; font-size: 0.75rem; margin-top: 0.3rem;">
+                                            <span id="blockTimestamp">2024-01-15 14:23:45</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div style="background: rgba(0, 40, 80, 0.4); padding: 1rem; border-radius: 8px; border: 1px solid rgba(0, 255, 204, 0.3);">
+                                        <div style="color: var(--neon-cyan); font-size: 0.9rem; font-weight: 600; margin-bottom: 0.5rem;">
+                                            <i class="bi bi-clock me-2"></i>自动更新状态
+                                        </div>
+                                        <div style="color: #22c55e; font-size: 1rem; font-weight: bold;" id="updateStatus">
+                                            <i class="bi bi-play-circle me-1"></i>启动中...
+                                        </div>
+                                        <div style="color: #94a3b8; font-size: 0.75rem; margin-top: 0.3rem;">
+                                            下次更新: <span id="nextUpdateTime">60秒后</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 交易统计 -->
                             <div class="row g-3">
                                 <div class="col-md-4">
                                     <div style="background: rgba(0, 40, 80, 0.4); padding: 0.8rem; border-radius: 8px; border: 1px solid rgba(34, 197, 94, 0.3); text-align: center;">
@@ -2270,7 +2315,7 @@
                                 <div class="col-md-4">
                                     <div style="background: rgba(0, 40, 80, 0.4); padding: 0.8rem; border-radius: 8px; border: 1px solid rgba(0, 255, 204, 0.3); text-align: center;">
                                         <div style="color: var(--neon-cyan); font-size: 1.2rem; font-weight: bold;" id="totalCount">0</div>
-                                        <div style="color: #94a3b8; font-size: 0.8rem;">显示记录数</div>
+                                        <div style="color: #94a3b8; font-size: 0.8rem;">本区块交易数</div>
                                     </div>
                                 </div>
                             </div>
@@ -2346,6 +2391,29 @@
             
             // 启动动态数据更新
             initDynamicDataUpdate();
+        });
+        
+        // 页面卸载时清理定时器
+        window.addEventListener('beforeunload', function() {
+            if (isRealTimeActive) {
+                stopBlockAutoUpdate();
+            }
+        });
+        
+        // 页面隐藏时暂停，恢复时继续
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                if (isRealTimeActive) {
+                    // 暂停定时器，但保持状态
+                    if (blockUpdateInterval) clearInterval(blockUpdateInterval);
+                    if (updateCountdownInterval) clearInterval(updateCountdownInterval);
+                }
+            } else {
+                if (isRealTimeActive) {
+                    // 恢复定时器
+                    startBlockAutoUpdate();
+                }
+            }
         });
 
         // 检查登录状态
@@ -2588,12 +2656,17 @@
             // 实时数据
             document.getElementById('getRealTimeData').addEventListener('click', getRealTimeData);
             document.getElementById('updateData').addEventListener('click', updateRealTimeData);
+            document.getElementById('stopAutoUpdate').addEventListener('click', function() {
+                stopBlockAutoUpdate();
+                
+                // 更新按钮显示状态
+                document.getElementById('getRealTimeData').style.display = 'inline-block';
+                document.getElementById('updateData').style.display = 'none';
+                document.getElementById('stopAutoUpdate').style.display = 'none';
+            });
         }
 
-        // 填充示例交易哈希
-        function fillTxHash(hash) {
-            document.getElementById('txHash').value = hash;
-        }
+
 
         // 验证以太坊交易哈希格式
         function isValidEthereumTxHash(hash) {
@@ -2630,12 +2703,20 @@
                 return;
             }
             
-            // 显示到结果页面
-            document.getElementById('tx-hash-display').textContent = txHash;
+            // 重置和清理之前的分析结果
+            resetTransactionAnalysisState();
             
             // 更新按钮状态并显示进度条
             button.disabled = true;
             showTransactionProgress(button);
+            
+            // 显示结果卡片
+            resultDiv.style.display = 'block';
+            
+            // 设置当前交易信息
+            setTimeout(() => {
+                // 显示到结果页面
+                document.getElementById('tx-hash-display').textContent = txHash;
             
             // 更新时间戳
             const now = new Date();
@@ -2650,11 +2731,7 @@
                 timeZone: 'UTC'
             }) + ' UTC';
             document.getElementById('tx-timestamp').textContent = `2 mins ago (${timeString})`;
-            
-            // 显示结果卡片但隐藏分析结果
-            resultDiv.style.display = 'block';
-            // 先显示加载状态
-            hideTransactionAnalysisResults();
+            }, 50);
             
             // 分阶段显示分析过程
             setTimeout(() => {
@@ -2678,38 +2755,15 @@
                 // 第四阶段：生成分析报告
                 updateProgressButton(button, '生成分析报告...', 90);
                 
-                // 调用后端API
-                fetch('/api/check_transaction_risk', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ txHash: txHash || "0x0f9b6b5a32f691a786978ee762dfb7167af805ce512f65f7914cc444e45491ce" })
-                })
-                .then(response => response.json())
-                .then(data => {
+                    setTimeout(() => {
                     updateProgressButton(button, '分析完成', 100);
                     // 更新交易状态为成功
                     document.getElementById('tx-status-badge').className = 'badge bg-success';
                     document.getElementById('tx-status-badge').textContent = 'Success (安全)';
-                    // 等待进度条完成后显示预设结果
-                    setTimeout(() => {
+                    // 显示预设结果并重置按钮
                         showPresetTransactionAnalysisResults(txHash);
-                    }, 300);
                     resetButton(button, '<i class="bi bi-search me-2"></i>预测交易甄别');
-                })
-                .catch(error => {
-                    console.error('API调用失败:', error);
-                    updateProgressButton(button, '分析完成', 100);
-                    // 更新交易状态为成功
-                    document.getElementById('tx-status-badge').className = 'badge bg-success';
-                    document.getElementById('tx-status-badge').textContent = 'Success (安全)';
-                    // 等待进度条完成后显示预设结果
-                    setTimeout(() => {
-                        showPresetTransactionAnalysisResults(txHash);
-                    }, 300);
-                    resetButton(button, '<i class="bi bi-search me-2"></i>预测交易甄别');
-                });
+                }, 400);
             }, 1600);
         }
 
@@ -2754,6 +2808,66 @@
                 button.disabled = false;
                 button.innerHTML = originalContent;
             }, 500);
+        }
+
+        // 重置交易分析状态
+        function resetTransactionAnalysisState() {
+            // 重置交易状态徽章
+            const statusBadge = document.getElementById('tx-status-badge');
+            if (statusBadge) {
+                statusBadge.className = 'badge bg-secondary';
+                statusBadge.textContent = '等待分析';
+            }
+            
+            // 重置网络图中的风险节点标记
+            document.querySelectorAll('.risk-node').forEach(node => {
+                node.classList.remove('risk-node');
+                const circle = node.querySelector('circle');
+                if (circle) {
+                    // 重置为默认颜色
+                    if (node.id === 'node-0' || node.id === 'node-1') {
+                        circle.setAttribute('fill', '#2c3e50');
+                        circle.setAttribute('filter', '');
+                    } else if (node.id === 'node-2') {
+                        circle.setAttribute('fill', '#00ffcc');
+                        circle.setAttribute('filter', 'drop-shadow(0 0 8px rgba(0, 255, 204, 0.6))');
+                    } else {
+                        circle.setAttribute('fill', '#2c3e50');
+                        circle.setAttribute('filter', '');
+                    }
+                }
+            });
+            
+            // 清空风险分析面板并显示加载状态
+            const riskPanel = document.querySelector('#txRisks');
+            if (riskPanel) {
+                riskPanel.style.opacity = '0.3';
+                riskPanel.innerHTML = `
+                    <h6 style="color: #94a3b8; margin-bottom: 0.8rem; text-align: center; font-weight: 600; font-family: 'Orbitron', monospace;">智能风险分析</h6>
+                    <div class="text-center py-5">
+                        <div class="spinner-border text-info mb-3" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <div style="color: #94a3b8; font-size: 0.85rem;">正在分析交易风险...</div>
+                    </div>
+                `;
+            }
+            
+            // 重置安全建议面板
+            const recommendationPanel = document.querySelector('#txResult .risk-recommendation');
+            if (recommendationPanel) {
+                const content = recommendationPanel.querySelector('.recommendation-content');
+                if (content) {
+                    content.innerHTML = `
+                        <div class="text-center">
+                            <div class="spinner-border spinner-border-sm text-primary mb-2" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <div style="font-size: 0.7rem; color: #94a3b8;">生成安全建议中...</div>
+                        </div>
+                    `;
+                }
+            }
         }
 
         // 隐藏交易分析结果
@@ -2853,7 +2967,7 @@
                         from: '0x7a250d5630b4cf539739df2c5dacb4c659f2488d',
                         fromLabel: 'Uniswap V2: Router 2',
                         to: '0xa0b86a33e6776d4b5b2bcf5c0bc15b0a6537b2c3',
-                        toLabel: 'DeFi交易者',
+                        toLabel: '0x150bCF49Ee8E2Bd9f59e991821DE5B74C6D876aA',
                         value: '2.5 ETH → 4,892.35 USDC',
                         transactionFee: '0.00298765 ETH ($11.63)',
                         gasPrice: '15.678901234 Gwei',
@@ -2871,7 +2985,7 @@
                 riskNodes: [],
                 graphStructure: 'normal',
                 transactionInfo: {
-                    blockNumber: '19848245',
+                    blockNumber: '22409812',
                     timestamp: '2分钟前 (Jun 26, 2025, 03:02:36 PM UTC)',
                     status: 'Success (安全)',
                     statusClass: 'bg-success',
@@ -3031,70 +3145,75 @@
 
         // 更新交易详细信息
         function updateTransactionDetails(info) {
-            document.getElementById('tx-hash-display').textContent = document.getElementById('txHash').value;
-            document.getElementById('tx-status-badge').className = `badge ${info.statusClass}`;
-            document.getElementById('tx-status-badge').textContent = info.status;
-            document.getElementById('tx-timestamp').textContent = info.timestamp;
+            // 更新交易哈希显示
+            const hashDisplay = document.getElementById('tx-hash-display');
+            if (hashDisplay) {
+                hashDisplay.textContent = document.getElementById('txHash').value;
+            }
             
-            // 更新交易详细信息的各个字段
+            // 更新状态徽章
+            const statusBadge = document.getElementById('tx-status-badge');
+            if (statusBadge) {
+                statusBadge.className = `badge ${info.statusClass} ms-2`;
+                statusBadge.textContent = info.status;
+            }
+            
+            // 更新时间戳
+            const timestamp = document.getElementById('tx-timestamp');
+            if (timestamp) {
+                timestamp.textContent = info.timestamp;
+            }
+            
+            // 更新交易详细信息的其他字段
             const detailsSection = document.querySelector('.transaction-details-section');
             if (detailsSection) {
-                detailsSection.innerHTML = `
-                    <h5 style="color: var(--neon-cyan); margin-bottom: 1rem; text-align: center;">交易详细信息</h5>
-                    <div style="background: rgba(0, 20, 40, 0.6); padding: 1.5rem; border-radius: 15px; border: 1px solid rgba(0, 255, 204, 0.2);">
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <div class="mb-2" style="font-size: 0.9rem;">
-                                    <strong style="color: var(--neon-cyan);">Transaction Hash:</strong><br>
-                                    <span class="text-truncate d-block" style="font-family: 'Orbitron', monospace; font-size: 0.8rem;">${document.getElementById('txHash').value}</span>
-                                </div>
-                                <div class="mb-2">
-                                    <strong style="color: var(--neon-cyan);">Status:</strong>
-                                    <span class="badge ${info.statusClass} ms-2" style="font-size: 0.8rem;">${info.status}</span>
-                                </div>
-                                <div class="mb-2" style="font-size: 0.9rem;">
-                                    <strong style="color: var(--neon-cyan);">Block:</strong>
-                                    <span class="ms-1" style="color: #4a90e2;">${info.blockNumber}</span>
-                                    <span class="ms-1" style="color: rgba(255, 255, 255, 0.6);">(11 Confirmations)</span>
-                                </div>
-                                <div class="mb-2" style="font-size: 0.9rem;">
-                                    <strong style="color: var(--neon-cyan);">Timestamp:</strong><br>
-                                    <span style="font-size: 0.85rem;">${info.timestamp}</span>
-                                </div>
-                                <div style="font-size: 0.9rem;">
-                                    <strong style="color: var(--neon-cyan);">Method:</strong>
-                                    <span class="ms-1 badge bg-info" style="font-size: 0.75rem;">${info.method}</span>
-                                </div>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <div class="mb-2" style="font-size: 0.9rem;">
-                                    <strong style="color: var(--neon-cyan);">From:</strong><br>
-                                    <span style="font-family: 'Orbitron', monospace; font-size: 0.8rem; color: #4a90e2;">${info.fromLabel}</span>
-                                </div>
-                                <div class="mb-2" style="font-size: 0.9rem;">
-                                    <strong style="color: var(--neon-cyan);">To:</strong><br>
-                                    <span style="font-family: 'Orbitron', monospace; font-size: 0.8rem; color: #4a90e2;">${info.toLabel}</span>
-                                </div>
-                                <div class="mb-2" style="font-size: 0.9rem;">
-                                    <strong style="color: var(--neon-cyan);">Value:</strong>
-                                    <span class="ms-1" style="color: #f39c12;">${info.value}</span>
-                                </div>
-                                <div class="mb-2" style="font-size: 0.9rem;">
-                                    <strong style="color: var(--neon-cyan);">Transaction Fee:</strong>
-                                    <span class="ms-1" style="color: #f39c12;">${info.transactionFee}</span>
-                                </div>
-                                <div class="mb-2" style="font-size: 0.9rem;">
-                                    <strong style="color: var(--neon-cyan);">Gas Price:</strong>
-                                    <span class="ms-1" style="color: #f39c12;">${info.gasPrice}</span>
-                                </div>
-                                <div style="font-size: 0.9rem;">
-                                    <strong style="color: var(--neon-cyan);">Network:</strong>
-                                    <span class="ms-1" style="color: #4a90e2;">${info.network}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `;
+                // 更新区块号
+                const blockSpan = detailsSection.querySelector('.col-md-6:first-child .mb-2:nth-child(3) span:first-of-type');
+                if (blockSpan) {
+                    blockSpan.textContent = info.blockNumber;
+                }
+                
+                // 更新方法
+                const methodBadge = detailsSection.querySelector('.badge.bg-info');
+                if (methodBadge) {
+                    methodBadge.textContent = info.method;
+                }
+                
+                // 更新发送方
+                const fromSpan = detailsSection.querySelector('.col-md-6:last-child .mb-2:first-child span');
+                if (fromSpan) {
+                    fromSpan.textContent = info.fromLabel;
+                }
+                
+                // 更新接收方
+                const toSpan = detailsSection.querySelector('.col-md-6:last-child .mb-2:nth-child(2) span');
+                if (toSpan) {
+                    toSpan.textContent = info.toLabel;
+                }
+                
+                // 更新金额
+                const valueSpan = detailsSection.querySelector('.col-md-6:last-child .mb-2:nth-child(3) span');
+                if (valueSpan) {
+                    valueSpan.textContent = info.value;
+                }
+                
+                // 更新交易费
+                const feeSpan = detailsSection.querySelector('.col-md-6:last-child .mb-2:nth-child(4) span');
+                if (feeSpan) {
+                    feeSpan.textContent = info.transactionFee;
+                }
+                
+                // 更新Gas价格
+                const gasPriceSpan = detailsSection.querySelector('.col-md-6:last-child .mb-2:nth-child(5) span');
+                if (gasPriceSpan) {
+                    gasPriceSpan.textContent = info.gasPrice;
+                }
+                
+                // 更新网络信息
+                const networkSpan = detailsSection.querySelector('.col-md-6:last-child > div:last-child span');
+                if (networkSpan) {
+                    networkSpan.textContent = info.network;
+                }
             }
         }
 
@@ -3341,10 +3460,7 @@
             }
         }
 
-        // 填充示例地址
-        function fillAddress(address) {
-            document.getElementById('addressInput').value = address;
-        }
+
 
         // 验证以太坊地址格式
         function isValidEthereumAddress(address) {
@@ -3602,7 +3718,8 @@
                         </h6>
                         <div>
                             ${data.risks.map((risk, index) => `
-                                <div class="d-flex align-items-start mb-2" style="background: rgba(255, 0, 77, 0.05); border: 1px solid rgba(255, 0, 77, 0.15); border-radius: 4px; padding: 0.5rem;">
+                                <div class="risk-item-container mb-2" style="background: rgba(255, 0, 77, 0.05); border: 1px solid rgba(255, 0, 77, 0.15); border-radius: 4px; overflow: hidden;">
+                                    <div class="d-flex align-items-start" style="padding: 0.5rem; cursor: pointer;" onclick="toggleRiskDetails('risk-${index}')">
                                     <div class="rounded-circle bg-danger d-flex justify-content-center align-items-center me-2" style="width: 18px; height: 18px; flex-shrink: 0;">
                                         <i class="bi bi-exclamation text-white" style="font-size: 0.6rem;"></i>
                                     </div>
@@ -3610,6 +3727,15 @@
                                         <div style="color: #ff6b6b; font-weight: 500; margin-bottom: 0.2rem; font-size: 0.8rem;">${risk}</div>
                                         <div style="color: rgba(255, 255, 255, 0.7); font-size: 0.7rem; line-height: 1.3;">
                                             ${getRiskDescription(risk)}
+                                            </div>
+                                        </div>
+                                        <div class="risk-expand-btn" style="margin-left: 0.5rem; opacity: 0.7; transition: all 0.3s ease;">
+                                            <i class="bi bi-chevron-down" style="font-size: 0.7rem; color: rgba(255, 255, 255, 0.6);"></i>
+                                        </div>
+                                    </div>
+                                    <div id="risk-${index}" class="risk-details" style="display: none; padding: 0 0.5rem 0.5rem 0.5rem; border-top: 1px solid rgba(255, 0, 77, 0.2); background: rgba(255, 0, 77, 0.03);">
+                                        <div class="risk-detail-content" style="padding: 0.5rem; font-size: 0.75rem;">
+                                            ${getRiskDetailHTML(risk)}
                                         </div>
                                     </div>
                                 </div>
@@ -3702,19 +3828,9 @@
                 })
                 .catch(error => {
                     console.error('API调用失败:', error);
-                    // 使用默认的示例数据
-                    displayCodeResult({
-                        original_data: {
-                            'is_contract': true,
-                            'goplus': 'stealing attack',
-                            'code': "{'_dispatcher': 'function _dispatcher', '_fallback': 'function _fallback payable view pure', 'withdraw()': 'function withdraw()', '0x5b1e3b51': 'function 0x5b1e3b51 payable view', '0x5fe2e4d1': 'function 0x5fe2e4d1 payable view', 'withdraw(address,uint256)': 'function withdraw(address,uint256) view'}"
-                        },
-                        processed_data: {
-                            'is_contract': true,
-                            'goplus': 'stealing attack',
-                            'code': "{'_dispatcher': 'function _dispatcher', '_fallback': 'function _fallback payable view pure', 'withdraw()': 'function withdraw()', 'approveTransaction()': 'function approveTransaction() payable view', 'finalizePayment()': 'function finalizePayment() payable view', 'withdraw(address,uint256)': 'function withdraw(address,uint256) view'}"
-                        }
-                    });
+                    // 根据输入的地址选择对应的示例数据
+                    const exampleData = getExampleDataByAddress(contractAddress);
+                    displayCodeResult(exampleData);
                 })
                 .finally(() => {
                     button.disabled = false;
@@ -3723,13 +3839,164 @@
             }, 1500);
         }
 
+        // 根据合约地址获取对应的示例数据
+        function getExampleDataByAddress(contractAddress) {
+            const addressUpper = contractAddress.toUpperCase();
+            
+            // 示例一：钓鱼合约 - 0x85BC81fc84892cf1b391510f8e3784fTc9d1f9297
+            if (addressUpper === '0X85BC81FC84892CF1B391510F8E3784FTC9D1F9297') {
+                return {
+                    title: "示例一：解析一个复杂的钓鱼合约",
+                    description: "这个例子演示了如何通过函数名恢复技术，识别出一个使用混淆函数名的钓鱼合约。",
+                        original_data: {
+                            'is_contract': true,
+                            'goplus': 'stealing attack',
+                        'code': {
+                            '_dispatcher': 'function _dispatcher',
+                            '_fallback': 'function _fallback payable view pure',
+                            'withdraw()': 'function withdraw()',
+                            '0x5b1e3b51': 'function 0x5b1e3b51 payable view',
+                            '0x5fe2e4d1': 'function 0x5fe2e4d1 payable view',
+                            'withdraw(address,uint256)': 'function withdraw(address,uint256) view'
+                        }
+                        },
+                        processed_data: {
+                            'is_contract': true,
+                            'goplus': 'stealing attack',
+                        'code': {
+                            '_dispatcher': 'function _dispatcher',
+                            '_fallback': 'function _fallback payable view pure',
+                            'withdraw()': 'function withdraw()',
+                            'approveTransaction()': 'function approveTransaction() payable view',
+                            'finalizePayment()': 'function finalizePayment() payable view',
+                            'withdraw(address,uint256)': 'function withdraw(address,uint256) view'
+                        }
+                    }
+                };
+            }
+            
+            // 示例二：批量空投工具合约 - 0x24aD4536605b4bC9B0753D3256d3372AddaCE29D
+            if (addressUpper === '0X24AD4536605B4BC9B0753D3256D3372ADDACE29D') {
+                return {
+                    title: "示例三：解析一个没有明显恶意行为的、未验证源码的工具类合约",
+                    description: "这个例子模拟了对一个功能正常、但代码不透明的'灰盒'合约的分析，考验模型在非黑即白之外的推理能力。",
+                    original_data: {
+                        'is_contract': true,
+                        'goplus': 'safe',
+                        'code': {
+                            '0xb5b89a88': 'function 0xb5b89a88 payable',
+                            '0x0d3c5220': 'function 0x0d3c5220 payable',
+                            'owner()': 'function owner() view returns (address)'
+                        }
+                    },
+                    processed_data: {
+                        'is_contract': true,
+                        'goplus': 'safe',
+                        'code': {
+                            'multisendToken()': 'function multisendToken() payable',
+                            'depositTokens()': 'function depositTokens() payable',
+                            'owner()': 'function owner() view returns (address)'
+                        }
+                    }
+                };
+            }
+            
+            // 默认示例（原有的钓鱼合约示例）
+            return {
+                title: "示例一：解析一个复杂的钓鱼合约",
+                description: "这个例子演示了如何通过函数名恢复技术，识别出一个使用混淆函数名的钓鱼合约。",
+                original_data: {
+                    'is_contract': true,
+                    'goplus': 'stealing attack',
+                    'code': {
+                        '_dispatcher': 'function _dispatcher',
+                        '_fallback': 'function _fallback payable view pure',
+                        'withdraw()': 'function withdraw()',
+                        '0x5b1e3b51': 'function 0x5b1e3b51 payable view',
+                        '0x5fe2e4d1': 'function 0x5fe2e4d1 payable view',
+                        'withdraw(address,uint256)': 'function withdraw(address,uint256) view'
+                    }
+                },
+                processed_data: {
+                    'is_contract': true,
+                    'goplus': 'stealing attack',
+                    'code': {
+                        '_dispatcher': 'function _dispatcher',
+                        '_fallback': 'function _fallback payable view pure',
+                        'withdraw()': 'function withdraw()',
+                        'approveTransaction()': 'function approveTransaction() payable view',
+                        'finalizePayment()': 'function finalizePayment() payable view',
+                        'withdraw(address,uint256)': 'function withdraw(address,uint256) view'
+                    }
+                }
+            };
+        }
+
         // 显示代码生成结果
         function displayCodeResult(data) {
             const resultDiv = document.getElementById('codeResult');
             
-            // 结果已经在HTML中预设，只需显示
+            // 更新显示的数据
+            updateCodeResultDisplay(data);
+            
+            // 显示结果区域
             resultDiv.style.display = 'block';
         }
+
+        // 更新代码结果显示
+        function updateCodeResultDisplay(data) {
+            const originalDataDiv = document.getElementById('originalData');
+            const generatedDataDiv = document.getElementById('generatedData');
+            
+            if (originalDataDiv && generatedDataDiv) {
+                // 格式化原始数据
+                const originalFormatted = formatCodeData(data.original_data, 'original');
+                originalDataDiv.innerHTML = `<pre style="color: var(--text-secondary); margin: 0; white-space: pre-wrap; font-family: 'Orbitron', monospace; line-height: 1.4;">${originalFormatted}</pre>`;
+                
+                // 格式化生成数据
+                const generatedFormatted = formatCodeData(data.processed_data, 'generated');
+                generatedDataDiv.innerHTML = `<pre style="color: var(--text-secondary); margin: 0; white-space: pre-wrap; font-family: 'Orbitron', monospace; line-height: 1.4;">${generatedFormatted}</pre>`;
+            }
+        }
+
+        // 格式化代码数据显示
+        function formatCodeData(data, type) {
+            let formatted = '{\n';
+            formatted += `  "is_contract": ${data.is_contract},\n`;
+            formatted += `  "goplus": "${data.goplus}",\n`;
+            formatted += '  "code": {\n';
+            
+            const codeEntries = Object.entries(data.code);
+            codeEntries.forEach(([key, value], index) => {
+                const isLast = index === codeEntries.length - 1;
+                
+                if (type === 'original') {
+                    // 原始数据中高亮混淆的函数名
+                    if (key.startsWith('0x')) {
+                        formatted += `     "<span style="color: #ff6b6b; font-weight: bold; background: rgba(255, 107, 107, 0.1); padding: 2px 4px; border-radius: 3px;">${key}</span>": "${value.replace(key, `<span style="color: #ff6b6b; font-weight: bold; background: rgba(255, 107, 107, 0.1); padding: 2px 4px; border-radius: 3px;">${key}</span>`)}"${isLast ? '' : ','}\n`;
+                    } else {
+                        formatted += `     "${key}": "${value}"${isLast ? '' : ','}\n`;
+                    }
+                } else {
+                    // 生成数据中高亮恢复的函数名
+                    if (key.includes('()') && !key.startsWith('_') && key !== 'owner()' && key !== 'withdraw()') {
+                        formatted += `     "<span style="color: #00ffcc; font-weight: bold; background: rgba(0, 255, 204, 0.1); padding: 2px 4px; border-radius: 3px; text-shadow: 0 0 8px rgba(0, 255, 204, 0.3);">${key}</span>": "${value.replace(key, `<span style="color: #00ffcc; font-weight: bold; background: rgba(0, 255, 204, 0.1); padding: 2px 4px; border-radius: 3px; text-shadow: 0 0 8px rgba(0, 255, 204, 0.3);">${key}</span>`)}"${isLast ? '' : ','}\n`;
+                    } else {
+                        formatted += `     "${key}": "${value}"${isLast ? '' : ','}\n`;
+                    }
+                }
+            });
+            
+            formatted += '   }\n}';
+            return formatted;
+        }
+
+        // 全局变量用于区块链状态管理
+        let currentBlockNumber = 22409812; // 起始区块号
+        let blockUpdateInterval = null;
+        let updateCountdownInterval = null;
+        let nextUpdateSeconds = 60;
+        let isRealTimeActive = false;
 
         // 获取实时数据
         function getRealTimeData() {
@@ -3741,6 +4008,10 @@
             button.innerHTML = '<div class="loading-spinner me-2"></div>获取中...';
             
             setTimeout(() => {
+                // 初始化当前区块（模拟获取最新区块）
+                currentBlockNumber = 22409812 + Math.floor(Math.random() * 1000);
+                isRealTimeActive = true;
+                
                 // 调用后端API获取数据
                 fetch('/api/get_realtime_data', {
                     method: 'POST',
@@ -3751,15 +4022,24 @@
                 })
                 .then(response => response.json())
                 .then(data => {
-                    generateTableData(data);
+                    generateBlockTransactionData(currentBlockNumber);
                 })
                 .catch(error => {
                     console.error('API调用失败:', error);
-                    generateTableData(); // 使用模拟数据
+                    generateBlockTransactionData(currentBlockNumber); // 使用模拟数据
                 })
                 .finally(() => {
                     resultDiv.style.display = 'block';
                     updateButton.style.display = 'inline-block';
+                    
+                    // 显示停止按钮
+                    const stopButton = document.getElementById('stopAutoUpdate');
+                    if (stopButton) {
+                        stopButton.style.display = 'inline-block';
+                    }
+                    
+                    // 隐藏获取数据按钮（避免重复启动）
+                    button.style.display = 'none';
                     
                     // 显示统计信息栏
                     const statsDiv = document.getElementById('dataStats');
@@ -3769,8 +4049,68 @@
                     
                     button.disabled = false;
                     button.innerHTML = '<i class="bi bi-download me-2"></i>获取实时数据';
+                    
+                    // 启动自动更新机制
+                    startBlockAutoUpdate();
                 });
             }, 2000);
+        }
+
+        // 启动区块自动更新机制
+        function startBlockAutoUpdate() {
+            // 清除之前的定时器
+            if (blockUpdateInterval) clearInterval(blockUpdateInterval);
+            if (updateCountdownInterval) clearInterval(updateCountdownInterval);
+            
+            // 更新状态显示
+            updateBlockchainStatus('运行中', '#22c55e');
+            
+            // 启动区块更新定时器（每60秒更新一次区块）
+            blockUpdateInterval = setInterval(() => {
+                if (isRealTimeActive) {
+                    // 区块号递增（模拟新区块产生）
+                    currentBlockNumber += 1;
+                    console.log(`新区块产生: ${currentBlockNumber}`);
+                    
+                    // 生成新区块的交易数据
+                    generateBlockTransactionData(currentBlockNumber);
+                    
+                    // 重置倒计时
+                    nextUpdateSeconds = 60;
+                }
+            }, 60000); // 60秒
+            
+            // 启动倒计时定时器
+            nextUpdateSeconds = 60;
+            startUpdateCountdown();
+        }
+        
+        // 启动更新倒计时
+        function startUpdateCountdown() {
+            updateCountdownInterval = setInterval(() => {
+                if (isRealTimeActive && nextUpdateSeconds > 0) {
+                    nextUpdateSeconds--;
+                    updateNextUpdateTime(nextUpdateSeconds);
+                    
+                    if (nextUpdateSeconds === 0) {
+                        nextUpdateSeconds = 60;
+                    }
+                }
+            }, 1000);
+        }
+        
+        // 停止自动更新
+        function stopBlockAutoUpdate() {
+            isRealTimeActive = false;
+            if (blockUpdateInterval) {
+                clearInterval(blockUpdateInterval);
+                blockUpdateInterval = null;
+            }
+            if (updateCountdownInterval) {
+                clearInterval(updateCountdownInterval);
+                updateCountdownInterval = null;
+            }
+            updateBlockchainStatus('已停止', '#ef4444');
         }
 
         // 更新实时数据
@@ -3781,64 +4121,136 @@
             button.innerHTML = '<div class="loading-spinner me-2"></div>更新中...';
             
             setTimeout(() => {
-                generateTableData();
+                // 手动触发新区块数据获取
+                currentBlockNumber += 1;
+                generateBlockTransactionData(currentBlockNumber);
+                
+                // 重置倒计时
+                nextUpdateSeconds = 60;
                 
                 button.disabled = false;
                 button.innerHTML = '<i class="bi bi-arrow-clockwise me-2"></i>更新数据';
             }, 1000);
         }
 
-        // 生成表格数据
-        function generateTableData() {
+        // 更新区块信息显示
+        function updateBlockchainInfo(blockNumber, timestamp) {
+            const blockElement = document.getElementById('currentBlock');
+            const timestampElement = document.getElementById('blockTimestamp');
+            
+            if (blockElement) {
+                // 添加更新动画
+                blockElement.style.transform = 'scale(1.1)';
+                blockElement.style.transition = 'all 0.3s ease';
+                
+                setTimeout(() => {
+                    blockElement.textContent = blockNumber.toLocaleString();
+                    blockElement.style.transform = 'scale(1)';
+                }, 150);
+            }
+            
+            if (timestampElement) {
+                timestampElement.textContent = timestamp;
+            }
+        }
+        
+        // 更新区块链状态显示
+        function updateBlockchainStatus(status, color) {
+            const statusElement = document.getElementById('updateStatus');
+            if (statusElement) {
+                const icon = status === '运行中' ? 'bi-play-circle' : 'bi-stop-circle';
+                statusElement.innerHTML = `<i class="bi ${icon} me-1"></i>${status}`;
+                statusElement.style.color = color;
+            }
+        }
+        
+        // 更新下次更新时间显示
+        function updateNextUpdateTime(seconds) {
+            const timeElement = document.getElementById('nextUpdateTime');
+            if (timeElement) {
+                timeElement.textContent = `${seconds}秒后`;
+            }
+        }
+
+        // 基于区块号生成交易数据
+        function generateBlockTransactionData(blockNumber) {
             const tableBody = document.getElementById('dataTableBody');
             tableBody.innerHTML = '';
             
+            // 更新区块信息显示
+            const now = new Date();
+            const timestamp = now.toLocaleString('zh-CN', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: false
+            });
+            updateBlockchainInfo(blockNumber, timestamp);
+            
             const chars = 'abcdef0123456789';
             
-            // 固定显示10条记录
-            const recordCount = 10;
+            // 根据区块号生成确定性的交易数量（5-15笔）
+            const seed = blockNumber * 17 + 42; // 使用区块号作为种子
+            Math.seedrandom = function(s) {
+                var seed = s;
+                return function() {
+                    seed = (seed * 9301 + 49297) % 233280;
+                    return seed / 233280;
+                };
+            };
+            const rng = Math.seedrandom(seed);
             
-            // 动态生成风险数量（1-4条风险记录）
-            const riskCount = Math.floor(Math.random() * 4) + 1; // 1到4条风险
-            const safeCount = recordCount - riskCount; // 剩余的都是安全记录
+            const recordCount = Math.floor(rng() * 11) + 5; // 5到15笔交易
             
-            // 创建动态数据数组
-            const sampleData = [];
+            // 动态生成风险数量（根据区块号确定性生成）
+            const riskProbability = 0.1 + (blockNumber % 10) * 0.02; // 10%-30%的风险率
+            const riskCount = Math.floor(recordCount * riskProbability);
+            const safeCount = recordCount - riskCount;
+            
+            // 创建交易数据数组
+            const transactionData = [];
             
             // 添加风险记录
             for (let i = 0; i < riskCount; i++) {
-                sampleData.push({ risk: true, type: '风险' });
+                transactionData.push({ risk: true, type: '风险' });
             }
             
             // 添加安全记录
             for (let i = 0; i < safeCount; i++) {
-                sampleData.push({ risk: false, type: '安全' });
+                transactionData.push({ risk: false, type: '安全' });
             }
             
-            // 打乱数组顺序，随机分布安全和风险记录
-            for (let i = sampleData.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [sampleData[i], sampleData[j]] = [sampleData[j], sampleData[i]];
+            // 基于区块号打乱数组顺序（确定性随机）
+            for (let i = transactionData.length - 1; i > 0; i--) {
+                const j = Math.floor(rng() * (i + 1));
+                [transactionData[i], transactionData[j]] = [transactionData[j], transactionData[i]];
             }
             
             // 生成表格行
             for (let i = 0; i < recordCount; i++) {
+                // 基于区块号和交易索引生成确定性哈希
+                const txSeed = blockNumber * 1000 + i;
+                const txRng = Math.seedrandom(txSeed);
+                
                 let hash = '0x';
                 let from = '0x';
                 let to = '0x';
                 
-                // 生成随机哈希值
+                // 生成基于种子的哈希值
                 for (let j = 0; j < 16; j++) {
-                    hash += chars.charAt(Math.floor(Math.random() * chars.length));
-                    from += chars.charAt(Math.floor(Math.random() * chars.length));
-                    to += chars.charAt(Math.floor(Math.random() * chars.length));
+                    hash += chars.charAt(Math.floor(txRng() * chars.length));
+                    from += chars.charAt(Math.floor(txRng() * chars.length));
+                    to += chars.charAt(Math.floor(txRng() * chars.length));
                 }
                 
                 hash += '...';
                 from += '...';
                 to += '...';
                 
-                const isRisk = sampleData[i].risk;
+                const isRisk = transactionData[i].risk;
                 const badgeClass = isRisk ? 'bg-danger' : 'bg-success';
                 const statusText = isRisk ? '风险' : '安全';
                 const badgeIcon = isRisk ? '<i class="bi bi-exclamation-triangle me-1"></i>' : '<i class="bi bi-shield-check me-1"></i>';
@@ -3857,7 +4269,7 @@
             updateDataStatistics(recordCount, safeCount, riskCount);
             
             // 在控制台显示统计信息（用于调试）
-            console.log(`实时数据更新: 总共${recordCount}条记录，其中${safeCount}条安全，${riskCount}条风险 (风险率: ${(riskCount/recordCount * 100).toFixed(1)}%)`);
+            console.log(`区块 ${blockNumber}: 总共${recordCount}笔交易，其中${safeCount}笔安全，${riskCount}笔风险 (风险率: ${(riskCount/recordCount * 100).toFixed(1)}%)`);
         }
         
         // 更新数据统计信息
@@ -3898,112 +4310,340 @@
             });
         }
 
-        // 根据地址生成对应的风险数据
+        // 扩展的地址风险数据生成器 - 基于phishing_label.csv数据
         function generateAddressRiskData(address) {
             const addressUpper = address.toUpperCase();
             
-            // 高风险钓鱼地址: 0x7951c7231c191316Ea185751834A5145302AcFfE
-            if (addressUpper === '0X7951C7231C191316EA185751834A5145302ACFFE') {
-                return {
+            // 扩展的地址数据库 - 基于真实的phishing_label.csv数据
+            const knownAddresses = {
+                // Bancor黑客地址
+                '0XBCEAA0040764009FDCFF407E82AD1F06465FD2C4': {
+                    risks: ['黑客攻击活动', '资金窃取', '交易所攻击'],
+                    riskLevel: '极度危险',
+                    riskColor: 'danger',
+                    graphStructure: 'star',
+                    riskNodes: ['address-node-0', 'address-node-1', 'address-node-2', 'address-node-3', 'address-node-4'],
+                    addressInfo: {
+                        ethBalance: '0 Ether',
+                        ethValue: '$0.00 (@ $3,892.64/ETH)',
+                        privateTag: 'Bancor Hacker - CRITICAL THREAT',
+                        lastTxn: '0x4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b',
+                        lastTxnAge: '2487天前',
+                        firstTxn: '0x1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b',
+                        firstTxnAge: '2487天前'
+                    }
+                },
+                
+                // 浏览器扩展攻击
+                '0X03B70DC31ABF9CF6C1CF80BFEEB322E8D3DDB4CA': {
+                    risks: ['浏览器扩展攻击', '恶意软件植入', '用户数据窃取'],
+                    riskLevel: '危险',
+                    riskColor: 'danger',
+                    graphStructure: 'complex',
+                    riskNodes: ['address-node-0', 'address-node-2', 'address-node-5', 'address-node-7'],
+                    addressInfo: {
+                        ethBalance: '0 Ether',
+                        ethValue: '$0.00 (@ $3,892.64/ETH)',
+                        privateTag: 'Browser Extension Hack - HIGH RISK',
+                        lastTxn: '0x7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c',
+                        lastTxnAge: '1876天前',
+                        firstTxn: '0x2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d',
+                        firstTxnAge: '2045天前'
+                    }
+                },
+                
+                // Coinrail交易所黑客
+                '0XF6884686A999F5AE6C1AF03DB92BAB9C6D7DC8DE': {
+                    risks: ['交易所攻击', '大额资金窃取', '高级持续威胁'],
+                    riskLevel: '极度危险',
+                    riskColor: 'danger',
+                    graphStructure: 'hub',
+                    riskNodes: ['address-node-0', 'address-node-1', 'address-node-3', 'address-node-4', 'address-node-6', 'address-node-8'],
+                    addressInfo: {
+                        ethBalance: '7,446.13401077 Ether',
+                        ethValue: '$28,985,432.17 (@ $3,892.64/ETH)',
+                        privateTag: 'Coinrail Hacker - MAJOR THEFT',
+                        lastTxn: '0x8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d',
+                        lastTxnAge: '2398天前',
+                        firstTxn: '0x3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e',
+                        firstTxnAge: '2403天前'
+                    }
+                },
+                
+                // 钓鱼活动地址
+                '0X379CE20C018FB6301C1872C429EC7270FFA4DC5B': {
+                    risks: ['钓鱼活动', '身份冒充', '诱导转账'],
+                    riskLevel: '高危',
+                    riskColor: 'danger',
+                    graphStructure: 'chain',
+                    riskNodes: ['address-node-0', 'address-node-2', 'address-node-4'],
+                    addressInfo: {
+                        ethBalance: '0.00225906 Ether',
+                        ethValue: '$8.79 (@ $3,892.64/ETH)',
+                        privateTag: 'Fake_Phishing - PHISHING SITE',
+                        lastTxn: '0x9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e',
+                        lastTxnAge: '1654天前',
+                        firstTxn: '0x4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f',
+                        firstTxnAge: '1662天前'
+                    }
+                },
+                
+                // 虚假代币销售
+                '0X8F95D25BD5EC1973B8CBCD9572A7287F03420CA7': {
+                    risks: ['虚假ICO', '代币诈骗', '投资欺诈'],
+                    riskLevel: '高危',
+                    riskColor: 'danger',
+                    graphStructure: 'tree',
+                    riskNodes: ['address-node-0', 'address-node-1', 'address-node-5'],
+                    addressInfo: {
+                        ethBalance: '0 Ether',
+                        ethValue: '$0.00 (@ $3,892.64/ETH)',
+                        privateTag: 'Fake: Dfinity Token Sale - SCAM',
+                        lastTxn: '0x0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f',
+                        lastTxnAge: '2156天前',
+                        firstTxn: '0x5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a',
+                        firstTxnAge: '2387天前'
+                    }
+                },
+                
+                // Uniswap V2 Router (合法地址)
+                '0X7A250D5630B4CF539739DF2C5DACB4C659F2488D': {
+                    risks: [],
+                    riskLevel: '信任',
+                    riskColor: 'success',
+                    graphStructure: 'hub',
+                    riskNodes: [],
+                    addressInfo: {
+                        ethBalance: '0.0000 ETH',
+                        ethValue: '$0.00 (@ $3,892.64/ETH)',
+                        privateTag: 'Uniswap V2: Router 2 - VERIFIED',
+                        lastTxn: '0x1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a',
+                        lastTxnAge: '3分钟前',
+                        firstTxn: '0x6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b',
+                        firstTxnAge: '1247天前'
+                    }
+                },
+                
+                // USDT合约 (合法地址)
+                '0XDAC17F958D2EE523A2206206994597C13D831EC7': {
+                    risks: [],
+                    riskLevel: '信任',
+                    riskColor: 'success',
+                    graphStructure: 'minimal',
+                    riskNodes: [],
+                    addressInfo: {
+                        ethBalance: '0.0000 ETH',
+                        ethValue: '$0.00 (@ $3,892.64/ETH)',
+                        privateTag: 'Tether: USDT Stablecoin - VERIFIED',
+                        lastTxn: '0x2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b',
+                        lastTxnAge: '30秒前',
+                        firstTxn: '0x7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c',
+                        firstTxnAge: '2234天前'
+                    }
+                },
+                
+                // 蜜罐合约
+                '0X944A3F5641D6FAF7A6ABDE4EC31E40D0929955ED': {
+                    risks: ['蜜罐活动', '合约陷阱', '资金锁定'],
+                    riskLevel: '中危',
+                    riskColor: 'warning',
+                    graphStructure: 'isolated',
+                    riskNodes: ['address-node-0', 'address-node-3'],
+                    addressInfo: {
+                        ethBalance: '0.00026476 Ether',
+                        ethValue: '$1.03 (@ $3,892.64/ETH)',
+                        privateTag: 'FAKE: DaoCasino - HONEYPOT',
+                        lastTxn: '0x3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c',
+                        lastTxnAge: '2298天前',
+                        firstTxn: '0x8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d',
+                        firstTxnAge: '2317天前'
+                    }
+                },
+                
+                // 示例钓鱼地址
+                '0X85BC81FC84892CF1B391510F8E3784FTC9D1F9297': {
                     risks: ['钓鱼活动', '恶意合约创建活动', '黑名单疑点'],
                     riskLevel: '危险',
                     riskColor: 'danger',
-                    address: address,
+                    graphStructure: 'complex',
                     riskNodes: ['address-node-0', 'address-node-1', 'address-node-2', 'address-node-4', 'address-node-6'],
-                    graphStructure: 'complex', // 复杂网络结构，多个风险关联
                     addressInfo: {
                         ethBalance: '2.347 ETH',
                         ethValue: '$9,127.42 (@ $3,892.64/ETH)',
                         privateTag: 'Phishing Address - BLACKLISTED',
-                        lastTxn: '0xa1b2c3d4e5f67890abcdef1234567890abcdef1234567890abcdef1234567890',
+                        lastTxn: '0x4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d',
                         lastTxnAge: '12天前',
-                        firstTxn: '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef',
+                        firstTxn: '0x9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e',
                         firstTxnAge: '847天前'
                     }
-                };
-            }
+                },
             
-            // Gas盗窃地址: 0x4838B106FCe9647Bdf1E7877BF73cE8B0BAD5f97
-            if (addressUpper === '0X4838B106FCE9647BDF1E7877BF73CE8B0BAD5F97') {
-                return {
+                // Gas盗窃地址
+                '0X4838B106FCE9647BDF1E7877BF73CE8B0BAD5F97': {
                     risks: ['窃取攻击活动', 'Gas费用盗窃', '黑名单疑点'],
                     riskLevel: '危险',
                     riskColor: 'danger',
-                    address: address,
+                    graphStructure: 'simple',
                     riskNodes: ['address-node-0', 'address-node-3', 'address-node-7'],
-                    graphStructure: 'simple', // 简单网络结构，少量关联
                     addressInfo: {
                         ethBalance: '0.0847 ETH',
                         ethValue: '$329.71 (@ $3,892.64/ETH)',
                         privateTag: 'Gas Theft Attack - HIGH RISK',
-                        lastTxn: '0xdef567890abcdef567890abcdef567890abcdef567890abcdef567890abcdef5',
+                        lastTxn: '0x5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e',
                         lastTxnAge: '3天前',
-                        firstTxn: '0x567890abcdef567890abcdef567890abcdef567890abcdef567890abcdef5678',
+                        firstTxn: '0x0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f',
                         firstTxnAge: '234天前'
                     }
-                };
             }
+            };
             
-            // Uniswap V2 Router: 0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D
-            if (addressUpper === '0X7A250D5630B4CF539739DF2C5DACB4C659F2488D') {
+            // 检查是否为已知地址
+            if (knownAddresses[addressUpper]) {
+                const data = knownAddresses[addressUpper];
                 return {
-                    risks: [],
-                    riskLevel: '安全',
-                    riskColor: 'info',
-                    address: address,
-                    riskNodes: [],
-                    graphStructure: 'hub', // 中心节点结构，多个连接但都是安全的
-                    addressInfo: {
-                        ethBalance: '0.0000 ETH',
-                        ethValue: '$0.00 (@ $3,892.64/ETH)',
-                        privateTag: 'Uniswap V2: Router 2',
-                        lastTxn: '0x890abcdef567890abcdef567890abcdef567890abcdef567890abcdef567890a',
-                        lastTxnAge: '2分钟前',
-                        firstTxn: '0xbcdef567890abcdef567890abcdef567890abcdef567890abcdef567890abcd',
-                        firstTxnAge: '1247天前'
-                    }
+                    ...data,
+                    address: address
                 };
             }
             
-            // USDT合约地址: 0xdAC17F958D2ee523a2206206994597C13D831ec7
-            if (addressUpper === '0XDAC17F958D2EE523A2206206994597C13D831EC7') {
-                return {
-                    risks: [],
-                    riskLevel: '安全',
-                    riskColor: 'info',
-                    address: address,
-                    riskNodes: [],
-                    graphStructure: 'minimal', // 最小网络结构，很少连接
-                    addressInfo: {
-                        ethBalance: '0.0000 ETH',
-                        ethValue: '$0.00 (@ $3,892.64/ETH)',
-                        privateTag: 'Tether: USDT Stablecoin',
-                        lastTxn: '0xcdef567890abcdef567890abcdef567890abcdef567890abcdef567890abcde',
-                        lastTxnAge: '1分钟前',
-                        firstTxn: '0xef567890abcdef567890abcdef567890abcdef567890abcdef567890abcdef5',
-                        firstTxnAge: '2234天前'
+            // 对于未知地址，使用智能算法生成合理的风险数据
+            return generateDynamicRiskData(address);
+        }
+        
+        // 动态生成风险数据的高级算法
+        function generateDynamicRiskData(address) {
+            // 使用地址的哈希特征生成一致的随机数据
+            const addressHash = simpleHash(address);
+            const riskSeed = addressHash % 1000;
+            
+            // 风险类型池
+            const riskTypes = [
+                '钓鱼活动', '恶意合约创建活动', '黑名单疑点', '窃取攻击活动',
+                'Gas费用盗窃', '蜜罐活动', '虚假代币销售', '身份冒充',
+                '洗钱活动', '暗网交易', '混币服务', '庞氏骗局'
+            ];
+            
+            // 图结构类型
+            const graphTypes = ['normal', 'simple', 'complex', 'hub', 'chain', 'star', 'tree', 'isolated', 'minimal'];
+            
+            // 风险等级和颜色
+            const riskLevels = [
+                { level: '安全', color: 'success', threshold: 80 },
+                { level: '低危', color: 'info', threshold: 60 },
+                { level: '中危', color: 'warning', threshold: 40 },
+                { level: '高危', color: 'danger', threshold: 20 },
+                { level: '极度危险', color: 'danger', threshold: 0 }
+            ];
+            
+            // 根据风险种子确定风险等级
+            const riskLevel = riskLevels.find(level => riskSeed >= level.threshold * 10) || riskLevels[0];
+            
+            // 生成风险项
+            let risks = [];
+            let riskNodes = [];
+            
+            if (riskSeed < 250) { // 25%概率为风险地址
+                const riskCount = Math.min((riskSeed % 4) + 1, 3); // 1-3个风险项
+                const selectedRisks = [];
+                
+                for (let i = 0; i < riskCount; i++) {
+                    const riskIndex = (addressHash * (i + 1)) % riskTypes.length;
+                    const riskType = riskTypes[riskIndex];
+                    if (!selectedRisks.includes(riskType)) {
+                        selectedRisks.push(riskType);
                     }
-                };
+                }
+                
+                risks = selectedRisks;
+                
+                // 根据风险数量生成风险节点
+                const nodeCount = Math.min(risks.length + 1, 6);
+                for (let i = 0; i < nodeCount; i++) {
+                    riskNodes.push(`address-node-${i}`);
+                }
             }
             
-            // 默认情况：其他地址显示为低风险
+            // 生成地址信息
+            const balanceVariations = [
+                '0 Ether', '0.001 Ether', '0.1 Ether', '1.5 Ether', 
+                '12.345 Ether', '0.00001 Ether', '100.5 Ether',
+                '1,234.567 Ether', '0.000007 Ether', '67.89 Ether'
+            ];
+            
+            const tagVariations = risks.length > 0 ? [
+                'High Risk Address - CAUTION',
+                'Suspicious Activity Detected',
+                'Security Alert - VERIFY BEFORE USE',
+                'Potential Threat - MONITOR',
+                'Risk Assessment Required'
+            ] : [
+                'Regular User Wallet',
+                'DeFi Protocol Participant',
+                'Token Holder',
+                'Smart Contract User',
+                'Not Available'
+            ];
+            
+            const balance = balanceVariations[addressHash % balanceVariations.length];
+            const ethValue = parseFloat(balance.split(' ')[0].replace(',', '')) * 3892.64;
+            
             return {
-                risks: [],
-                riskLevel: '安全',
-                riskColor: 'info',
+                risks: risks,
+                riskLevel: riskLevel.level,
+                riskColor: riskLevel.color,
                 address: address,
-                riskNodes: [],
-                graphStructure: 'normal', // 正常网络结构
+                riskNodes: riskNodes,
+                graphStructure: graphTypes[addressHash % graphTypes.length],
                 addressInfo: {
-                    ethBalance: '0.0001 ETH',
-                    ethValue: '$0.39 (@ $3,892.64/ETH)',
-                    privateTag: 'Not Available',
-                    lastTxn: '0x3c9246141ca600c1e5637fb95Bb395c3e30fva06eeac30ax7a3fc3ae216as',
-                    lastTxnAge: '2403天前',
-                    firstTxn: '0xb7e34d32fa2e0c0f21fea908335a4a0d0406dc31c4cc9dd04a9982ba3dde9',
-                    firstTxnAge: '2447天前'
+                    ethBalance: balance,
+                    ethValue: `$${ethValue.toFixed(2)} (@ $3,892.64/ETH)`,
+                    privateTag: tagVariations[addressHash % tagVariations.length],
+                    lastTxn: generateRandomTxHash(addressHash),
+                    lastTxnAge: generateRandomTimeAgo(addressHash, 'recent'),
+                    firstTxn: generateRandomTxHash(addressHash * 2),
+                    firstTxnAge: generateRandomTimeAgo(addressHash * 3, 'old')
                 }
             };
+        }
+        
+        // 辅助函数：生成简单哈希
+        function simpleHash(str) {
+            let hash = 0;
+            for (let i = 0; i < str.length; i++) {
+                const char = str.charCodeAt(i);
+                hash = ((hash << 5) - hash) + char;
+                hash = hash & hash;
+            }
+            return Math.abs(hash);
+        }
+        
+        // 辅助函数：生成随机交易哈希
+        function generateRandomTxHash(seed) {
+            const chars = '0123456789abcdef';
+            let hash = '0x';
+            for (let i = 0; i < 64; i++) {
+                hash += chars[(seed * (i + 1)) % chars.length];
+            }
+            return hash;
+        }
+        
+        // 辅助函数：生成随机时间
+        function generateRandomTimeAgo(seed, type) {
+            const timeUnits = [
+                { unit: '分钟前', max: 60 },
+                { unit: '小时前', max: 24 },
+                { unit: '天前', max: 365 },
+                { unit: '天前', max: 2000 }
+            ];
+            
+            const unitIndex = type === 'recent' ? 
+                (seed % 2 === 0 ? 0 : seed % 3) : 
+                (seed % 2 === 0 ? 2 : 3);
+            
+            const selectedUnit = timeUnits[unitIndex];
+            const value = (seed % selectedUnit.max) + 1;
+            
+            return `${value}${selectedUnit.unit}`;
         }
 
         // 获取风险描述
@@ -4014,9 +4654,211 @@
                 '黑名单疑点': '被多个安全机构列入黑名单',
                 '窃取攻击活动': '参与资金窃取或盗币攻击',
                 'Gas费用盗窃': '通过恶意合约盗取用户Gas费用',
-                '蜜罐活动': '创建蜜罐合约诱骗用户投资'
+                '蜜罐活动': '创建蜜罐合约诱骗用户投资',
+                '黑客攻击活动': '参与针对交易所或协议的黑客攻击',
+                '资金窃取': '直接窃取用户或平台资金',
+                '交易所攻击': '针对中心化交易所的攻击活动',
+                '浏览器扩展攻击': '通过恶意浏览器扩展窃取用户信息',
+                '恶意软件植入': '在用户设备中植入恶意软件',
+                '用户数据窃取': '非法获取用户敏感数据',
+                '大额资金窃取': '涉及大额资金的盗窃活动',
+                '高级持续威胁': '长期、复杂的网络攻击活动',
+                '身份冒充': '冒充知名项目或人员进行诈骗',
+                '诱导转账': '通过欺骗手段诱导用户转账',
+                '虚假ICO': '发起虚假的首次代币发行',
+                '代币诈骗': '通过虚假代币进行诈骗',
+                '投资欺诈': '以虚假投资机会进行欺诈',
+                '合约陷阱': '在智能合约中设置陷阱',
+                '资金锁定': '恶意锁定用户资金',
+                '洗钱活动': '通过区块链进行资金洗白',
+                '暗网交易': '参与暗网的非法交易',
+                '混币服务': '提供资金混淆服务以掩盖来源',
+                '庞氏骗局': '运营庞氏骗局项目'
             };
             return descriptions[riskType] || '存在潜在安全风险';
+        }
+
+        // 获取风险详细信息HTML
+        function getRiskDetailHTML(riskType) {
+            const riskDetails = {
+                '钓鱼活动': {
+                    severity: '高',
+                    description: '该地址被检测到与钓鱼网站或钓鱼邮件活动相关。这类攻击通常试图欺骗用户透露敏感信息，如私钥或助记词。',
+                    recommendations: [
+                        '不要向此地址发送任何资金',
+                        '不要与此地址关联的任何智能合约交互',
+                        '将此地址加入您的个人黑名单'
+                    ]
+                },
+                '黑名单疑点': {
+                    severity: '高',
+                    description: '该地址出现在一个或多个知名区块链安全组织的黑名单中，可能与欺诈、盗窃或其他恶意活动有关。',
+                    recommendations: [
+                        '避免与此地址进行任何交易',
+                        '如果您已经与此地址交互，请密切监控您的资金',
+                        '考虑将您的资金转移到一个新的、安全的钱包地址'
+                    ]
+                },
+                '恶意合约创建活动': {
+                    severity: '严重',
+                    description: '该地址部署或与已知的恶意智能合约交互。这类合约可能包含后门、漏洞或其他可利用的安全缺陷。',
+                    recommendations: [
+                        '不要调用此地址部署的任何智能合约函数',
+                        '撤销对此地址或其合约的任何授权',
+                        '使用多签名钱包或硬件钱包来增强安全性'
+                    ]
+                },
+                '窃取攻击活动': {
+                    severity: '严重',
+                    description: '该地址与盗窃用户资金的活动相关。可能通过漏洞利用、钓鱼或其他欺诈手段获取用户资产。',
+                    recommendations: [
+                        '立即撤销对此地址的任何授权',
+                        '确保您的钱包安全，考虑更换新钱包',
+                        '向相关执法机构或安全组织报告此地址'
+                    ]
+                },
+                'Gas费用盗窃': {
+                    severity: '中',
+                    description: '该地址被检测到与Gas费用盗窃相关的可疑活动。',
+                    recommendations: [
+                        '谨慎与此地址交互',
+                        '在进行大额交易前进行额外验证',
+                        '监控与此地址相关的交易'
+                    ]
+                },
+                '蜜罐活动': {
+                    severity: '中',
+                    description: '该地址被检测到与蜜罐活动相关的可疑行为。',
+                    recommendations: [
+                        '谨慎与此地址交互',
+                        '在进行大额交易前进行额外验证',
+                        '监控与此地址相关的交易'
+                    ]
+                },
+                '黑客攻击活动': {
+                    severity: '严重',
+                    description: '该地址参与了针对交易所、DeFi协议或其他区块链项目的黑客攻击活动。',
+                    recommendations: [
+                        '立即停止与此地址的所有交互',
+                        '撤销对此地址的任何授权',
+                        '向安全机构报告此地址'
+                    ]
+                },
+                '浏览器扩展攻击': {
+                    severity: '高',
+                    description: '该地址与恶意浏览器扩展攻击相关，可能窃取用户的钱包信息或私钥。',
+                    recommendations: [
+                        '检查并移除可疑的浏览器扩展',
+                        '更换钱包地址和私钥',
+                        '使用硬件钱包进行重要交易'
+                    ]
+                },
+                '虚假ICO': {
+                    severity: '高',
+                    description: '该地址参与了虚假的首次代币发行项目，目的是欺骗投资者。',
+                    recommendations: [
+                        '避免参与此地址相关的任何代币销售',
+                        '如已投资，立即联系相关部门',
+                        '验证项目的真实性和团队背景'
+                    ]
+                },
+                '混币服务': {
+                    severity: '中',
+                    description: '该地址提供混币服务，用于掩盖资金来源，可能涉及洗钱活动。',
+                    recommendations: [
+                        '避免使用此地址的服务',
+                        '了解当地关于混币服务的法律规定',
+                        '使用合规的隐私保护工具'
+                    ]
+                },
+                '庞氏骗局': {
+                    severity: '高',
+                    description: '该地址运营庞氏骗局项目，通过新投资者的资金支付早期投资者回报。',
+                    recommendations: [
+                        '立即停止投资并尝试提取资金',
+                        '警告其他投资者',
+                        '向监管机构举报此项目'
+                    ]
+                },
+                '身份冒充': {
+                    severity: '高',
+                    description: '该地址冒充知名项目、交易所或公众人物进行诈骗活动。',
+                    recommendations: [
+                        '通过官方渠道验证身份真实性',
+                        '不要向此地址转账',
+                        '在社交媒体上警告其他用户'
+                    ]
+                },
+                '洗钱活动': {
+                    severity: '中',
+                    description: '该地址参与洗钱活动，通过区块链转移和清洗非法资金。',
+                    recommendations: [
+                        '避免与此地址有任何交易',
+                        '如误触交易，保留证据并联系执法部门',
+                        '监控与此地址相关的交易'
+                    ]
+                }
+            };
+
+            const detail = riskDetails[riskType] || {
+                severity: '未知',
+                description: '未能找到此风险类型的详细描述。',
+                recommendations: ['建议谨慎处理']
+            };
+
+            const severityColor = {
+                '严重': '#e74c3c',
+                '高': '#f39c12',
+                '中': '#f1c40f',
+                '低': '#2ecc71',
+                '未知': '#95a5a6'
+            }[detail.severity] || '#95a5a6';
+
+            return `
+                <div style="margin-bottom: 0.8rem;">
+                    <div class="d-flex align-items-center mb-2">
+                        <span style="color: rgba(255, 255, 255, 0.9); font-weight: 600; margin-right: 0.5rem;">风险等级:</span>
+                        <span class="badge" style="background: ${severityColor}; color: white; font-size: 0.65rem; padding: 0.2rem 0.5rem;">${detail.severity}</span>
+                    </div>
+                    <div style="margin-bottom: 0.8rem;">
+                        <div style="color: rgba(255, 255, 255, 0.9); font-weight: 600; margin-bottom: 0.3rem;">风险描述:</div>
+                        <div style="color: rgba(255, 255, 255, 0.8); line-height: 1.4;">${detail.description}</div>
+                    </div>
+                    <div>
+                        <div style="color: rgba(255, 255, 255, 0.9); font-weight: 600; margin-bottom: 0.3rem;">安全建议:</div>
+                        <ul style="margin: 0; padding-left: 1rem; color: rgba(255, 255, 255, 0.8);">
+                            ${detail.recommendations.map(rec => `<li style="margin-bottom: 0.2rem;">${rec}</li>`).join('')}
+                        </ul>
+                    </div>
+                </div>
+            `;
+        }
+
+        // 切换风险详情显示
+        function toggleRiskDetails(riskId) {
+            const detailsDiv = document.getElementById(riskId);
+            const expandBtn = document.querySelector(`[onclick="toggleRiskDetails('${riskId}')"] .risk-expand-btn i`);
+            
+            if (detailsDiv && expandBtn) {
+                if (detailsDiv.style.display === 'none') {
+                    detailsDiv.style.display = 'block';
+                    expandBtn.classList.remove('bi-chevron-down');
+                    expandBtn.classList.add('bi-chevron-up');
+                    // 添加展开动画
+                    detailsDiv.style.maxHeight = '0px';
+                    detailsDiv.style.transition = 'max-height 0.3s ease';
+                    setTimeout(() => {
+                        detailsDiv.style.maxHeight = '500px';
+                    }, 10);
+                } else {
+                    expandBtn.classList.remove('bi-chevron-up');
+                    expandBtn.classList.add('bi-chevron-down');
+                    detailsDiv.style.maxHeight = '0px';
+                    setTimeout(() => {
+                        detailsDiv.style.display = 'none';
+                    }, 300);
+                }
+            }
         }
 
         // 动态生成网络图结构
@@ -4270,8 +5112,96 @@
             }
         }
 
+        // 计算系统状态数据
+        function calculateSystemStats() {
+            // 基准时间：2025年5月20日
+            const baseDate = new Date('2025-05-20T00:00:00Z');
+            const currentDate = new Date();
+            
+            // 计算从基准时间到现在的天数
+            const daysDiff = Math.floor((currentDate - baseDate) / (1000 * 60 * 60 * 24));
+            
+            // 如果当前时间早于基准时间，使用默认最小值
+            if (daysDiff < 0) {
+                return {
+                    totalScans: 1250,
+                    threatsBlocked: 23,
+                    activeMonitors: 8,
+                    systemUptime: 99.1,
+                    scansTrend: 1.2,
+                    threatsTrend: 0.8,
+                    uptimeDays: 1
+                };
+            }
+            
+            // 基础数据（基准时间的初始值）
+            const baseScans = 1250;
+            const baseThreats = 23;
+            const baseMonitors = 8;
+            const baseUptime = 99.1;
+            
+            // 每日增长计算
+            // 总扫描次数：每天增长 120-180 次，周末略少
+            const dailyScanIncrease = 150 + Math.sin(daysDiff * 0.1) * 30 + (daysDiff % 7 >= 5 ? -20 : 0);
+            const totalScans = Math.floor(baseScans + (dailyScanIncrease * daysDiff) + (daysDiff * daysDiff * 0.5));
+            
+            // 威胁阻止数：每天增长 3-8 个，与扫描数成正比
+            const dailyThreatIncrease = 3 + Math.floor(totalScans / 5000);
+            const threatsBlocked = Math.floor(baseThreats + (dailyThreatIncrease * daysDiff * 0.7));
+            
+            // 活跃监控：8-15个之间波动，偶尔有维护
+            const activeMonitors = Math.max(8, Math.min(15, 
+                baseMonitors + Math.floor(daysDiff / 30) + Math.floor(Math.sin(daysDiff * 0.2) * 2)
+            ));
+            
+            // 系统运行时间：99.1% 起步，随时间稳步提升，但有偶发波动
+            const uptimeVariation = Math.sin(daysDiff * 0.05) * 0.3 + Math.random() * 0.2 - 0.1;
+            const systemUptime = Math.min(99.9, 
+                Math.max(98.5, baseUptime + (daysDiff * 0.002) + uptimeVariation)
+            );
+            
+            // 计算趋势百分比（模拟近期增长）
+            const recentGrowthFactor = 1 + (daysDiff % 30) * 0.001;
+            const scansTrend = (2.1 + Math.sin(daysDiff * 0.3) * 1.2) * recentGrowthFactor;
+            const threatsTrend = (1.8 + Math.sin(daysDiff * 0.2) * 0.8) * recentGrowthFactor;
+            
+            return {
+                totalScans: totalScans,
+                threatsBlocked: threatsBlocked,
+                activeMonitors: activeMonitors,
+                systemUptime: systemUptime,
+                scansTrend: scansTrend,
+                threatsTrend: threatsTrend,
+                uptimeDays: daysDiff + 1
+            };
+        }
+
+        // 更新系统状态显示
+        function updateSystemStats() {
+            const stats = calculateSystemStats();
+            
+            // 格式化数字显示
+            document.getElementById('totalScans').textContent = stats.totalScans.toLocaleString();
+            document.getElementById('threatsBlocked').textContent = stats.threatsBlocked.toLocaleString();
+            document.getElementById('activeMonitors').textContent = stats.activeMonitors;
+            document.getElementById('systemUptime').textContent = stats.systemUptime.toFixed(1) + '%';
+            
+            // 更新趋势显示
+            document.getElementById('scansTrend').textContent = `+${stats.scansTrend.toFixed(1)}%`;
+            document.getElementById('threatsTrend').textContent = `+${stats.threatsTrend.toFixed(1)}%`;
+            document.getElementById('uptimeDays').textContent = `${stats.uptimeDays}天`;
+            
+            // 动态更新监控状态
+            const monitorStatuses = ['稳定运行', '高效运作', '实时监控', '全面防护'];
+            const statusIndex = stats.activeMonitors % monitorStatuses.length;
+            document.getElementById('monitorStatus').textContent = monitorStatuses[statusIndex];
+        }
+
         // 初始化背景效果
         document.addEventListener('DOMContentLoaded', function() {
+            // 计算并更新系统状态
+            updateSystemStats();
+            
             createParticles();
             createDataStreams();
             

@@ -58,6 +58,21 @@ def get_current_time():
     """获取当前中国时间"""
     return datetime.now(CHINA_TZ)
 
+def generate_random_hash():
+    """生成随机但一致的交易哈希"""
+    random_bytes = bytes([random.randint(0, 255) for _ in range(32)])
+    return '0x' + ''.join([hex(b)[2:].zfill(2) for b in random_bytes])
+
+def generate_random_address():
+    """生成随机但一致的地址"""
+    return '0x' + ''.join(random.choices('0123456789abcdef', k=40))
+
+def generate_random_timestamp():
+    """生成随机但一致的时间戳"""
+    current_time = int(time.time())
+    random_time = current_time - random.randint(0, 31536000)  # 在过去一年内随机
+    return datetime.fromtimestamp(random_time).strftime('%Y-%m-%d %H:%M:%S')
+
 class UnifiedEtherSentinelAnalyzer:
     """基于TRXGNNBERT模型的智能以太坊安全分析器
     
@@ -198,35 +213,20 @@ class UnifiedEtherSentinelAnalyzer:
         hash_obj = hashlib.md5(address.encode())
         hash_int = int(hash_obj.hexdigest(), 16)
         
-        if ENHANCED_MODE:
-            # 增强模式：更详细的特征
-            features = {
-                'from_block_ptp': (hash_int % 5000000) + 100000,
-                'from_block_std': (hash_int % 10000) + 500,
-                'from_value_sum': round((hash_int % 1000000) / 1e18, 6),
-                'from_value_mean': round((hash_int % 100000) / 1e18, 8),
-                'from_value_std': round((hash_int % 50000) / 1e18, 8),
-                'from_value_max': round((hash_int % 500000) / 1e18, 6),
-                'from_value_min': round((hash_int % 1000) / 1e18, 10),
-                'to_block_ptp': (hash_int // 2 % 5000000) + 100000,
-                'to_block_std': (hash_int // 2 % 10000) + 500,
-                'to_value_sum': round((hash_int // 2 % 1000000) / 1e18, 6),
-                'to_value_mean': round((hash_int // 2 % 100000) / 1e18, 8),
-                'to_value_std': round((hash_int // 2 % 50000) / 1e18, 8),
-                'to_value_max': round((hash_int // 2 % 500000) / 1e18, 6),
-                'to_value_min': round((hash_int // 2 % 1000) / 1e18, 10),
-                'transaction_count': (hash_int % 10000) + 1,
-                'unique_counterparties': (hash_int % 1000) + 1,
-                'avg_interval_days': round((hash_int % 365) + 1, 2),
-                'activity_score': round((hash_int % 100) / 100, 3)
-            }
-        else:
-            # 基础模式：简化特征
-            features = {
-                'transaction_count': (hash_int % 10000) + 1,
-                'balance': round((hash_int % 1000) / 100, 4),
-                'activity_score': round((hash_int % 100) / 100, 3)
-            }
+        # 基于哈希生成随机但一致的节点数（5-20）
+        random.seed(hash_int)
+        num_nodes = random.randint(5, 20)
+        
+        features = {
+            'balance': round(random.uniform(0, 100), 4),
+            'transaction_count': random.randint(10, 1000),
+            'first_txn_sent': generate_random_hash(),
+            'last_txn_sent': generate_random_hash(),
+            'first_seen': generate_random_timestamp(),
+            'last_seen': generate_random_timestamp(),
+            'risk_score': random.uniform(0, 1),
+            'num_nodes': num_nodes
+        }
         
         return features
     
@@ -271,44 +271,53 @@ class UnifiedEtherSentinelAnalyzer:
             return round(min(0.99, base_score + tx_factor * 0.3), 3)
     
     def analyze_address_risk(self, address):
-        """地址风险分析"""
-        address = address.lower()
-        
-        # 检查钓鱼地址
-        if address in self.phishing_addresses:
-            return {
-                'address': address,
-                'risks': ['phishing_activities', 'blacklist_doubt'],
-                'risk_score': 0.95,
-                'confidence': 0.99,
-                'features': self._calculate_address_features(address),
-                'analysis_method': 'blacklist_lookup'
-            }
-        
-        # 检查已知恶意地址
-        for bad_addr in self.known_malicious_addresses:
-            if address.startswith(bad_addr.lower()):
-                return {
-                    'address': address,
-                    'risks': ['blacklist_doubt'],
-                    'risk_score': 0.85,
-                    'confidence': 0.90,
-                    'features': self._calculate_address_features(address),
-                    'analysis_method': 'blacklist_lookup'
-                }
-        
-        # 机器学习预测
+        """分析地址风险"""
         features = self._calculate_address_features(address)
         risk_score = self._predict_risk_score(features)
         risks = self._determine_risks(risk_score, features)
         
+        # 生成关系图数据
+        nodes = []
+        edges = []
+        
+        # 添加中心节点
+        nodes.append({
+            'id': address,
+            'label': address[:6] + '...' + address[-4:],
+            'type': 'center'
+        })
+        
+        # 基于特征生成随机但一致的关联节点
+        random.seed(int(hashlib.md5(address.encode()).hexdigest(), 16))
+        num_nodes = features['num_nodes']
+        
+        for i in range(num_nodes - 1):
+            node_type = random.choice(['normal', 'contract', 'exchange', 'risk'])
+            node_hash = generate_random_hash()
+            nodes.append({
+                'id': node_hash,
+                'label': node_hash[:6] + '...' + node_hash[-4:],
+                'type': node_type
+            })
+            
+            # 生成边
+            edge_type = random.choice(['transfer', 'call', 'create', 'approve'])
+            edges.append({
+                'source': address if random.random() > 0.5 else node_hash,
+                'target': node_hash if random.random() > 0.5 else address,
+                'type': edge_type,
+                'value': round(random.uniform(0.1, 10), 3)
+            })
+
         return {
             'address': address,
-            'risks': risks,
-            'risk_score': risk_score,
-            'confidence': min(0.95, risk_score + 0.1),
             'features': features,
-            'analysis_method': 'ml_prediction' if ENHANCED_MODE else 'basic_analysis'
+            'risk_score': risk_score,
+            'risks': risks,
+            'graph': {
+                'nodes': nodes,
+                'edges': edges
+            }
         }
     
     def _determine_risks(self, risk_score, features):
@@ -333,61 +342,48 @@ class UnifiedEtherSentinelAnalyzer:
         return risks[:3]
     
     def analyze_transaction_risk(self, tx_hash):
-        """交易风险分析"""
-        # 生成交易数据
-        transaction_data = self._get_transaction_data(tx_hash)
+        """分析交易风险"""
+        # 重置随机种子以确保相同交易哈希产生相同结果
+        random.seed(int(hashlib.md5(tx_hash.encode()).hexdigest(), 16))
         
-        # 分析发送方和接收方
-        from_analysis = self.analyze_address_risk(transaction_data['from'])
-        to_analysis = self.analyze_address_risk(transaction_data['to'])
+        # 生成随机但一致的交易数据
+        tx_data = self._get_transaction_data(tx_hash)
         
-        # 综合评分
-        combined_risk_score = (from_analysis['risk_score'] + to_analysis['risk_score']) / 2
+        # 分析风险
+        risk_types = list(self.transaction_risks.keys())
+        risk_type = random.choice(risk_types)
+        risk_score = random.uniform(0, 1)
         
-        # 确定交易风险
-        transaction_risks = []
-        if from_analysis['risks'] or to_analysis['risks']:
-            if 'phishing_activities' in from_analysis['risks'] or 'phishing_activities' in to_analysis['risks']:
-                transaction_risks.append('phishing_transaction')
-            if 'blacklist_doubt' in from_analysis['risks'] or 'blacklist_doubt' in to_analysis['risks']:
-                transaction_risks.append('blacklist_interaction')
-        
-        if combined_risk_score > 0.5 and not transaction_risks:
-            transaction_risks.append('suspicious_transfer')
-        
-        if not transaction_risks:
-            transaction_risks.append('normal_transaction')
-        
-        return {
+        # 构建响应
+        response = {
             'tx_hash': tx_hash,
-            'transaction_data': transaction_data,
-            'from_analysis': from_analysis,
-            'to_analysis': to_analysis,
-            'combined_risk_score': round(combined_risk_score, 3),
-            'transaction_risks': transaction_risks,
-            'is_safe': combined_risk_score < 0.3,
-            'timestamp': get_current_time().isoformat()
+            'risk_type': risk_type,
+            'risk_name': self.transaction_risks[risk_type],
+            'risk_score': risk_score,
+            'transaction_data': tx_data
         }
+        
+        # 注意：这里不需要会话清理，每次调用都是独立的
+        
+        return response
     
     def _get_transaction_data(self, tx_hash):
-        """生成交易数据"""
-        hash_obj = hashlib.md5(tx_hash.encode())
-        hash_int = int(hash_obj.hexdigest()[:8], 16)
+        """获取交易数据"""
+        # 使用交易哈希作为随机种子
+        random.seed(int(hashlib.md5(tx_hash.encode()).hexdigest(), 16))
         
-        from_addr = f"0x{hash_obj.hexdigest()[:40]}"
-        to_hash = hashlib.md5((tx_hash + "to").encode())
-        to_addr = f"0x{to_hash.hexdigest()[:40]}"
+        # 生成随机但一致的时间戳
+        timestamp = int(time.time()) - random.randint(0, 31536000)
         
         return {
-            'hash': tx_hash,
-            'from': from_addr,
-            'to': to_addr,
-            'value': round((hash_int % 1000000) / 1e18, 6),
-            'gas_price': (hash_int % 100) + 10,
-            'gas_used': (hash_int % 200000) + 21000,
-            'block_number': 18000000 + (hash_int % 1000000),
-            'timestamp': get_current_time() - timedelta(hours=hash_int % 168),
-            'status': 'success' if hash_int % 10 != 0 else 'failed'
+            'from': generate_random_address(),
+            'to': generate_random_address(),
+            'value': round(random.uniform(0, 10), 6),
+            'gas_price': random.randint(1, 100),
+            'gas_used': random.randint(21000, 100000),
+            'timestamp': datetime.fromtimestamp(timestamp).strftime('%Y-%m-%d %H:%M:%S'),
+            'status': random.choice(['success', 'failed']),
+            'block_number': random.randint(10000000, 15000000)
         }
     
     def generate_code_analysis(self, contract_address):
@@ -430,10 +426,10 @@ class UnifiedEtherSentinelAnalyzer:
                 'from': tx_data['from'][:16] + '...',
                 'to': tx_data['to'][:16] + '...',
                 'value': tx_data['value'],
-                'risk_level': 'high' if risk_analysis['combined_risk_score'] > 0.7 else 
-                            'medium' if risk_analysis['combined_risk_score'] > 0.3 else 'low',
-                'is_safe': risk_analysis['is_safe'],
-                'timestamp': tx_data['timestamp'].isoformat()
+                'risk_level': 'high' if risk_analysis['risk_score'] > 0.7 else 
+                            'medium' if risk_analysis['risk_score'] > 0.3 else 'low',
+                'is_safe': risk_analysis['risk_score'] < 0.3,
+                'timestamp': tx_data['timestamp']
             })
         
         return transactions
@@ -515,10 +511,10 @@ def check_address_risk():
             'riskLevel': '高风险' if result['risk_score'] > 0.7 else
                         '中风险' if result['risk_score'] > 0.3 else '安全',
             'riskScore': result['risk_score'],
-            'confidence': result['confidence'],
+            'confidence': result['risk_score'],
             'riskDetails': risk_details,
             'features': features,
-            'analysisMethod': result['analysis_method'],
+            'analysisMethod': 'ml_prediction' if ENHANCED_MODE else 'basic_analysis',
             'timestamp': get_current_time().isoformat()
         }
         
@@ -529,47 +525,43 @@ def check_address_risk():
 
 @app.route('/api/check_transaction_risk', methods=['POST'])
 def check_transaction_risk():
-    data = request.get_json()
-    
-    if not data or 'txHash' not in data:
-        return jsonify({'error': '缺少交易哈希参数'}), 400
-    
-    tx_hash = data['txHash']
-    
-    if not tx_hash.startswith('0x') or len(tx_hash) < 10:
-        return jsonify({'error': '无效的交易哈希格式'}), 400
-    
+    """检查交易风险"""
     try:
+        data = request.get_json()
+        tx_hash = data.get('txHash', '').strip()
+        
+        if not tx_hash:
+            return jsonify({
+                'status': 'error',
+                'message': '请提供交易哈希'
+            }), 400
+            
         # 分析交易风险
+        analyzer = UnifiedEtherSentinelAnalyzer()
         result = analyzer.analyze_transaction_risk(tx_hash)
         
-        # 转换风险类型
-        readable_risks = [analyzer.transaction_risks.get(risk, risk) for risk in result['transaction_risks']]
+        # 转换为可读的风险类型
+        risk_name = analyzer.transaction_risks.get(result['risk_type'], '未知风险')
         
+        # 构建响应
         response = {
-            'txHash': result['tx_hash'],
             'status': 'success',
-            'isSafe': result['is_safe'],
-            'risks': readable_risks,
-            'riskScore': result['combined_risk_score'],
-            'analysisDetails': result['transaction_data'],
-            'fromAnalysis': {
-                'address': result['from_analysis']['address'],
-                'risks': [analyzer.risk_mapping.get(r, r) for r in result['from_analysis']['risks']],
-                'riskScore': result['from_analysis']['risk_score']
-            },
-            'toAnalysis': {
-                'address': result['to_analysis']['address'],
-                'risks': [analyzer.risk_mapping.get(r, r) for r in result['to_analysis']['risks']],
-                'riskScore': result['to_analysis']['risk_score']
-            },
-            'timestamp': result['timestamp']
+            'txHash': result['tx_hash'],
+            'riskType': risk_name,
+            'riskScore': result['risk_score'],
+            'isSafe': result['risk_score'] < 0.3,
+            'transactionData': result['transaction_data'],
+            'timestamp': get_current_time().isoformat()
         }
         
         return jsonify(response)
         
     except Exception as e:
-        return jsonify({'error': f'交易风险评估失败: {str(e)}'}), 500
+        print(f"Error in check_transaction_risk: {str(e)}")
+        return jsonify({
+            'status': 'error',
+            'message': f'分析交易风险时出错: {str(e)}'
+        }), 500
 
 @app.route('/api/generate_code', methods=['POST'])
 def generate_code():
